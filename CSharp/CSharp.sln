@@ -21,7 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Array", "Array\Array.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoopStatements", "LoopStatements\LoopStatements.csproj", "{11A74C8C-2907-49A3-BD48-18AF518E95B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Array2D", "Array2D\Array2D.csproj", "{BE3BFBC6-6DBF-4335-8427-72BD6C20D2A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Array2D", "Array2D\Array2D.csproj", "{BE3BFBC6-6DBF-4335-8427-72BD6C20D2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumAndSwitchCase", "EnumAndSwitchCase\EnumAndSwitchCase.csproj", "{0C40A664-C655-4C3E-9BC8-EDE6A2B25D14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example1_HorseRacing", "Example1_HorseRacing\Example1_HorseRacing.csproj", "{7603737F-761A-415D-A36C-C76FE445F4F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{BE3BFBC6-6DBF-4335-8427-72BD6C20D2A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE3BFBC6-6DBF-4335-8427-72BD6C20D2A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE3BFBC6-6DBF-4335-8427-72BD6C20D2A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C40A664-C655-4C3E-9BC8-EDE6A2B25D14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C40A664-C655-4C3E-9BC8-EDE6A2B25D14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C40A664-C655-4C3E-9BC8-EDE6A2B25D14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C40A664-C655-4C3E-9BC8-EDE6A2B25D14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7603737F-761A-415D-A36C-C76FE445F4F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7603737F-761A-415D-A36C-C76FE445F4F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7603737F-761A-415D-A36C-C76FE445F4F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7603737F-761A-415D-A36C-C76FE445F4F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

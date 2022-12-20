@@ -14,6 +14,7 @@ namespace Array2D
             // 객체 자기자신 참조 키워드
             public void SetPos(int x, int y)
             {
+                map[_y, _x] = mapOrigin[_y, _x]; // 이전 위치 롤백
                 this._x = x;
                 this._y = y;
                 Program.map[y, x] = 5;
@@ -49,7 +50,7 @@ namespace Array2D
             public void MoveRight()
             {
                 // 움직이면 맵의 경계를 벗어나는지 체크
-                if (_y >= map.GetLength(1) - 1)
+                if (_x >= map.GetLength(1) - 1)
                     return;
 
                 // 지나갈 수 없는 벽인지 체크
@@ -58,10 +59,11 @@ namespace Array2D
 
                 SetPos(_x + 1, _y);
             }
+
             public void MoveLeft()
             {
                 // 움직이면 맵의 경계를 벗어나는지 체크
-                if (_y <= 0)
+                if (_x <= 0)
                     return;
 
                 // 지나갈 수 없는 벽인지 체크
@@ -78,6 +80,14 @@ namespace Array2D
         // 2 : 도착지점
         // 5 : 플레이어
         static int[,] map = new int[5, 5]
+        {
+            { 0, 1, 1, 1, 1 },
+            { 0, 1, 1, 1, 1 },
+            { 0, 0, 0, 1, 1 },
+            { 1, 1, 0, 1, 1 },
+            { 1, 1, 0, 0, 2 },
+        };
+        static int[,] mapOrigin = new int[5, 5]
         {
             { 0, 1, 1, 1, 1 },
             { 0, 1, 1, 1, 1 },
@@ -102,8 +112,15 @@ namespace Array2D
             Player player = new Player();
             player.SetPos(0, 0);
 
-            
-            DisplayMap();
+            string userInput = string.Empty;
+            while (map[4,4] != 5)
+            {
+                userInput = Console.ReadLine();
+                if (userInput == "L") player.MoveLeft();
+                else if (userInput == "R") player.MoveRight();
+                else if (userInput == "U") player.MoveUp();
+                else if (userInput == "D") player.MoveDown();
+            }
         }
 
         static void DisplayMap()
