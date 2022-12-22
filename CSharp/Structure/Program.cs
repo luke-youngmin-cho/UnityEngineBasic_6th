@@ -31,7 +31,7 @@ namespace Structure
             }
         }
 
-        public static Stats Zero
+        public  static Stats Zero
         {
             get
             {
@@ -151,7 +151,7 @@ namespace Structure
             player_s.LUK = 10;
 
             // 그러면은 언제 클래스를 쓰고 언제 구조체를 쓰나?
-            // 1. 멤버들의 크기 총합이 16 byte 이상일때는 일반적으로 클래스를 씀.
+            // 1. 멤버들의 크기 총합이 16 byte 초과일때는 일반적으로 클래스를 씀.
             // 
             // 참조타입으로 값을 읽고 쓰는거 보다 값타입을 읽고 쓰는게 빠르다. 
             // 하지만 16 byte를 초과할때는 레지스터가 두번 이상 값을 읽어야 하기 때문에 
