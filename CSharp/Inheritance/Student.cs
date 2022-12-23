@@ -18,7 +18,8 @@ namespace Inheritance
             }
         }
 
-        private string[] _seminarsTaken;
+        private string[] _seminarsTaken = new string[5];
+        private int _seminarsTakenCount;
         public bool TakenSeminar
         {
             get
@@ -31,6 +32,11 @@ namespace Inheritance
         public Student(string name, int phoneNumber, string emailAddress) 
             : base(name, phoneNumber, emailAddress)
         {
+        }
+
+        public void TakeSeminar(string seminar)
+        {
+            _seminarsTaken[_seminarsTakenCount++] = seminar;
         }
 
         public void TakeSeminars(string[] seminars)

@@ -18,6 +18,8 @@ namespace Inheritance
 
         public override void Attack()
         {
+            // base 키워드
+            // 상위타입 (부모)  
             //base.Attack();
             Console.WriteLine($"고양이가 추가로 전기공격을 했다");
         }
