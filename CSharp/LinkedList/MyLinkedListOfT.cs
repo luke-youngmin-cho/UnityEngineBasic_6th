@@ -62,37 +62,117 @@ namespace LinkedList
         // 작성 해 보슈
         public void AddLast(T value)
         {
-
+            _tmp1 = new Node<T>(value);
+            if (_last != null)
+            {
+                _last.Next = _tmp1;
+                _tmp1.Prev = _last;
+            }
+            if (_first == null)
+            {
+                _first = _tmp1;
+            }
+            _last = _tmp1;
         }
 
         public void AddBefore(Node<T> node, T value)
         {
+            _tmp1 = new Node<T>(value);
 
+            if (node.Prev != null)
+            {
+                node.Prev.Next = _tmp1;
+                _tmp1.Prev = node.Prev;
+            }
+            else
+            {
+                _first = _tmp1;
+            }
+
+            node.Prev = _tmp1;
+            _tmp1.Next = node;
         }
 
         public void AddAfter(Node<T> node, T value)
         {
+            _tmp1 = new Node<T>(value);
 
+            if (node.Next != null)
+            {
+                node.Next.Prev = _tmp1;
+                _tmp1.Next = node.Next;
+            }
+            else
+            {
+                _last = _tmp1;
+            }
+
+            node.Next = _tmp1;
+            _tmp1.Prev = node;
         }
 
-        public Node<T> Find(int value)
+        public Node<T> Find(T value)
         {
+            _tmp1 = _first;
+            while (_tmp1 != null)
+            {
+                if (Comparer<T>.Default.Compare(_tmp1.Value, value) == 0)
+                    return _tmp1;
+
+                _tmp1 = _tmp1.Next;
+            }
+
             return null;
         }
 
-        public Node<T> FindLast(int value)
+        public Node<T> FindLast(T value)
         {
+            _tmp1 = _last;
+            while (_tmp1 != null)
+            {
+                if (Comparer<T>.Default.Compare(_tmp1.Value, value) == 0)
+                    return _tmp1;
+
+                _tmp1 = _tmp1.Prev;
+            }
+
             return null;
         }
 
-        public bool Remove(int value)
+        public bool Remove(Node<T> node)
         {
-            return false;
+            if (node == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (node.Prev != null)
+                    node.Prev.Next = node.Next;
+                else
+                {
+                    _first = node.Next;
+                }
+
+                if (node.Next != null)
+                    node.Next.Prev = node.Prev;
+                else
+                {
+                    _last = node.Prev;
+                }
+
+                return true;
+            }
         }
 
-        public bool RemoveLast(int value)
+        public bool Remove(T value)
         {
-            return false;
+            return Remove(Find(value));
+        }
+
+        public bool RemoveLast(T value)
+        {
+            return Remove(FindLast(value));
         }
     }
 }
