@@ -46,6 +46,13 @@ namespace Collections
                 Console.WriteLine(list[i]);
             }
 
+            // foreach 문
+            // IEnumerable 을 iterating 하기위한 구문 
+            // (IEnumerable 의 모든 아이템들을 순회하는 구문)
+            foreach (int item in list)
+            {
+                Console.WriteLine(item);
+            }
             // LinkedList<T>
             // 제네릭 연결 리스트
             //----------------------------------------------------------
@@ -61,6 +68,12 @@ namespace Collections
             {
                 Console.WriteLine(node.Value);
                 node = node.Next;
+            }
+
+            
+            foreach (float item in linkedList)
+            {
+                Console.WriteLine(item);
             }
 
             // Dictionary<TKey, TValue>
@@ -82,6 +95,11 @@ namespace Collections
             if (dictionary.ContainsValue("철수"))
             {
 
+            }
+            foreach (KeyValuePair<int, string> item in dictionary)
+            {
+                Console.WriteLine(item.Key);
+                Console.WriteLine(item.Value);
             }
         }
     }

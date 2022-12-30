@@ -174,5 +174,61 @@ namespace LinkedList
         {
             return Remove(FindLast(value));
         }
+
+        public MyLinkedListEnum<T> GetEnumerator()
+        {
+            return new MyLinkedListEnum<T>(_first);
+        }
+
+        public struct MyLinkedListEnum<K>
+        {
+            public K Current
+            {
+                get
+                {
+                    return _currentNode.Value;
+                }
+            }
+            private Node<K> _currentNode;
+            private Node<K> _first;
+            private bool _firstFlag;
+            private bool FirstFlag
+            {
+                get
+                {
+                    return _firstFlag;
+                }
+                set
+                {
+                    if (value)
+                        _currentNode = _first;
+
+                    _firstFlag = value;
+                }
+            }
+
+            public MyLinkedListEnum(Node<K> first)
+            {
+                _first = first;
+                _currentNode = null;
+                _firstFlag = false;
+            }
+
+            public bool MoveNext()
+            {
+                if (_firstFlag == false)
+                    FirstFlag = true;
+                else
+                    _currentNode = _currentNode.Next;
+
+                return _currentNode != null;
+            }
+
+            public void Reset()
+            {
+                _currentNode = null;
+                FirstFlag = false;
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ namespace DynamicArray
         {
             if (Count >= Capacity)
             {
-                T[] tmp = new T[(int)Math.Ceiling(Math.Log10(Capacity)) + 1];
+                T[] tmp = new T[(int)Math.Ceiling(Math.Log10(Capacity)) + DEFAULT_SIZE + 1];
                 for (int i = 0; i < Count; i++)
                 {
                     tmp[i] = _data[i];
@@ -126,6 +126,45 @@ namespace DynamicArray
             for (int i = 0; i < Capacity; i++)
             {
                 _data[i] = default(T);
+            }
+        }
+
+        public MyDynamicArrayEnum<T> GetEnumerator()
+        {
+            return new MyDynamicArrayEnum<T>(_data);
+        }
+
+        // 열거자의 핵심멤버
+        // Current {get;} : 열거된 자료구조에서 현재 가리키고있는 자료아이템
+        // MoveNext() : 현재에서 그다음 아이템을 가리키도록 하는 함수
+        // Reset() : 가리키는 인덱스를 초기화하는 함수
+        public struct MyDynamicArrayEnum<K>
+        {
+            public K Current
+            {
+                get
+                {
+                    return _data[_index];
+                }
+            }
+            private readonly K[] _data;
+            private int _index;
+            
+            public MyDynamicArrayEnum(K[] origin)
+            {
+                _data = origin;
+                _index = -1;
+            }
+
+            public bool MoveNext()
+            {
+                _index++;
+                return (_index >= 0) && (_index < _data.Length);
+            }
+
+            public void Reset()
+            {
+                _index = -1;
             }
         }
     }

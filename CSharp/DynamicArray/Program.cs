@@ -15,6 +15,18 @@ namespace DynamicArray
             da.Find(BiggerThan20);
 
             MyDynamicArray<double> da_double = new MyDynamicArray<double>();
+            da_double.Add(3.0f);
+            da_double.Add(6.5f);
+            da_double.Add(4.2f);
+
+            MyDynamicArray<double>.MyDynamicArrayEnum<double> enumerator
+                = da_double.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                Console.WriteLine(enumerator.Current);
+            }
+            enumerator.Reset();
         }
 
         public static bool BiggerThan20(int value)
