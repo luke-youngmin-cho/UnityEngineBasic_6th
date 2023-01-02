@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace DynamicArray
     // 자료형을 일반화하는 문법
     // 클래스 / 구조체 / 인터페이스 / 함수 등의 이름뒤에 붙어서 정해지지 않은 타입에 대한 일반식을 
     // 정의할 때 사용한다.
-    internal class MyDynamicArray<T>
+    internal class MyDynamicArray<T> : IEnumerable<T>
     {        
         // const 키워드 
         // 상수 키워드. const 키워드가 붙은 변수는 
@@ -129,17 +130,23 @@ namespace DynamicArray
             }
         }
 
-        public MyDynamicArrayEnum<T> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return new MyDynamicArrayEnum<T>(_data);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         // 열거자의 핵심멤버
         // Current {get;} : 열거된 자료구조에서 현재 가리키고있는 자료아이템
         // MoveNext() : 현재에서 그다음 아이템을 가리키도록 하는 함수
         // Reset() : 가리키는 인덱스를 초기화하는 함수
-        public struct MyDynamicArrayEnum<K>
+        public struct MyDynamicArrayEnum<K> : IEnumerator<K>
         {
+            
             public K Current
             {
                 get
@@ -147,6 +154,15 @@ namespace DynamicArray
                     return _data[_index];
                 }
             }
+
+            object IEnumerator.Current
+            {
+                get
+                {
+                    return Current;
+                }
+            }
+
             private readonly K[] _data;
             private int _index;
             
@@ -165,6 +181,13 @@ namespace DynamicArray
             public void Reset()
             {
                 _index = -1;
+            }
+
+            // IDispose
+            // 관리되지 않는 힙영역 (Unmanaged heap) 의 메모리를 해제하는 내용을 구현하는 함수
+            public void Dispose()
+            {
+                
             }
         }
     }
