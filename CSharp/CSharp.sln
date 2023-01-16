@@ -41,7 +41,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryTree", "BinaryTree\Bi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections", "Collections\Collections.csproj", "{4934E39D-C986-4AED-BC93-3FA2E77E7A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortAlgorithms", "SortAlgorithms\SortAlgorithms.csproj", "{2ABA25AB-304D-410C-B4F3-753FB479F82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SortAlgorithms", "SortAlgorithms\SortAlgorithms.csproj", "{2ABA25AB-304D-410C-B4F3-753FB479F82A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delegate", "Delegate\Delegate.csproj", "{431645F6-6BE4-4668-BBF5-5890ADF4CC5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,10 @@ Global
 		{2ABA25AB-304D-410C-B4F3-753FB479F82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ABA25AB-304D-410C-B4F3-753FB479F82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ABA25AB-304D-410C-B4F3-753FB479F82A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431645F6-6BE4-4668-BBF5-5890ADF4CC5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431645F6-6BE4-4668-BBF5-5890ADF4CC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431645F6-6BE4-4668-BBF5-5890ADF4CC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431645F6-6BE4-4668-BBF5-5890ADF4CC5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -143,14 +143,14 @@ namespace SortAlgorithms
 
         #endregion
 
+        #region Quick Sort
         /// <summary>
         /// 퀵 정렬
         /// O(N^2)
         /// θ(NLogN)
+        /// Unstable
         /// </summary>
         /// <param name="arr"></param>
-        #region Quick Sort
-
         public static void QuickSort(int[] arr)
         {
             QuickSort(arr, 0, arr.Length - 1);
@@ -182,6 +182,103 @@ namespace SortAlgorithms
                 else
                 {
                     return end; // returnm pivot index
+                }
+            }
+        }
+
+        #endregion
+
+        #region Heap Sort
+        /// <summary>
+        /// Max - 힙 정렬
+        /// SIFT-UP Heapfiy 시 O(NLogN)
+        /// SIFT_DOWN Healpfiy 시 O(N^2)
+        /// Unstable
+        /// </summary>
+        /// <param name="arr"></param>
+        public static void HeapSort(int[] arr)
+        {
+            //Max-힙구조로 변환 (정렬하면서)
+            HeapifyTopDown(arr);
+            //HeapifyBottonUp(arr);
+
+            //원래 구조로 변환
+            InverseHeapify(arr);
+        }
+
+        // O(NLogN)
+        public static void HeapifyTopDown(int[] arr)
+        {
+            int end = 1;
+            while (end < arr.Length)
+            {
+                SIFT_Up(arr, 0, end++);
+            }
+        }
+
+        // O(N^2)
+        public static void HeapifyBottonUp(int[] arr)
+        {
+            int end = arr.Length - 1;
+            int current = end;
+
+            while (current >= 0)
+            {
+                SIFT_Down(arr, end, current--);
+            }
+        }
+
+        public static void InverseHeapify(int[] arr)
+        {
+            int end = arr.Length - 1;
+            while (end > 0)
+            {
+                Swap(ref arr[0], ref arr[end]);
+                end--; // 마지막 아이템 고정
+                SIFT_Down(arr, end, 1);
+            }
+        }
+
+        // O(LogN)
+        public static void SIFT_Up(int[] arr, int root, int current)
+        {
+            int parent = (current - 1) / 2;
+            while (current > root)
+            {
+                if (arr[current] > arr[parent])
+                {
+                    Swap(ref arr[current], ref arr[parent]);
+                    current = parent;
+                    parent = (current - 1) / 2;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        // O(N)
+        public static void SIFT_Down(int[] arr, int end, int current)
+        {
+            int parent = (current - 1) / 2;
+
+            while (current <= end)
+            {
+                // 오른쪽 자식이 더 크면 오른쪽으로 스왑
+                if (current + 1 <= end &&
+                    arr[current] < arr[current + 1])
+                    current++;
+
+                if (arr[current] > arr[parent])
+                {
+                    Swap(ref arr[current], ref arr[parent]);
+                    parent = current;
+                    current = parent * 2 + 1; // 왼쪽자식으로감
+                }
+                else
+                {
+                    break;
                 }
             }
         }
