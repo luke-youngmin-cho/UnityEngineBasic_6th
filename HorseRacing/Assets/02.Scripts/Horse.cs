@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 안정성에 따른 속도로 전진하는 말
+/// </summary>
 public class Horse : MonoBehaviour
 {
     public bool doMove;
@@ -9,7 +12,11 @@ public class Horse : MonoBehaviour
     [Range(0.0f, 1.0f)]
     [SerializeField] private float _stability = 0.7f;
 
-    
+
+    //============================================================
+    //                      Private Methods
+    //============================================================
+
     private void FixedUpdate()
     {
         if (doMove)
