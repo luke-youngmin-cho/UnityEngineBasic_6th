@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÀüÅõ±â ÀÌµ¿ Á¦¾î 
+/// ì „íˆ¬ê¸° ì´ë™ ì œì–´ 
 /// </summary>
 public class FighterMove : MonoBehaviour
 {

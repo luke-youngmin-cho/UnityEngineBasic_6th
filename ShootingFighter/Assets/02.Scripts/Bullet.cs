@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¾ÕÀ¸·Î ³ª¾Æ°¡´Ù°¡ Æ®¸®°ÅµÇ¸é ÆÄ±«µÇ´Â ÃÑ¾Ë
+/// ì•ìœ¼ë¡œ ë‚˜ì•„ê°€ë‹¤ê°€ íŠ¸ë¦¬ê±°ë˜ë©´ íŒŒê´´ë˜ëŠ” ì´ì•Œ
 /// </summary>
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float _speed = 10.0f;
     private Vector3 _dir = Vector3.forward;
     private Transform _tr;
-
+    [SerializeField] private LayerMask _enemyMask;
+    [SerializeField] private int _damage = 20;
 
     //===================================================================
     //                          Private Methods
@@ -28,6 +29,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (((1 << other.gameObject.layer) & _enemyMask) > 0)
+        {
+            other.GetComponent<Enemy>().hp -= _damage;
+        }
         Destroy(gameObject);
     }
 }
