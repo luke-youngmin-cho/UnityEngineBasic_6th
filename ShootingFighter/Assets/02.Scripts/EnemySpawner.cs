@@ -11,7 +11,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float _targetFollowRate = 0.7f;
     private float _timer;
 
-
     private void Update()
     {
         Spawn();
