@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 7124274569197018074}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7124274569431161126}
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7124274569197018074}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300004, guid: 86fc77829a6e78d43a007a5d05e6be45, type: 3}
 --- !u!23 &7124274569197018052
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dbcc46b864cf62342a62647435959e32, type: 2}
+  - {fileID: 2100000, guid: dadefef0edf68504b971d5e8b275586d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -127,8 +127,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.2
-  m_Height: 0.8
+  m_Radius: 0.4
+  m_Height: 1.3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-5645992930298848150
@@ -147,6 +147,6 @@ MonoBehaviour:
   _enemyMask:
     serializedVersion: 2
     m_Bits: 1048576
-  _damage: 40
+  _damage: 100
   _range: 4
   _explosionEffect: {fileID: 3077631340651959094, guid: 38c3a118266ab5f4ab5bcce43ae0cfd2, type: 3}
