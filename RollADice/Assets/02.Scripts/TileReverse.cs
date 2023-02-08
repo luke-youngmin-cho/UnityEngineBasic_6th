@@ -10,6 +10,6 @@ public class TileReverse : Tile
 
     private void ReverseDirection()
     {
-        DiceManager.instance.direction = DiceManager.DIRECTION_BACKWARD;
+        Player.instance.direction = Player.DIRECTION_BACKWARD;
     }
 }
