@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     }
     private int _star;
     public event Action<int> onStarChanged;
+    public float starGain = 1.0f;
 
     public const int DIRECTION_FORWARD = 1;
     public const int DIRECTION_BACKWARD = -1;
@@ -44,6 +45,8 @@ public class Player : MonoBehaviour
     private int _direction = DIRECTION_FORWARD;
     public event Action<int> onDirectionChanged;
 
+    public float speed = 1.0f;
+
     [SerializeField] private TileMap _tileMap;
     private List<TileStar> _tileStars = new List<TileStar>();
     private int _currentTileIndex = -1;
@@ -51,6 +54,8 @@ public class Player : MonoBehaviour
 
     public void Move(int diceValue)
     {
+        diceValue = (int)(diceValue * speed);
+
         // 정방향
         if (direction == DIRECTION_FORWARD)
         {
@@ -74,6 +79,14 @@ public class Player : MonoBehaviour
         // 플레이어 실제 이동
         transform.position = _tileMap[_currentTileIndex].transform.position;
         _tileMap[_currentTileIndex].OnHere();
+
+        speed = 1.0f;
+    }
+
+    public void MoveBackToOrigin()
+    {
+        transform.position = _tileMap[0].transform.position;
+        _currentTileIndex = 0;
     }
 
     private void Start()
@@ -116,7 +129,8 @@ public class Player : MonoBehaviour
                 }
             }
         }
-
+        sum = (int)(sum * starGain);
         star += sum;
+        starGain = 1.0f;
     }
 }
