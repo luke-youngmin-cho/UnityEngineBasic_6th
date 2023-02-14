@@ -11,19 +11,16 @@ public class TarotUI : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        _content.localPosition = Vector3.zero;
+        gameObject.SetActive(false);
     }
     #endregion
 
+    [SerializeField] private RectTransform _content;
     [SerializeField] private List<TarotCard> _cards;
 
     public void Show()
     {
-        // 기존카드 다 뒤집고(비활성화)
-        foreach (TarotCard card in _cards)
-        {
-            card.gameObject.SetActive(false);
-        }
-
         // 카드 전부 무작위로 섞음
         IEnumerable<TarotCard> shuffled = _cards.OrderBy((x) => Guid.NewGuid());
 
@@ -31,11 +28,15 @@ public class TarotUI : MonoBehaviour
         int count = 0;
         foreach (TarotCard card in shuffled)
         {
-            card.gameObject.SetActive(true);
+            card.gameObject.SetActive(count < 3);
             count++;
-
-            if (count >= 3)
-                break;
         }
+
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
     }
 }
