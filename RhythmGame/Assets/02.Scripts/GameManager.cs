@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
                     if (MVPlayer.instance != null)
                     {
                         MVPlayer.instance.Play(SongDataLoader.clipLoaded);
-                        // todo -> NoteSpawnManager 한테 노트 생성해달라고하기
+                        NoteSpawnManager.instance.StartSpawn(SongDataLoader.dataLoaded.notes);
                         state = GameStates.WaitUntilGameFinished;
                     }
                 }

@@ -13,7 +13,7 @@ public class MVPlayer : MonoBehaviour
     public void Play(VideoClip clip)
     {
         _videoPlayer.clip = clip;
-        _videoPlayer.Play();
+        Invoke("Play", NoteSpawnManager.instance.noteFallingTime);
     }
 
     public void Stop()
@@ -27,5 +27,10 @@ public class MVPlayer : MonoBehaviour
     {
         instance = this;
         _videoPlayer = GetComponent<VideoPlayer>();
+    }
+
+    private void Play()
+    {
+        _videoPlayer.Play();
     }
 }
