@@ -15,7 +15,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Note
   - 
   - 
   - 
@@ -40,4 +40,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BG
+    uniqueID: 2030652031
+    locked: 0
+  - name: BGObjects
+    uniqueID: 4131643645
+    locked: 0
+  - name: NoteHitters
+    uniqueID: 818719521
+    locked: 0
+  - name: NoteHitEffects
+    uniqueID: 3266841353
+    locked: 0
+  - name: Note
+    uniqueID: 2244357557
     locked: 0
