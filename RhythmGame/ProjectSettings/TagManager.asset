@@ -53,6 +53,9 @@ TagManager:
   - name: NoteHitEffects
     uniqueID: 3266841353
     locked: 0
+  - name: HitAlerts
+    uniqueID: 743487621
+    locked: 0
   - name: Note
     uniqueID: 2244357557
     locked: 0
