@@ -58,22 +58,22 @@ public class NoteHitter : MonoBehaviour
 
             float distance = Mathf.Abs(colsFiltered.First().transform.position.y - transform.position.y);
 
-            if (distance < PlaySettings.HIT_JUDGE_RANGE_COOL)
+            if (distance < PlaySettings.HIT_JUDGE_RANGE_COOL / 2.0f)
             {
                 hitJudge = HitJudge.Cool;
                 GameStatus.IncreaseCoolCount();
             }
-            else if (distance < PlaySettings.HIT_JUDGE_RANGE_GREAT)
+            else if (distance < PlaySettings.HIT_JUDGE_RANGE_GREAT / 2.0f)
             {
                 hitJudge = HitJudge.Great;
                 GameStatus.IncreaseGreatCount();
             }
-            else if (distance < PlaySettings.HIT_JUDGE_RANGE_GOOD)
+            else if (distance < PlaySettings.HIT_JUDGE_RANGE_GOOD / 2.0f)
             {
                 hitJudge = HitJudge.Good;
                 GameStatus.IncreaseGoodCount();
             }
-            else if (distance < PlaySettings.HIT_JUDGE_RANGE_MISS)
+            else if (distance < PlaySettings.HIT_JUDGE_RANGE_MISS / 2.0f)
             {
                 hitJudge = HitJudge.Miss;
                 GameStatus.IncreaseMissCount();
