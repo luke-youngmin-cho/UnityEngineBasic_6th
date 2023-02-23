@@ -46,6 +46,12 @@ public class NoteSpawnManager : MonoBehaviour
                 break;
             }
         }
+
+        if (_noteDataQueue.Count <= 0)
+        {
+            isSpawning = false;
+            Invoke("StopMV", noteFallingTime * 2);
+        }
     }
 
 
@@ -57,5 +63,10 @@ public class NoteSpawnManager : MonoBehaviour
         {
             _spanwers.Add(spawners[i].key, spawners[i]);
         }
+    }
+
+    private void StopMV()
+    {
+        MVPlayer.instance.Stop();
     }
 }

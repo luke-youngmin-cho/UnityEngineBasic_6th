@@ -1423,11 +1423,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _score: {fileID: 5139075209148907755}
   _coolCount: {fileID: 9017170669929440700}
-  _greatCount: {fileID: 7742224555774469898}
+  _greatCount: {fileID: 7786015957961549532}
   _goodCount: {fileID: 7742224555774469898}
   _missCount: {fileID: 8788253196164962748}
   _badCount: {fileID: 2838338125908695345}
   _rank: {fileID: 5987622233191347370}
+  _replay: {fileID: 969435734744609975}
+  _lobby: {fileID: 7855701122407387715}
 --- !u!1 &4844991655713646750
 GameObject:
   m_ObjectHideFlags: 0

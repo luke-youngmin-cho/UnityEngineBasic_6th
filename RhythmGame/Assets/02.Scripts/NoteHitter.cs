@@ -20,6 +20,7 @@ public class NoteHitter : MonoBehaviour
     private Color _colorOrigin;
     [SerializeField] private Color _colorPressed;
     [SerializeField] private GameObject _hitEffect;
+    [SerializeField] private ParticleSystem _hitParticleEffect;
 
     private void Awake()
     {
@@ -80,7 +81,7 @@ public class NoteHitter : MonoBehaviour
             }
 
             Destroy(colsFiltered.First().gameObject);
-            
+            _hitParticleEffect.Play();
             HitAlertsManager.instance.PopUp(hitJudge);
         }
     }

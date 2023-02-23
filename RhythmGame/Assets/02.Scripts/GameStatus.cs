@@ -32,6 +32,17 @@ public static class GameStatus
     private static int _currentCombo;
     private static int _score;
     
+    public static void Clear()
+    {
+        currentCombo = 0;
+        score = 0;
+        coolCount = 0;
+        greatCount = 0;
+        goodCount = 0;
+        missCount = 0;
+        badCount = 0;
+    }
+
     public static void IncreaseCoolCount()
     {
         coolCount++;

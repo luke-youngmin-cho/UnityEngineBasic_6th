@@ -30,6 +30,12 @@ public class ScoringText : MonoBehaviour
     private StringBuilder _buffer;
     private string format = " {0,3:" + "000" + "}";
 
+    public void Clear()
+    {
+        _score = _before = _after = _delta = 0;
+        _scoreText.text = "0";
+    }
+
 
     private void Awake()
     {

@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         WaitUntilSongDataLoaded,
         StartGame,
         WaitUntilGameFinished,
-        DisplayScore,
+        ShowResult,
         WaitForUser
     }
     public GameStates state;
@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
                 {
                     if (MVPlayer.instance != null)
                     {
+                        GameStatus.Clear();
+                        ScoringText.instance.Clear();
                         MVPlayer.instance.Play(SongDataLoader.clipLoaded);
                         NoteSpawnManager.instance.StartSpawn(SongDataLoader.dataLoaded.notes);
                         state = GameStates.WaitUntilGameFinished;
@@ -60,8 +62,17 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameStates.WaitUntilGameFinished:
+                {
+                    if (MVPlayer.instance.isPlaying == false && 
+                        NoteSpawnManager.instance.isSpawning == false)
+                        state = GameStates.ShowResult;
+                }
                 break;
-            case GameStates.DisplayScore:
+            case GameStates.ShowResult:
+                {
+                    ResultUI.instance.Show();
+                    state = GameStates.WaitForUser;
+                }
                 break;
             case GameStates.WaitForUser:
                 break;

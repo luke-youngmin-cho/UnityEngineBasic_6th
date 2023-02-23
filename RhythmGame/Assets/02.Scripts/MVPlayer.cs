@@ -7,6 +7,8 @@ using UnityEngine.Video;
 public class MVPlayer : MonoBehaviour
 {
     public static MVPlayer instance;
+
+    public bool isPlaying => _videoPlayer.isPlaying;
     private VideoPlayer _videoPlayer;
 
 
