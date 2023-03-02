@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D), typeof(Animator))]
-public class EnemyController : MonoBehaviour
+public abstract class EnemyController : MonoBehaviour
 {
     private Animator _animator;
     private Rigidbody2D _rb;
@@ -19,9 +19,9 @@ public class EnemyController : MonoBehaviour
         Die
     }
     public StateType current;
-    // ¾î¶² »óÅÂÀÏ¶§ ¾î¶² ·ÎÁ÷À» ¼öÇàÇØ¾ßÇÏ´ÂÁö¿¡ ´ëÇÑ »çÀü
+    // ì–´ë–¤ ìƒíƒœì¼ë•Œ ì–´ë–¤ ë¡œì§ì„ ìˆ˜í–‰í•´ì•¼í•˜ëŠ”ì§€ì— ëŒ€í•œ ì‚¬ì „
     private Dictionary<StateType, IEnumerator<int>> _workflows = new Dictionary<StateType, IEnumerator<int>>();
-    // ¾î¶² Á¶°ÇÀÏ¶§ ¾î¶² »óÅÂ¸¦ ¼öÇàÇÒ ¼ö ÀÖ´ÂÁö¿¡ ´ëÇÑ »çÀü
+    // ì–´ë–¤ ì¡°ê±´ì¼ë•Œ ì–´ë–¤ ìƒíƒœë¥¼ ìˆ˜í–‰í•  ìˆ˜ ìˆëŠ”ì§€ì— ëŒ€í•œ ì‚¬ì „
     private Dictionary<StateType, Func<bool>> _conditions = new Dictionary<StateType, Func<bool>>();
 
     #region AI
@@ -32,7 +32,9 @@ public class EnemyController : MonoBehaviour
         TakeARest,
         MoveLeft,
         MoveRight,
+        StartFollowTarget,
         FollowTarget,
+        StartAttackTarget,
         AttackTarget
     }
     [SerializeField] private AI _ai;
@@ -290,7 +292,7 @@ public class EnemyController : MonoBehaviour
     }
     #endregion
 
-    // ¹æÇâ
+    // ë°©í–¥
     private const int DIRECTION_LEFT = -1;
     private const int DIRECTION_RIGHT = 1;
     public int direction
@@ -314,10 +316,13 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private bool _moveEnable = true;
     [SerializeField] private float _moveSpeed = 1.0f;
-    private bool _movable;
+    [SerializeField] private bool _movable;
 
     public bool ChangeState(StateType newState)
     {
+        if (current == newState)
+            return false;
+
         if (_conditions[newState].Invoke())
         {
             current = newState;
@@ -327,7 +332,6 @@ public class EnemyController : MonoBehaviour
 
         return false;
     }
-
 
     private void Awake()
     {
@@ -370,20 +374,24 @@ public class EnemyController : MonoBehaviour
     {
         Collider2D target = Physics2D.OverlapCircle(_rb.position, _aiDetectRange, _aiTargetMask);
 
-        //Å¸°Ù °¨Áö
-        if (target != null)
+        //íƒ€ê²Ÿ ê°ì§€
+        if (_aiAutoFollow &&
+            target != null)
         {
-            // Å¸°Ù °ø°İ¹üÀ§³»¿¡ ÀÖ´ÂÁö Ã¼Å©
             if (_aiAttackEnable &&
                 Vector2.Distance(_rb.position, target.transform.position) <= _aiAttackRange)
             {
-                _ai = AI.AttackTarget;
+                if (_ai != AI.StartAttackTarget &&
+                    _ai != AI.AttackTarget)
+                {
+                    _ai = AI.StartAttackTarget;
+                }
             }
-            else
+            else if (_ai != AI.StartFollowTarget &&
+                     _ai != AI.FollowTarget)
             {
-                _ai = AI.FollowTarget;
+                _ai = AI.StartFollowTarget;
             }
-            _aiBehaviourTimer = 0;
         }  
         else if (_aiBehaviourTimer <= 0)
         {
@@ -431,10 +439,15 @@ public class EnemyController : MonoBehaviour
                     }
                 }
                 break;
-            case AI.FollowTarget:
+            case AI.StartFollowTarget:
                 {
                     ChangeState(StateType.Move);
-
+                    _aiBehaviourTimer = 0;
+                    _ai = AI.FollowTarget;
+                }
+                break;
+            case AI.FollowTarget:
+                {
                     if (_rb.position.x < target.transform.position.x - _col.size.x)
                     {
                         direction = DIRECTION_RIGHT;
@@ -445,12 +458,26 @@ public class EnemyController : MonoBehaviour
                     }
                 }
                 break;
+            case AI.StartAttackTarget:
+                {
+                    direction = _rb.position.x < target.transform.position.x ? DIRECTION_RIGHT : DIRECTION_LEFT;                    
+                    ChangeState(StateType.Attack);
+                    _aiBehaviourTimer = 0;
+                    _ai = AI.AttackTarget;
+                }
+                break;
             case AI.AttackTarget:
+                {
+                    if (current != StateType.Attack)
+                        _ai = AI.StartAttackTarget;
+                }
                 break;
             default:
                 break;
         }
     }
+
+    protected virtual void Hit() { }
 
     private void OnDrawGizmos()
     {
