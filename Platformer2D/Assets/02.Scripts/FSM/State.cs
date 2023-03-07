@@ -13,14 +13,17 @@ public abstract class State : IState
     private Func<bool> _canExecute;
     protected GameObject owner;
     protected Animator animator;
+    protected Movement movement;
 
-    public State(GameObject owner, int id, Func<bool> executionCondition)
+    public State(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions)
     {
         this.owner = owner;
         this.id = id;
         _canExecute = executionCondition;
+        this.transitions = transitions;
 
         animator = owner.GetComponent<Animator>();
+        movement = owner.GetComponent<Movement>();
     }
 
 

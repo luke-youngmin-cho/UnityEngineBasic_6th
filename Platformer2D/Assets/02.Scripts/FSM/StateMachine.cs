@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class StateMachine
     public StateMachine(GameObject owner)
     {
         this.owner = owner;
+        InitStates();
     }
 
     /// <summary>
@@ -40,6 +42,7 @@ public class StateMachine
         states[nextStateID].Execute();
         currentStateID = nextStateID;
         currentState = states[nextStateID];
+        Debug.Log($"State has changed to {(StateType)nextStateID}");
         return true;
     }
 
@@ -50,15 +53,37 @@ public class StateMachine
 
     protected void InitStates()
     {
+        Movement movement = owner.GetComponent<Movement>();
+
         states = new Dictionary<int, IState>();
-        StateIdle idle = new StateIdle(owner,
-                                       (int)StateType.Idle,
-                                       () => true);
+        StateIdle idle = new StateIdle(owner: owner,
+                                       id: (int)StateType.Idle,
+                                       executionCondition: () => true,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => movement.isMovable && movement.isInputValid,
+                                               (int)StateType.Move
+                                           )
+                                       });
         states.Add((int)StateType.Idle, idle);
 
-        StateMove move = new StateMove(owner,
-                                       (int)StateType.Move,
-                                       () => true);
+        StateMove move = new StateMove(owner: owner,
+                                       id: (int)StateType.Move,
+                                       executionCondition: () => true,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => movement.isMovable && movement.isInputValid == false,
+                                               (int)StateType.Idle
+                                           )
+                                       });
         states.Add((int)StateType.Move, move);
+
+        currentState = idle;
+        currentStateID = (int)StateType.Idle;
+        currentState.Execute();
     }
 }

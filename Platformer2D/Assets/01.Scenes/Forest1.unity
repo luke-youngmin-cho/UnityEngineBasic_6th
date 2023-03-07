@@ -5203,6 +5203,8 @@ GameObject:
   - component: {fileID: 1983716760}
   - component: {fileID: 1983716759}
   - component: {fileID: 1983716762}
+  - component: {fileID: 1983716763}
+  - component: {fileID: 1983716764}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -5284,6 +5286,37 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1983716763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983716758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6148ffd3a87c5c43b0fac5fbb23a9a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1983716764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983716758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ab70eab5b1a8b48a43e12f613a28a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMovable: 0
+  isDirectionChangeable: 0
+  speed: 1.3
+  h: 0
+  v: 0
+  move: {x: 0, y: 0}
+  _minInputDelta: 0.05
 --- !u!1 &2018543768
 GameObject:
   m_ObjectHideFlags: 0
