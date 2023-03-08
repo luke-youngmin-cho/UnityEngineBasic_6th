@@ -11,17 +11,19 @@ public abstract class State : IState
     public List<KeyValuePair<Func<bool>, int>> transitions { get; set; }
 
     private Func<bool> _canExecute;
+    protected bool hasExitTime;
     protected GameObject owner;
     protected Animator animator;
     protected Movement movement;
 
-    public State(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions)
+    public State(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime)
     {
         this.owner = owner;
         this.id = id;
         _canExecute = executionCondition;
         this.transitions = transitions;
 
+        this.hasExitTime = hasExitTime;
         animator = owner.GetComponent<Animator>();
         movement = owner.GetComponent<Movement>();
     }
@@ -43,12 +45,17 @@ public abstract class State : IState
     {
         int nextID = id;
 
-        foreach (KeyValuePair<Func<bool>, int> transition  in transitions)
+        if (hasExitTime == false ||
+            (hasExitTime && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f))
         {
-            if (transition.Key.Invoke())
+
+            foreach (KeyValuePair<Func<bool>, int> transition in transitions)
             {
-                nextID = transition.Value;
-                break;
+                if (transition.Key.Invoke())
+                {
+                    nextID = transition.Value;
+                    break;
+                }
             }
         }
 

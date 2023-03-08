@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMove : State
+public class StateFall : State
 {
-    public StateMove(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime)
+    public StateFall(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime) 
         : base(owner, id, executionCondition, transitions, hasExitTime)
     {
     }
@@ -13,8 +13,8 @@ public class StateMove : State
     public override void Execute()
     {
         base.Execute();
-        movement.isMovable = true;
+        movement.isMovable = false;
         movement.isDirectionChangeable = true;
-        animator.Play("Move");
+        animator.Play("Fall");
     }
 }

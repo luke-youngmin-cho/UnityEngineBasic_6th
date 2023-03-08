@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class StateIdle : State
 {
-    public StateIdle(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions) 
-        : base(owner, id, executionCondition, transitions)
+    public StateIdle(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime) 
+        : base(owner, id, executionCondition, transitions, hasExitTime)
     {
+        
     }
 
     public override void Execute()

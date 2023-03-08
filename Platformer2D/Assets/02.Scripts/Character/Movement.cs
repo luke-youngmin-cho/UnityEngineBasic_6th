@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
         }
     }
     private int _dir;
-    public float speed = 2.0f;
+    public float speed = 1.3f;
     public float h, v;
     public bool isInputValid => Mathf.Abs(h) > _minInputDelta;
 

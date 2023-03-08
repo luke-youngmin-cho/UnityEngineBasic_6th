@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            _stateMachine.ChangeState((int)StateMachine.StateType.Jump);
+
+
         _stateMachine.UpdateState();
     }
 }

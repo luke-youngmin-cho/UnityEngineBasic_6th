@@ -54,6 +54,8 @@ public class StateMachine
     protected void InitStates()
     {
         Movement movement = owner.GetComponent<Movement>();
+        GroundDetector groundDetector = owner.GetComponent<GroundDetector>();
+        Rigidbody2D rigidBody = owner.GetComponent<Rigidbody2D>();
 
         states = new Dictionary<int, IState>();
         StateIdle idle = new StateIdle(owner: owner,
@@ -66,12 +68,13 @@ public class StateMachine
                                                () => movement.isMovable && movement.isInputValid,
                                                (int)StateType.Move
                                            )
-                                       });
+                                       },
+                                       hasExitTime: false);
         states.Add((int)StateType.Idle, idle);
 
         StateMove move = new StateMove(owner: owner,
                                        id: (int)StateType.Move,
-                                       executionCondition: () => true,
+                                       executionCondition: () => groundDetector.isDetected,
                                        transitions: new List<KeyValuePair<Func<bool>, int>>()
                                        {
                                            new KeyValuePair<Func<bool>, int>
@@ -79,8 +82,63 @@ public class StateMachine
                                                () => movement.isMovable && movement.isInputValid == false,
                                                (int)StateType.Idle
                                            )
-                                       });
+                                       },
+                                       hasExitTime: false);
         states.Add((int)StateType.Move, move);
+
+        StateJump jump = new StateJump(owner: owner,
+                                       id: (int)StateType.Jump,
+                                       executionCondition: () => groundDetector.isDetected,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => groundDetector.isDetected,
+                                               (int)StateType.Idle
+                                           ),
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => rigidBody.velocity.y < 0.0f,
+                                               (int)StateType.Fall
+                                           )
+                                       },
+                                       hasExitTime: false);
+        states.Add((int)StateType.Jump, jump);
+
+        StateFall fall = new StateFall(owner: owner,
+                                       id: (int)StateType.Fall,
+                                       executionCondition: () => groundDetector.isDetected,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => groundDetector.isDetected &&                                               
+                                                     rigidBody.velocity.y < -2.0f,
+                                               (int)StateType.Land
+                                           ),
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => groundDetector.isDetected &&
+                                                     rigidBody.velocity.y >= -2.0f,
+                                               (int)StateType.Idle
+                                           )
+                                       },
+                                       hasExitTime: false);
+        states.Add((int)StateType.Fall, fall);
+
+        StateLand land = new StateLand(owner: owner,
+                                       id: (int)StateType.Land,
+                                       executionCondition: () => groundDetector.isDetected,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => true,
+                                               (int)StateType.Idle
+                                           )
+                                       },
+                                       hasExitTime:  true);
+        states.Add((int)StateType.Land, land); ;
 
         currentState = idle;
         currentStateID = (int)StateType.Idle;
