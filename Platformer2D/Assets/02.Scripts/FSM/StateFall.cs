@@ -17,4 +17,5 @@ public class StateFall : State
         movement.isDirectionChangeable = true;
         animator.Play("Fall");
     }
+
 }

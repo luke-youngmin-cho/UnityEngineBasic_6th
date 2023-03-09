@@ -76,9 +76,10 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isMovable)
-        {
-            _rb.MovePosition(_rb.position + move * speed * Time.fixedDeltaTime);
-        }
+        //if (isMovable)
+        //{
+        //    _rb.MovePosition(_rb.position + move * speed * Time.fixedDeltaTime);
+        //}
+        _rb.position += move * speed * Time.fixedDeltaTime; 
     }
 }

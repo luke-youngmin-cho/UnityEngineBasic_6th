@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftAlt))
             _stateMachine.ChangeState((int)StateMachine.StateType.Jump);
 
+        if (Input.GetKey(KeyCode.DownArrow))
+            _stateMachine.ChangeState((int)StateMachine.StateType.Crouch);
 
         _stateMachine.UpdateState();
     }

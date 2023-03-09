@@ -6,7 +6,7 @@ using UnityEngine;
 public class StateJump : State
 {
     private Rigidbody2D _rb;
-    private float _jumpForce = 2.0f;
+    private float _jumpForce = 2.7f;
 
     public StateJump(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime) 
         : base(owner, id, executionCondition, transitions, hasExitTime)

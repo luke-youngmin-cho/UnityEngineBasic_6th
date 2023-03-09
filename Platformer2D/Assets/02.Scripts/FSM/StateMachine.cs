@@ -12,6 +12,7 @@ public class StateMachine
         Fall,
         Land,
         Attack,
+        Crouch
     }
 
     public int currentStateID;
@@ -88,12 +89,15 @@ public class StateMachine
 
         StateJump jump = new StateJump(owner: owner,
                                        id: (int)StateType.Jump,
-                                       executionCondition: () => groundDetector.isDetected,
+                                       executionCondition: () => groundDetector.isDetected &&
+                                                                 (currentStateID == (int)StateType.Idle ||
+                                                                  currentStateID == (int)StateType.Move),
                                        transitions: new List<KeyValuePair<Func<bool>, int>>()
                                        {
                                            new KeyValuePair<Func<bool>, int>
                                            (
-                                               () => groundDetector.isDetected,
+                                               () => groundDetector.isDetected && 
+                                                     rigidBody.velocity.y == 0.0f,
                                                (int)StateType.Idle
                                            ),
                                            new KeyValuePair<Func<bool>, int>
@@ -107,19 +111,19 @@ public class StateMachine
 
         StateFall fall = new StateFall(owner: owner,
                                        id: (int)StateType.Fall,
-                                       executionCondition: () => groundDetector.isDetected,
+                                       executionCondition: () => groundDetector.isDetected == false,
                                        transitions: new List<KeyValuePair<Func<bool>, int>>()
                                        {
                                            new KeyValuePair<Func<bool>, int>
                                            (
                                                () => groundDetector.isDetected &&                                               
-                                                     rigidBody.velocity.y < -2.0f,
+                                                     rigidBody.velocity.y < -3.0f,
                                                (int)StateType.Land
                                            ),
                                            new KeyValuePair<Func<bool>, int>
                                            (
                                                () => groundDetector.isDetected &&
-                                                     rigidBody.velocity.y >= -2.0f,
+                                                     rigidBody.velocity.y >= -3.0f,
                                                (int)StateType.Idle
                                            )
                                        },
@@ -138,7 +142,24 @@ public class StateMachine
                                            )
                                        },
                                        hasExitTime:  true);
-        states.Add((int)StateType.Land, land); ;
+        states.Add((int)StateType.Land, land);
+
+        StateCrouch crouch = new StateCrouch(owner: owner,
+                                             id: (int)StateType.Crouch,
+                                             executionCondition: () => groundDetector.isDetected &&
+                                                                       (currentStateID == (int)StateType.Idle ||
+                                                                        currentStateID == (int)StateType.Move),
+                                             transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                             {
+                                                 new KeyValuePair<Func<bool>, int>
+                                                 (
+                                                     () => true,
+                                                     (int)StateType.Idle
+                                                 )
+                                             },
+                                             hasExitTime: false);
+        states.Add((int)StateType.Crouch, crouch);
+
 
         currentState = idle;
         currentStateID = (int)StateType.Idle;
