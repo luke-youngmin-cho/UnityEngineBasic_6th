@@ -12,7 +12,10 @@ public class StateMachine
         Fall,
         Land,
         Attack,
-        Crouch
+        Crouch,
+        Hurt,
+        Die,
+        Ledge
     }
 
     public int currentStateID;
@@ -56,6 +59,7 @@ public class StateMachine
     {
         Movement movement = owner.GetComponent<Movement>();
         GroundDetector groundDetector = owner.GetComponent<GroundDetector>();
+        LedgeDetector ledgeDetector = owner.GetComponent<LedgeDetector>();
         Rigidbody2D rigidBody = owner.GetComponent<Rigidbody2D>();
 
         states = new Dictionary<int, IState>();
@@ -117,13 +121,13 @@ public class StateMachine
                                            new KeyValuePair<Func<bool>, int>
                                            (
                                                () => groundDetector.isDetected &&                                               
-                                                     rigidBody.velocity.y < -3.0f,
+                                                     rigidBody.velocity.y < -2.7f,
                                                (int)StateType.Land
                                            ),
                                            new KeyValuePair<Func<bool>, int>
                                            (
                                                () => groundDetector.isDetected &&
-                                                     rigidBody.velocity.y >= -3.0f,
+                                                     rigidBody.velocity.y >= -2.7f,
                                                (int)StateType.Idle
                                            )
                                        },
@@ -160,6 +164,37 @@ public class StateMachine
                                              hasExitTime: false);
         states.Add((int)StateType.Crouch, crouch);
 
+        StateHurt hurt = new StateHurt(owner: owner,
+                                       id: (int)StateType.Hurt,
+                                       executionCondition: () => currentStateID != (int)StateType.Attack,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => true,
+                                               (int)StateType.Idle
+                                           )
+                                       },
+                                       hasExitTime: true);
+        states.Add((int)StateType.Hurt, hurt);
+
+        StateDie die = new StateDie(owner: owner,
+                                       id: (int)StateType.Die,
+                                       executionCondition: () => true,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                       },
+                                       hasExitTime: true);
+        states.Add((int)StateType.Die, die);
+
+        StateLedge ledge = new StateLedge(owner: owner,
+                                          id: (int)StateType.Ledge,
+                                          executionCondition: () => ledgeDetector.isDetected,
+                                          transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                          {
+                                          },
+                                          hasExitTime: false);
+        states.Add((int)StateType.Ledge, ledge);
 
         currentState = idle;
         currentStateID = (int)StateType.Idle;

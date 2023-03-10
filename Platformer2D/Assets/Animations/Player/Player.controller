@@ -137,7 +137,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LedgeGrabStart
+  m_Name: LedgeStart
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -300,7 +300,7 @@ AnimatorStateMachine:
     m_Position: {x: 550, y: 650, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5639613005802780167}
-    m_Position: {x: 585, y: 715, z: 0}
+    m_Position: {x: 590, y: 720, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7697269106331305871}
     m_Position: {x: 620, y: 780, z: 0}
@@ -324,7 +324,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LedgeGrabEnd
+  m_Name: LedgeEnd
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -350,7 +350,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LedgeGrabKeep
+  m_Name: LedgeKeep
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
