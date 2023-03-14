@@ -16,10 +16,12 @@ public class StateLedge : State
     private Vector2 _startPos;
     private Vector2 _endPos => _startPos + new Vector2(0.145f * movement.dir, 0.392f);
     private Rigidbody2D _rb;
+    private LedgeDetector _ledgeDetector;
 
     public StateLedge(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime) : base(owner, id, executionCondition, transitions, hasExitTime)
     {
         _rb = owner.GetComponent<Rigidbody2D>();
+        _ledgeDetector = owner.GetComponent<LedgeDetector>();
     }
 
     public override void Execute()
@@ -30,7 +32,8 @@ public class StateLedge : State
         movement.isDirectionChangeable = false;
         _step = Step.Start;
         _workflowIndex = 0;
-        _startPos = owner.transform.position;
+        owner.transform.position = _ledgeDetector.posDetected;
+        _startPos = _ledgeDetector.posDetected;
         _rb.bodyType = RigidbodyType2D.Kinematic;
     }
 

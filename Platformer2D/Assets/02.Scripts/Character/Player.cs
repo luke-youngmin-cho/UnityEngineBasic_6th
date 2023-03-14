@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow))
             _stateMachine.ChangeState((int)StateMachine.StateType.Ledge);
 
+        if (Input.GetKeyDown(KeyCode.X))
+            _stateMachine.ChangeState((int)StateMachine.StateType.Slide);
+
         _stateMachine.UpdateState();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class StateMachine
@@ -15,7 +16,8 @@ public class StateMachine
         Crouch,
         Hurt,
         Die,
-        Ledge
+        Ledge,
+        Slide
     }
 
     public int currentStateID;
@@ -195,6 +197,21 @@ public class StateMachine
                                           },
                                           hasExitTime: false);
         states.Add((int)StateType.Ledge, ledge);
+
+        StateSlide slide = new StateSlide(owner: owner,
+                                          id: (int)StateType.Slide,
+                                          executionCondition: () => currentStateID == (int)StateType.Idle ||
+                                                                    currentStateID == (int)StateType.Move,
+                                          transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                          {
+                                              new KeyValuePair<Func<bool>, int>
+                                              (
+                                                  () => true,
+                                                  (int)StateType.Idle
+                                              )
+                                          },
+                                          hasExitTime: true);
+        states.Add((int)StateType.Slide, slide);
 
         currentState = idle;
         currentStateID = (int)StateType.Idle;
