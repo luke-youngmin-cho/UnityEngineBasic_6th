@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 public class StateMachine
 {
@@ -17,7 +18,9 @@ public class StateMachine
         Hurt,
         Die,
         Ledge,
-        Slide
+        Slide,
+        LadderUp,
+        LadderDown
     }
 
     public int currentStateID;
@@ -62,6 +65,7 @@ public class StateMachine
         Movement movement = owner.GetComponent<Movement>();
         GroundDetector groundDetector = owner.GetComponent<GroundDetector>();
         LedgeDetector ledgeDetector = owner.GetComponent<LedgeDetector>();
+        LadderDetector ladderDetector = owner.GetComponent<LadderDetector>();
         Rigidbody2D rigidBody = owner.GetComponent<Rigidbody2D>();
 
         states = new Dictionary<int, IState>();
@@ -191,7 +195,9 @@ public class StateMachine
 
         StateLedge ledge = new StateLedge(owner: owner,
                                           id: (int)StateType.Ledge,
-                                          executionCondition: () => ledgeDetector.isDetected,
+                                          executionCondition: () => ledgeDetector.isDetected &&
+                                                                    (currentStateID == (int)StateType.Jump ||
+                                                                     currentStateID == (int)StateType.Fall),
                                           transitions: new List<KeyValuePair<Func<bool>, int>>()
                                           {
                                           },
@@ -212,6 +218,31 @@ public class StateMachine
                                           },
                                           hasExitTime: true);
         states.Add((int)StateType.Slide, slide);
+
+        StateLadderUp ladderUp = new StateLadderUp(owner: owner,
+                                                   id: (int)StateType.LadderUp,
+                                                   executionCondition: () => ladderDetector.isUpDetected &&
+                                                                             (currentStateID == (int)StateType.Idle ||
+                                                                              currentStateID == (int)StateType.Move ||
+                                                                              currentStateID == (int)StateType.Jump ||
+                                                                              currentStateID == (int)StateType.Fall),
+                                                   transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                                   {
+                                                   },
+                                                   hasExitTime: false);
+        states.Add((int)StateType.LadderUp, ladderUp);
+        StateLadderDown ladderDown = new StateLadderDown(owner: owner,
+                                                         id: (int)StateType.LadderDown,
+                                                         executionCondition: () => ladderDetector.isDownDetected &&
+                                                                                   (currentStateID == (int)StateType.Idle ||
+                                                                                    currentStateID == (int)StateType.Move ||
+                                                                                    currentStateID == (int)StateType.Jump ||
+                                                                                    currentStateID == (int)StateType.Fall),
+                                                         transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                                         {
+                                                         },
+                                                         hasExitTime: false);
+        states.Add((int)StateType.LadderDown, ladderDown);
 
         currentState = idle;
         currentStateID = (int)StateType.Idle;

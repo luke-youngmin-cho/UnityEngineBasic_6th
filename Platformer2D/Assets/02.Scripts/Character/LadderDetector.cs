@@ -1,9 +1,10 @@
+using Mono.Cecil.Cil;
 using UnityEngine;
 
 public class LadderDetector : MonoBehaviour
 {
-    public bool isUpDetected => _upLadder != null && doEscapeUp == false && doEscapeDown == false;
-    public bool isDownDetected => _downLadder != null && doEscapeUp == false && doEscapeDown == false;
+    public bool isUpDetected => _upLadder != null;
+    public bool isDownDetected => _downLadder != null;
     public bool doEscapeUp;
     public bool doEscapeDown;
 
@@ -15,6 +16,46 @@ public class LadderDetector : MonoBehaviour
 
     private BoxCollider2D _upLadder;
     private BoxCollider2D _downLadder;
+    public Vector2 latestUpLadderTopPos;
+    public Vector2 latestDownLadderTopPos;
+
+    private CapsuleCollider2D _col;
+
+    public Vector2 GetUpLadderTopPos()
+    {
+        if (_upLadder == null)
+            return Vector2.zero;
+
+        return new Vector2(_upLadder.transform.position.x,
+                           _upLadder.transform.position.y + _upLadder.offset.y + _upLadder.size.y / 2.0f);
+    }
+
+    public Vector2 GetUpLadderBottomPos()
+    {
+        if (_upLadder == null)
+            return Vector2.zero;
+
+        return new Vector2(_upLadder.transform.position.x,
+                           _upLadder.transform.position.y + _upLadder.offset.y - _upLadder.size.y / 2.0f);
+    }
+
+    public Vector2 GetDownLadderTopPos()
+    {
+        if (_downLadder == null)
+            return Vector2.zero;
+
+        return new Vector2(_downLadder.transform.position.x,
+                           _downLadder.transform.position.y + _downLadder.offset.y + _downLadder.size.y / 2.0f);
+    }
+
+    public Vector2 GetDownLadderBottomPos()
+    {
+        if (_downLadder == null)
+            return Vector2.zero;
+
+        return new Vector2(_downLadder.transform.position.x,
+                           _downLadder.transform.position.y + _downLadder.offset.y - _downLadder.size.y / 2.0f);
+    }
 
     public Vector2 GetClimbUpStartPos()
     {
@@ -31,16 +72,31 @@ public class LadderDetector : MonoBehaviour
             return Vector2.zero;
 
         float startPosY = _downLadder.transform.position.y + _downLadder.offset.y + _downLadder.size.y / 2.0f - downEscapeOffset;
-        startPosY = startPosY > transform.position.y ? startPosY : transform.position.y;
+        Debug.Log($"{startPosY}, {transform.position.y} ");
+        //startPosY = startPosY < transform.position.y ? startPosY : transform.position.y;
         return new Vector2(_downLadder.transform.position.x + _downLadder.offset.x, startPosY);
+    }
+
+    private void Awake()
+    {
+        _col = GetComponent<CapsuleCollider2D>();
     }
 
     private void FixedUpdate()
     {
-        doEscapeUp = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upEscapeOffset, 0.01f) == null;
-        doEscapeDown = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downEscapeOffset, 0.01f) == null;
-        _upLadder = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upClimbOffset, 0.01f) as BoxCollider2D;
-        _downLadder = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downClimbOffset, 0.01f) as BoxCollider2D;
+        _upLadder = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upClimbOffset, 0.01f, _targetMask) as BoxCollider2D;
+        _downLadder = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downClimbOffset, 0.01f, _targetMask) as BoxCollider2D;
+        doEscapeUp = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upEscapeOffset, 0.01f, _targetMask) == null &&
+                     Physics2D.OverlapCircle((Vector2)transform.position, 0.01f, _targetMask) != null;
+        doEscapeDown = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downEscapeOffset, 0.01f, _targetMask) == null &&
+                       Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * _col.size.y, 0.01f, _targetMask) != null;
+
+
+        if (_upLadder != null)
+            latestUpLadderTopPos = GetUpLadderTopPos();
+
+        if (_downLadder != null)
+            latestDownLadderTopPos = GetDownLadderTopPos();
     }
 
     private void OnDrawGizmos()

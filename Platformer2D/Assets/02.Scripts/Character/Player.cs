@@ -17,10 +17,16 @@ public class Player : MonoBehaviour
             _stateMachine.ChangeState((int)StateMachine.StateType.Jump);
 
         if (Input.GetKey(KeyCode.DownArrow))
+        {
+            _stateMachine.ChangeState((int)StateMachine.StateType.LadderDown);
             _stateMachine.ChangeState((int)StateMachine.StateType.Crouch);
+        }
 
         if (Input.GetKey(KeyCode.UpArrow))
+        {
+            _stateMachine.ChangeState((int)StateMachine.StateType.LadderUp);
             _stateMachine.ChangeState((int)StateMachine.StateType.Ledge);
+        }
 
         if (Input.GetKeyDown(KeyCode.X))
             _stateMachine.ChangeState((int)StateMachine.StateType.Slide);
