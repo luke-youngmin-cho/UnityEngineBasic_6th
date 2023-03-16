@@ -5,8 +5,10 @@ public class LadderDetector : MonoBehaviour
 {
     public bool isUpDetected => _upLadder != null;
     public bool isDownDetected => _downLadder != null;
-    public bool doEscapeUp;
-    public bool doEscapeDown;
+    public bool doEscapeUp => Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upEscapeOffset, 0.01f, _targetMask) == null &&
+                              Physics2D.OverlapCircle((Vector2)transform.position, 0.01f, _targetMask) != null;
+    public bool doEscapeDown => Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downEscapeOffset, 0.01f, _targetMask) == null &&
+                                Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * _col.size.y, 0.01f, _targetMask) != null;
 
     public float upEscapeOffset;
     public float downEscapeOffset;
@@ -86,12 +88,7 @@ public class LadderDetector : MonoBehaviour
     {
         _upLadder = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upClimbOffset, 0.01f, _targetMask) as BoxCollider2D;
         _downLadder = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downClimbOffset, 0.01f, _targetMask) as BoxCollider2D;
-        doEscapeUp = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * upEscapeOffset, 0.01f, _targetMask) == null &&
-                     Physics2D.OverlapCircle((Vector2)transform.position, 0.01f, _targetMask) != null;
-        doEscapeDown = Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * downEscapeOffset, 0.01f, _targetMask) == null &&
-                       Physics2D.OverlapCircle((Vector2)transform.position + Vector2.up * _col.size.y, 0.01f, _targetMask) != null;
-
-
+        
         if (_upLadder != null)
             latestUpLadderTopPos = GetUpLadderTopPos();
 

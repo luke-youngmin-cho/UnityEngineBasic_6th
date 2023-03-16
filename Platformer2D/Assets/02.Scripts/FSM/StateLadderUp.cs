@@ -8,7 +8,6 @@ public class StateLadderUp : State
     private LadderDetector _ladderDetector;
     private GroundDetector _groundDetector;
     private Rigidbody2D _rb;
-
     public StateLadderUp(GameObject owner, int id, Func<bool> executionCondition, List<KeyValuePair<Func<bool>, int>> transitions, bool hasExitTime) : base(owner, id, executionCondition, transitions, hasExitTime)
     {
         _ladderDetector = owner.GetComponent<LadderDetector>();
@@ -53,6 +52,14 @@ public class StateLadderUp : State
         else if (_groundDetector.isDetected)
         {
             return (int)StateMachine.StateType.Idle;
+        }
+        else if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            _rb.bodyType = RigidbodyType2D.Dynamic;
+            movement.SetMove(new Vector2(movement.h,0));
+            _rb.velocity = movement.move;
+            machine.ChangeStateForcely((int)StateMachine.StateType.Jump);
+            return (int)StateMachine.StateType.Jump;
         }
 
         return base.Update();

@@ -479,6 +479,17 @@ public abstract class EnemyController : MonoBehaviour
 
     protected virtual void Hit() { }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & _aiTargetMask) > 0)
+        {
+            if (collision.gameObject.TryGetComponent(out IDamageable target))
+            {
+                target.Damage(this.gameObject, 10);
+            }
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;

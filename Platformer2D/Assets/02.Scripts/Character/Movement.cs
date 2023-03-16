@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -81,5 +82,26 @@ public class Movement : MonoBehaviour
         //    _rb.MovePosition(_rb.position + move * speed * Time.fixedDeltaTime);
         //}
         _rb.position += move * speed * Time.fixedDeltaTime; 
+    }
+
+    private void AddForceX(float force)
+    {
+        _rb.AddForce(Vector2.right * dir * force, ForceMode2D.Impulse);
+    }
+
+    private void Decelerate(float deceleration)
+    {
+        StartCoroutine(E_Decelerate(deceleration));
+    }
+
+    IEnumerator E_Decelerate(float deceleration)
+    {
+        Vector2 startV = _rb.velocity;
+        float timeMark = Time.time;
+        while (_rb.velocity.x > 0.001f)
+        {
+            _rb.velocity = Vector2.Lerp(startV, Vector2.zero, (Time.time - timeMark) * (Time.time - timeMark) * deceleration);
+            yield return null;
+        }
     }
 }

@@ -1,36 +1,82 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
-    private StateMachine _stateMachine;
+    public StateMachine stateMachine;
+
+    public int hp
+    {
+        get => _hp;
+        set
+        {
+            if (_hp == value)
+                return;
+
+            int prev = _hp;
+            _hp = value;
+
+            if (value <= hpMin)
+                OnHpMin?.Invoke();
+            else if (value >= hpMax)
+                OnHpMax?.Invoke();
+            else if (value < prev)
+                OnHpDecreased?.Invoke(value);
+            else if (value > prev)
+                OnHpIncreased?.Invoke(value);
+        }
+    }
+
+    public int hpMax => _hpMax;
+
+    public int hpMin => 0;
+
+    public event Action<int> OnHpDecreased;
+    public event Action<int> OnHpIncreased;
+    public event Action OnHpMin;
+    public event Action OnHpMax;
+
+    private int _hp;
+    [SerializeField] private int _hpMax = 100;
+
+    public void Damage(GameObject hitter, int damage)
+    {
+        hp -= damage;
+    }
 
     private void Awake()
     {
-        _stateMachine = new StateMachine(gameObject);
+        hp = hpMax;
+        stateMachine = new StateMachine(gameObject);
+        OnHpDecreased += (value) => stateMachine.ChangeState((int)StateMachine.StateType.Hurt);
+        OnHpMin += () => stateMachine.ChangeState((int)StateMachine.StateType.Die);
     }
 
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftAlt))
-            _stateMachine.ChangeState((int)StateMachine.StateType.Jump);
+            stateMachine.ChangeState((int)StateMachine.StateType.Jump);
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            _stateMachine.ChangeState((int)StateMachine.StateType.LadderDown);
-            _stateMachine.ChangeState((int)StateMachine.StateType.Crouch);
+            stateMachine.ChangeState((int)StateMachine.StateType.LadderDown);
+            stateMachine.ChangeState((int)StateMachine.StateType.Crouch);
         }
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            _stateMachine.ChangeState((int)StateMachine.StateType.LadderUp);
-            _stateMachine.ChangeState((int)StateMachine.StateType.Ledge);
+            stateMachine.ChangeState((int)StateMachine.StateType.LadderUp);
+            stateMachine.ChangeState((int)StateMachine.StateType.Ledge);
         }
 
         if (Input.GetKeyDown(KeyCode.X))
-            _stateMachine.ChangeState((int)StateMachine.StateType.Slide);
+            stateMachine.ChangeState((int)StateMachine.StateType.Slide);
 
-        _stateMachine.UpdateState();
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            stateMachine.ChangeState((int)StateMachine.StateType.Dash);
+
+        stateMachine.UpdateState();
     }
 }

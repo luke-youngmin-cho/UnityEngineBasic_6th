@@ -20,6 +20,7 @@ public class StateJump : State
         movement.isMovable = false;
         movement.isDirectionChangeable = true;
         animator.Play("Jump");
+
         _rb.velocity = new Vector2(_rb.velocity.x, 0.0f);
         _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
     }

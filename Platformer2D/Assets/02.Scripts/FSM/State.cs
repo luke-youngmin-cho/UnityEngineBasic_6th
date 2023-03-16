@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class State : IState
 {
     public int id { get; set; }
-
+    public StateMachine machine { get; set; }
     public bool canExecute => _canExecute.Invoke();
 
     public List<KeyValuePair<Func<bool>, int>> transitions { get; set; }

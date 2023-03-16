@@ -20,7 +20,8 @@ public class StateMachine
         Ledge,
         Slide,
         LadderUp,
-        LadderDown
+        LadderDown,
+        Dash
     }
 
     public int currentStateID;
@@ -53,6 +54,14 @@ public class StateMachine
         currentState = states[nextStateID];
         Debug.Log($"State has changed to {(StateType)nextStateID}");
         return true;
+    }
+    public void ChangeStateForcely(int nextStateID)
+    {
+        currentState.Stop();
+        states[nextStateID].Execute();
+        currentStateID = nextStateID;
+        currentState = states[nextStateID];
+        Debug.Log($"State has forcely changed to {(StateType)nextStateID}");
     }
 
     public void UpdateState()
@@ -243,6 +252,27 @@ public class StateMachine
                                                          },
                                                          hasExitTime: false);
         states.Add((int)StateType.LadderDown, ladderDown);
+        StateDash dash = new StateDash(owner: owner,
+                                       id: (int)StateType.Dash,
+                                       executionCondition: () => currentStateID == (int)StateType.Idle ||
+                                                                 currentStateID == (int)StateType.Move ||
+                                                                 currentStateID == (int)StateType.Jump ||
+                                                                 currentStateID == (int)StateType.Fall,
+                                       transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                       {
+                                           new KeyValuePair<Func<bool>, int>
+                                           (
+                                               () => true,
+                                               (int)StateType.Idle
+                                           )
+                                       },
+                                       hasExitTime: true);
+        states.Add((int)StateType.Dash, dash);
+
+        foreach (State state in states.Values)
+        {
+            state.machine = this;
+        }
 
         currentState = idle;
         currentStateID = (int)StateType.Idle;

@@ -40,7 +40,7 @@ public class StateLadderDown : State
     {
         owner.transform.position += Vector3.up * movement.v * Time.deltaTime;
         animator.speed = Mathf.Abs(movement.v);
-
+        
         if (_ladderDetector.doEscapeUp)
         {
             owner.transform.position = _ladderDetector.latestDownLadderTopPos;
@@ -53,6 +53,14 @@ public class StateLadderDown : State
         else if (_groundDetector.isDetected)
         {
             return (int)StateMachine.StateType.Idle;
+        }
+        else if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            _rb.bodyType = RigidbodyType2D.Dynamic;
+            movement.SetMove(new Vector2(movement.h, 0));
+            _rb.velocity = movement.move;
+            machine.ChangeStateForcely((int)StateMachine.StateType.Jump);
+            return (int)StateMachine.StateType.Jump;
         }
 
         return base.Update();
