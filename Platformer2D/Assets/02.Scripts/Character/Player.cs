@@ -37,13 +37,36 @@ public class Player : MonoBehaviour, IDamageable
     public event Action<int> OnHpIncreased;
     public event Action OnHpMin;
     public event Action OnHpMax;
-
+    [SerializeField] private int _damage = 20;
     private int _hp;
     [SerializeField] private int _hpMax = 100;
+    public bool isInvincible;
+    [SerializeField] private float _invincibleDuration = 0.5f;
+
+    [SerializeField] private Vector2 _attackCastCenter;
+    [SerializeField] private Vector2 _attackCastSize;
+    [SerializeField] private LayerMask _targetMask;
+    private Movement _movement;
 
     public void Damage(GameObject hitter, int damage)
     {
+        if (isInvincible)
+            return;
+
         hp -= damage;
+
+        isInvincible = true;
+        StartCoroutine(E_ReleaseInvincible());
+    }
+
+    IEnumerator E_ReleaseInvincible()
+    {
+        float timeMark = Time.time;
+        while (Time.time - timeMark < _invincibleDuration)
+        {
+            yield return null;
+        }
+        isInvincible = false;
     }
 
     private void Awake()
@@ -52,6 +75,7 @@ public class Player : MonoBehaviour, IDamageable
         stateMachine = new StateMachine(gameObject);
         OnHpDecreased += (value) => stateMachine.ChangeState((int)StateMachine.StateType.Hurt);
         OnHpMin += () => stateMachine.ChangeState((int)StateMachine.StateType.Die);
+        _movement = GetComponent<Movement>();
     }
 
     private void Update()
@@ -77,6 +101,29 @@ public class Player : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.LeftShift))
             stateMachine.ChangeState((int)StateMachine.StateType.Dash);
 
+        if (Input.GetKey(KeyCode.A))
+            stateMachine.ChangeState((int)StateMachine.StateType.Attack);
+
         stateMachine.UpdateState();
+    }
+
+    private void Hit()
+    {
+        Collider2D target = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(_attackCastCenter.x * _movement.dir, _attackCastCenter.y), _attackCastSize, 0.0f, _targetMask);
+        if (target != null &&
+            target.gameObject.TryGetComponent(out IDamageable damageable))
+        {
+            damageable.Damage(gameObject, _damage);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (stateMachine != null &&
+            stateMachine.currentStateID == (int)StateMachine.StateType.Attack)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(transform.position + new Vector3(_attackCastCenter.x * _movement.dir, _attackCastCenter.y, 0.0f), _attackCastSize);
+        }
     }
 }

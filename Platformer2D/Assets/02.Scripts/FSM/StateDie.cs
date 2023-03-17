@@ -11,6 +11,7 @@ public class StateDie : State
     public override void Execute()
     {
         base.Execute();
+        movement.StopMove();
         movement.isMovable = false;
         movement.isDirectionChangeable = false;
         animator.Play("Die");

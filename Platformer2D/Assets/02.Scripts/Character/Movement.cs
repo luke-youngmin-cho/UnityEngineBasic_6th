@@ -33,6 +33,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _minInputDelta = 0.05f;
 
     private Rigidbody2D _rb;
+    [SerializeField] private Vector2 _knockbackForce = Vector2.one;
 
     public void SetMove(Vector2 move)
     {
@@ -45,10 +46,20 @@ public class Movement : MonoBehaviour
         _rb.velocity = Vector2.zero;
     }
 
+    public void Knockback()
+    {
+        StopMove();
+        _rb.AddForce(new Vector2(-_knockbackForce.x * dir, _knockbackForce.y), ForceMode2D.Impulse);
+    }
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        GetComponent<IDamageable>().OnHpDecreased += (value) => Knockback();
     }
 
     private void Update()

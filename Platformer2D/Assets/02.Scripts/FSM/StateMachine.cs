@@ -269,6 +269,22 @@ public class StateMachine
                                        hasExitTime: true);
         states.Add((int)StateType.Dash, dash);
 
+        StateAttack attack = new StateAttack(owner: owner,
+                                             id: (int)StateType.Attack,
+                                             executionCondition: () => currentStateID == (int)StateType.Idle ||
+                                                                       currentStateID == (int)StateType.Move ||
+                                                                       currentStateID == (int)StateType.Jump ||
+                                                                       currentStateID == (int)StateType.Fall,
+                                             transitions: new List<KeyValuePair<Func<bool>, int>>()
+                                             {
+                                                 new KeyValuePair<Func<bool>, int>
+                                                 (
+                                                     () => true,
+                                                     (int)StateType.Idle
+                                                 )
+                                             },
+                                             hasExitTime: true);
+        states.Add((int)StateType.Attack, attack);
         foreach (State state in states.Values)
         {
             state.machine = this;

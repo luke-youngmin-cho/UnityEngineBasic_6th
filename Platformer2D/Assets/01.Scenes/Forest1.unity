@@ -332,12 +332,17 @@ MonoBehaviour:
   _aiBehaviourTimeMin: 0.1
   _aiBehaviourTimeMax: 2
   _aiBehaviourTimer: 0
-  _aiTargetMask:
+  aiTargetMask:
     serializedVersion: 2
     m_Bits: 1024
+  _hpMax: 200
   _moveEnable: 0
   _moveSpeed: 0.3
   _movable: 0
+  damage: 30
+  _knockbackForce: {x: 1, y: 0.5}
+  _attackBoxCenter: {x: 0.1, y: 0.2}
+  _attackBoxSize: {x: 0.4, y: 0.3}
 --- !u!95 &90101390
 Animator:
   serializedVersion: 4
@@ -837,13 +842,16 @@ MonoBehaviour:
   _aiBehaviourTimeMin: 0.1
   _aiBehaviourTimeMax: 2
   _aiBehaviourTimer: 0
-  _aiTargetMask:
+  aiTargetMask:
     serializedVersion: 2
     m_Bits: 1024
+  _hpMax: 300
   _moveEnable: 0
   _moveSpeed: 1
   _movable: 0
-  _projectilePrefab: {fileID: 4111804334392460449, guid: 006b695a018920e40a542ae0eb9793df, type: 3}
+  damage: 40
+  _knockbackForce: {x: 1, y: 0.5}
+  _projectilePrefab: {fileID: -158216506203105610, guid: 006b695a018920e40a542ae0eb9793df, type: 3}
 --- !u!95 &223753085
 Animator:
   serializedVersion: 4
@@ -2381,12 +2389,15 @@ MonoBehaviour:
   _aiBehaviourTimeMin: 0.1
   _aiBehaviourTimeMax: 2
   _aiBehaviourTimer: 0
-  _aiTargetMask:
+  aiTargetMask:
     serializedVersion: 2
     m_Bits: 1024
+  _hpMax: 100
   _moveEnable: 1
   _moveSpeed: 0.3
   _movable: 0
+  damage: 10
+  _knockbackForce: {x: 1, y: 0.5}
 --- !u!1 &701488290
 GameObject:
   m_ObjectHideFlags: 0
@@ -6157,6 +6168,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6148ffd3a87c5c43b0fac5fbb23a9a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damage: 20
+  _hpMax: 100
+  isInvincible: 0
+  _invincibleDuration: 1
+  _attackCastCenter: {x: 0.1, y: 0.25}
+  _attackCastSize: {x: 0.5, y: 0.4}
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!114 &1983716764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6176,6 +6196,7 @@ MonoBehaviour:
   v: 0
   move: {x: 0, y: 0}
   _minInputDelta: 0.05
+  _knockbackForce: {x: 1, y: 1}
 --- !u!114 &1983716765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6228,8 +6249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968b0f1e7c18f9b45aaef128f0de1c20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doEscapeUp: 0
-  doEscapeDown: 0
   upEscapeOffset: 0.05
   downEscapeOffset: 0.25
   upClimbOffset: 0.2

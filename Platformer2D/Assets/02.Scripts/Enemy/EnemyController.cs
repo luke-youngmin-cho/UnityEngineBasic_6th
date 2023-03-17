@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D), typeof(Animator))]
-public abstract class EnemyController : MonoBehaviour
+public abstract class EnemyController : MonoBehaviour, IDamageable
 {
     private Animator _animator;
     private Rigidbody2D _rb;
@@ -45,7 +45,7 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField] private float _aiBehaviourTimeMin = 0.1f;
     [SerializeField] private float _aiBehaviourTimeMax = 2.0f;
     [SerializeField] private float _aiBehaviourTimer;
-    [SerializeField] private LayerMask _aiTargetMask;
+    [SerializeField] protected LayerMask aiTargetMask;
     #endregion
 
     #region Workflows
@@ -312,12 +312,46 @@ public abstract class EnemyController : MonoBehaviour
             }
         }
     }
+
+    public int hp
+    {
+        get => _hp;
+        set
+        {
+            if (_hp == value)
+                return;
+
+            int prev = _hp;
+            _hp = value;
+
+            if (value <= hpMin)
+                OnHpMin?.Invoke();
+            else if (value >= hpMax)
+                OnHpMax?.Invoke();
+            else if (value < prev)
+                OnHpDecreased?.Invoke(value);
+            else if (value > prev)
+                OnHpIncreased?.Invoke(value);
+        }
+    }
+    private int _hp;
+    [SerializeField] private int _hpMax;
+    public int hpMax => _hpMax;
+
+    public int hpMin => 0;
+
     private int _direction;
 
     [SerializeField] private bool _moveEnable = true;
     [SerializeField] private float _moveSpeed = 1.0f;
     [SerializeField] private bool _movable;
 
+    [SerializeField] protected int damage;
+    public event Action<int> OnHpDecreased;
+    public event Action<int> OnHpIncreased;
+    public event Action OnHpMin;
+    public event Action OnHpMax;
+    [SerializeField] private Vector2 _knockbackForce = new Vector2(1.0f, 0.5f);
     public bool ChangeState(StateType newState)
     {
         if (current == newState)
@@ -338,6 +372,8 @@ public abstract class EnemyController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<CapsuleCollider2D>();
+        hp = hpMax;
+        OnHpDecreased += (value) => Knockback();
         InitializeWorkflows();
     }
 
@@ -372,7 +408,7 @@ public abstract class EnemyController : MonoBehaviour
 
     private void UpdateAI()
     {
-        Collider2D target = Physics2D.OverlapCircle(_rb.position, _aiDetectRange, _aiTargetMask);
+        Collider2D target = Physics2D.OverlapCircle(_rb.position, _aiDetectRange, aiTargetMask);
 
         //타겟 감지
         if (_aiAutoFollow &&
@@ -395,7 +431,8 @@ public abstract class EnemyController : MonoBehaviour
         }  
         else if (_aiBehaviourTimer <= 0)
         {
-            _ai = AI.Think;
+            if (_ai != AI.AttackTarget)
+                _ai = AI.Think;
         }
 
         switch (_ai)
@@ -481,21 +518,33 @@ public abstract class EnemyController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (((1 << collision.gameObject.layer) & _aiTargetMask) > 0)
+        if (((1 << collision.gameObject.layer) & aiTargetMask) > 0)
         {
             if (collision.gameObject.TryGetComponent(out IDamageable target))
             {
-                target.Damage(this.gameObject, 10);
+                target.Damage(this.gameObject, damage);
             }
         }
     }
 
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _aiDetectRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _aiAttackRange);
+    }
+
+    public void Damage(GameObject hitter, int damage)
+    {
+        direction = transform.position.x > hitter.transform.position.x ? DIRECTION_LEFT : DIRECTION_RIGHT;
+        hp -= damage;
+    }
+
+    public void Knockback()
+    {
+        _rb.velocity = Vector2.zero;
+        _rb.AddForce(new Vector2(-_knockbackForce.x * direction, _knockbackForce.y), ForceMode2D.Impulse);
     }
 }
 
