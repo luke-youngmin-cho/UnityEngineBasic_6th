@@ -56,6 +56,12 @@ TagManager:
   - name: Enemies
     uniqueID: 602869191
     locked: 0
+  - name: EnemyUISystems
+    uniqueID: 3347458107
+    locked: 0
   - name: Items
     uniqueID: 845032073
+    locked: 0
+  - name: DamageEffects
+    uniqueID: 2548629261
     locked: 0

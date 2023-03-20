@@ -276,7 +276,9 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
                     }
                     break;
                 case 2:
-                    // nothing to do.
+                    {
+                        Destroy(_controller.gameObject);
+                    }
                     break;
                 default:
                     break;
@@ -373,8 +375,16 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<CapsuleCollider2D>();
         hp = hpMax;
-        OnHpDecreased += (value) => Knockback();
         InitializeWorkflows();
+        OnHpDecreased += (value) =>
+        {
+            ChangeState(StateType.Hurt);
+            Knockback();
+        };
+        OnHpMin += () =>
+        {
+            ChangeState(StateType.Die);
+        };
     }
 
     private void Update()
@@ -543,6 +553,9 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
 
     public void Knockback()
     {
+        if (_moveEnable == false)
+            return;
+
         _rb.velocity = Vector2.zero;
         _rb.AddForce(new Vector2(-_knockbackForce.x * direction, _knockbackForce.y), ForceMode2D.Impulse);
     }
