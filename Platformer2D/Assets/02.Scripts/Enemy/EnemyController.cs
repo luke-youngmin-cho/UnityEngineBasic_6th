@@ -326,14 +326,24 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
             int prev = _hp;
             _hp = value;
 
-            if (value <= hpMin)
-                OnHpMin?.Invoke();
-            else if (value >= hpMax)
-                OnHpMax?.Invoke();
-            else if (value < prev)
-                OnHpDecreased?.Invoke(value);
-            else if (value > prev)
-                OnHpIncreased?.Invoke(value);
+            if (value < prev)
+            {
+                DamagePopUp.Create(1 << gameObject.layer,
+                                   transform.position + Vector3.up * _col.size.y,
+                                   prev - value);
+                 
+                if (value <= hpMin)
+                    OnHpMin?.Invoke();
+                else
+                    OnHpDecreased?.Invoke(value);
+            }
+            else
+            {
+                if (value >= hpMax)
+                    OnHpMax?.Invoke();
+                else
+                    OnHpIncreased?.Invoke(value);
+            }
         }
     }
     private int _hp;
@@ -377,7 +387,7 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
         hp = hpMax;
         InitializeWorkflows();
         OnHpDecreased += (value) =>
-        {
+        {            
             ChangeState(StateType.Hurt);
             Knockback();
         };

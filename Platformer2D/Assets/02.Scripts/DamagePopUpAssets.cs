@@ -18,21 +18,17 @@ public class DamagePopUpAssets : MonoBehaviour
         }
     }
 
-    public GameObject this[LayerMask layerMask]
+    public DamagePopUp this[LayerMask layerMask]
         => _dictionary[layerMask];
 
-    [SerializeField] private List<UKeyValuePair<LayerMask, GameObject>> _damagePopUps;
-    private Dictionary<LayerMask, GameObject> _dictionary;
+    [SerializeField] private List<UKeyValuePair<LayerMask, DamagePopUp>> _damagePopUps;
+    private Dictionary<LayerMask, DamagePopUp> _dictionary;
 
-    public GameObject GetDamagePopUP(LayerMask layerMask)
-    {
-        return _damagePopUps.Find(x => x.key == layerMask).value;
-    }
 
     private void Init()
     {
-        _dictionary = new Dictionary<LayerMask, GameObject>();
-        foreach (UKeyValuePair<LayerMask, GameObject> damagePopUp in _damagePopUps)
+        _dictionary = new Dictionary<LayerMask,DamagePopUp>();
+        foreach (UKeyValuePair<LayerMask, DamagePopUp> damagePopUp in _damagePopUps)
         {
             _dictionary.Add(damagePopUp.key, damagePopUp.value);
         }
