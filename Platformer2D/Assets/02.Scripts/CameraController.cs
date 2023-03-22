@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController instance;
+
     [SerializeField] private BoxCollider2D _boundShape;
     public BoxCollider2D boundShape
     {
@@ -31,6 +33,7 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         _cam = Camera.main;
         boundShape = _boundShape;
     }

@@ -12,7 +12,7 @@ public class EnemyHPUI : MonoBehaviour
     private void Start()
     {
         _hp = transform.GetChild(0).GetComponent<Slider>();
-        IDamageable subject = transform.root.GetComponent<IDamageable>();
+        IDamageable subject = transform.parent.GetComponent<IDamageable>();
         _hp.minValue = subject.hpMin;
         _hp.maxValue = subject.hpMax;
         _hp.value = subject.hp;
