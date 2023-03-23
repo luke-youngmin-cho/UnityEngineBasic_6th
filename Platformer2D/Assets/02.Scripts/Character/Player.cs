@@ -57,7 +57,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private Vector2 _attackCastSize;
     [SerializeField] private LayerMask _targetMask;
     private Movement _movement;
-
+    
+    
     public void Damage(GameObject hitter, int damage)
     {
         if (isInvincible)
@@ -90,30 +91,53 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftAlt))
-            stateMachine.ChangeState((int)StateMachine.StateType.Jump);
+        bool changed = false;
 
-        if (Input.GetKey(KeyCode.DownArrow))
+        do
         {
-            stateMachine.ChangeState((int)StateMachine.StateType.LadderDown);
-            stateMachine.ChangeState((int)StateMachine.StateType.Crouch);
-        }
+            if (Input.GetKey(KeyCode.LeftAlt))
+            {
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.Jump);
+                if (changed) break;
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.DownJump);
+                if (changed) break;
+            }
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            stateMachine.ChangeState((int)StateMachine.StateType.LadderUp);
-            stateMachine.ChangeState((int)StateMachine.StateType.Ledge);
-        }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.LadderDown);
+                if (changed) break;
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.Crouch);
+                if (changed) break;
+            }
 
-        if (Input.GetKeyDown(KeyCode.X))
-            stateMachine.ChangeState((int)StateMachine.StateType.Slide);
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.LadderUp);
+                if (changed) break;
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.Ledge);
+                if (changed) break;
+            }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            stateMachine.ChangeState((int)StateMachine.StateType.Dash);
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.Slide);
+                if (changed) break;
+            }
 
-        if (Input.GetKey(KeyCode.A))
-            stateMachine.ChangeState((int)StateMachine.StateType.Attack);
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.Dash);
+                if (changed) break;
+            }
 
+            if (Input.GetKey(KeyCode.A))
+            {
+                changed = stateMachine.ChangeState((int)StateMachine.StateType.Attack);
+                if (changed) break;
+            }
+        } while (false);
+        
         stateMachine.UpdateState();
     }
 

@@ -132,13 +132,12 @@ public class StateMachine
         StateDownJump downJump = new StateDownJump(owner: owner,
                                        id: (int)StateType.Jump,
                                        executionCondition: () => groundDetector.isDetected &&
+                                                                 groundDetector.IsGroundExistBelow() &&
                                                                  (currentStateID == (int)StateType.Crouch),
                                        transitions: new List<KeyValuePair<Func<bool>, int>>()
                                        {
                                            new KeyValuePair<Func<bool>, int>
                                            (
-                                               // todo -> 요기 groundDetector 가 ignore 중인 ground
-                                               // overlap 하는거 방지해야함
                                                () => groundDetector.isDetected &&
                                                      rigidBody.velocity.y == 0.0f,
                                                (int)StateType.Idle

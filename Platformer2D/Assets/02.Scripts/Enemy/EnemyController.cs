@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D), typeof(Animator))]
-public abstract class EnemyController : MonoBehaviour, IDamageable
+public abstract class EnemyController : MonoBehaviour, IDamageable, IPauseable
 {
     private Animator _animator;
     private Rigidbody2D _rb;
@@ -395,6 +395,7 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
         {
             ChangeState(StateType.Die);
         };
+        PauseController.instance.Register(this);
     }
 
     private void Update()
@@ -568,6 +569,12 @@ public abstract class EnemyController : MonoBehaviour, IDamageable
 
         _rb.velocity = Vector2.zero;
         _rb.AddForce(new Vector2(-_knockbackForce.x * direction, _knockbackForce.y), ForceMode2D.Impulse);
+    }
+
+    public void Pause(bool pause)
+    {
+        _animator.speed = pause ? 0.0f : 1.0f;
+        enabled = pause == false;
     }
 }
 
