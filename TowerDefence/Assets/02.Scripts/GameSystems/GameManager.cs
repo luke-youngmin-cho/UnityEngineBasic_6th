@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,8 +19,19 @@ public class GameManager : MonoBehaviour
         WaitForUser
     }
     public GameState state;
-    public int levelSelected;
+    public int levelSelected = -1;
     public LevelData levelData;
+
+    public void StartGame()
+    {
+        if (levelSelected < 0)
+            return;
+
+        if (state != GameState.Idle)
+            return;
+
+        state = GameState.LoadLevelData;
+    }
 
     private void Awake()
     {
@@ -48,8 +60,18 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.WaitUntilLevelDataLoaded:
+                {
+                    if (levelData != null)
+                    {
+                        state = GameState.StartLevel;
+                    }
+                }
                 break;
             case GameState.StartLevel:
+                {
+                    SceneManager.LoadScene($"Level{levelSelected}");
+                    state = GameState.WaitUntilLevelFinished;
+                }
                 break;
             case GameState.WaitUntilLevelFinished:
                 break;

@@ -15,18 +15,18 @@ TagManager:
   - 
   - 
   - 
+  - EnemyPath
+  - Node
+  - 
+  - 
+  - 
+  - Enemy
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Tower
+  - TowerProjectile
   - 
   - 
   - 
