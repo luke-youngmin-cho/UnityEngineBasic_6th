@@ -11871,6 +11871,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Buggy
       objectReference: {fileID: 0}
+    - target: {fileID: 47178282886948583, guid: 5b29e779c570fd84cb252779e83bd215, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6747482371603150431, guid: 5b29e779c570fd84cb252779e83bd215, type: 3}
       propertyPath: m_IsKinematic
       value: 0

@@ -13,6 +13,9 @@ public class PathInformation : MonoBehaviour
     [Serializable]
     public class Path
     {
+        public Transform start => pointList[0];
+        public Transform end => pointList[pointList.Count - 1];
+        public Transform this[int index] => pointList[index];
         public List<Transform> pointList;
     }
     public List<Path> customizedPathList;

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
         LoadLevelData,
         WaitUntilLevelDataLoaded,
         StartLevel,
+        InitLevel,
         WaitUntilLevelFinished,
         SuccessLevel,
         FailLevel,
@@ -70,6 +71,12 @@ public class GameManager : MonoBehaviour
             case GameState.StartLevel:
                 {
                     SceneManager.LoadScene($"Level{levelSelected}");
+                    state = GameState.InitLevel;
+                }
+                break;
+            case GameState.InitLevel:
+                {
+                    Pathfinder.SetUp();
                     state = GameState.WaitUntilLevelFinished;
                 }
                 break;

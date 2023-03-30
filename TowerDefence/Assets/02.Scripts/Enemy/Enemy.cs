@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Pathfinder))]
 public class Enemy : MonoBehaviour
 {
     public float hpMin => 0;
@@ -40,29 +41,30 @@ public class Enemy : MonoBehaviour
     public float speed;
     public float speedOrigin;
 
-    [SerializeField] private List<Transform> _path;
+    [SerializeField] private IEnumerator<Transform> _path;
     [SerializeField] private Transform _targetPathPoint;
-    private int _currentPathPointIndex;
     private float _posTolerance = 0.03f;
 
     private Rigidbody _rb;
-
+    private Pathfinder _pathfinder;
     public void SetPath(Transform start, Transform end)
     {
-        // todo -> find optimized path with pathfinder
+        _pathfinder.TryGetOptimizedPath(start, end, out _path, Pathfinder.Option.FixedPoints);
     }
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _pathfinder = GetComponent<Pathfinder>();
         hp = hpMax;
         speed = speedOrigin;
     }
 
     private void Start()
     {
-        _currentPathPointIndex = 0;
-        _targetPathPoint = _path[_currentPathPointIndex + 1];
+        SetPath(PathInformation.instance.startPoints[0], PathInformation.instance.endPoints[0]);
+        _path.MoveNext();
+        _targetPathPoint = _path.Current;
     }
 
     private void FixedUpdate()
@@ -83,9 +85,9 @@ public class Enemy : MonoBehaviour
         // 타겟포인트도착했는지
         if (Vector3.Distance(_rb.position, targetPos) < _posTolerance)
         {
-            if (TryGetNextTargetPoint(out _targetPathPoint))
+            if (_path.MoveNext())
             {
-                _currentPathPointIndex++;
+                _targetPathPoint = _path.Current;
             }
             else
             {
@@ -94,18 +96,5 @@ public class Enemy : MonoBehaviour
                 // 자기자신 파괴하기
             }
         }
-    }
-
-    private bool TryGetNextTargetPoint(out Transform targetPoint)
-    {
-        targetPoint = null;
-
-        if (_currentPathPointIndex < _path.Count - 1)
-        {
-            targetPoint = _path[_currentPathPointIndex + 1];
-            return true;
-        }
-
-        return false;
     }
 }
