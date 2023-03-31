@@ -49,7 +49,11 @@ public class Enemy : MonoBehaviour
     private Pathfinder _pathfinder;
     public void SetPath(Transform start, Transform end)
     {
-        _pathfinder.TryGetOptimizedPath(start, end, out _path, Pathfinder.Option.FixedPoints);
+        if (_pathfinder.TryGetOptimizedPath(start, end, out _path, Pathfinder.Option.DFS) == false)
+        {
+            Debug.LogWarning($"Failed to get path from {start} to {end} ");
+            Destroy(gameObject);
+        }
     }
 
     private void Awake()

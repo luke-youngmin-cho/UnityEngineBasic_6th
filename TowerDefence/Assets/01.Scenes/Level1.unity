@@ -25511,8 +25511,8 @@ MonoBehaviour:
   - {fileID: 486636459}
   - {fileID: 526874812}
   endPoints:
-  - {fileID: 1405911946}
   - {fileID: 504633054}
+  - {fileID: 1405911946}
   customizedPathList:
   - pointList:
     - {fileID: 486636459}
