@@ -47,12 +47,13 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody _rb;
     private Pathfinder _pathfinder;
+    [SerializeField] private Pathfinder.Option _pathfindOption;
     public void SetPath(Transform start, Transform end)
     {
-        if (_pathfinder.TryGetOptimizedPath(start, end, out _path, Pathfinder.Option.DFS) == false)
+        if (_pathfinder.TryGetOptimizedPath(start, end, out _path, _pathfindOption))
         {
-            Debug.LogWarning($"Failed to get path from {start} to {end} ");
-            Destroy(gameObject);
+            _path.MoveNext();
+            _targetPathPoint = _path.Current;
         }
     }
 
@@ -62,13 +63,6 @@ public class Enemy : MonoBehaviour
         _pathfinder = GetComponent<Pathfinder>();
         hp = hpMax;
         speed = speedOrigin;
-    }
-
-    private void Start()
-    {
-        SetPath(PathInformation.instance.startPoints[0], PathInformation.instance.endPoints[0]);
-        _path.MoveNext();
-        _targetPathPoint = _path.Current;
     }
 
     private void FixedUpdate()

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8255086413307238837}
   - component: {fileID: 3579902341800384898}
   m_Layer: 0
-  m_Name: Buggy
+  m_Name: Helicopter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 4300004, guid: b7d3ea14f798b45309e64cbf222d83ad, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 990dec5933dcb4fcc964d597b2b43970, type: 3}
 --- !u!54 &6747482371603150431
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -74,7 +74,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47178282886948583}
-  m_Mesh: {fileID: 4300004, guid: b7d3ea14f798b45309e64cbf222d83ad, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 990dec5933dcb4fcc964d597b2b43970, type: 3}
 --- !u!23 &7181533387214710664
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -95,7 +95,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e42d20b3f068be749926e99bb30a448c, type: 2}
+  - {fileID: 2100000, guid: 44b66b74dacba3e439da4b6425be65cd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,11 +129,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e57dc4a6f9e55c8438c83e3c9b6cc8b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hpMax: 100
+  _hpMax: 80
   speed: 0
-  speedOrigin: 3
+  speedOrigin: 5
   _targetPathPoint: {fileID: 0}
-  _pathfindOption: 1
+  _pathfindOption: 2
 --- !u!114 &3579902341800384898
 MonoBehaviour:
   m_ObjectHideFlags: 0

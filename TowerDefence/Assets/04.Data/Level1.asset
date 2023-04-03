@@ -15,47 +15,35 @@ MonoBehaviour:
   level: 1
   stageDataList:
   - spawnDataList:
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
-      startPointIndex: 0
-      endPointIndex: 0
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
+    - prefab: {fileID: 47178282886948583, guid: 5b29e779c570fd84cb252779e83bd215, type: 3}
+      num: 5
+      term: 1
+      startDelay: 0.5
       startPointIndex: 0
       endPointIndex: 0
   - spawnDataList:
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
+    - prefab: {fileID: 47178282886948583, guid: 5b29e779c570fd84cb252779e83bd215, type: 3}
+      num: 3
+      term: 2
+      startDelay: 1
       startPointIndex: 0
       endPointIndex: 0
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
-      startPointIndex: 0
-      endPointIndex: 0
+    - prefab: {fileID: 47178282886948583, guid: ce573e9f5c8fbad4581ce090145317d8, type: 3}
+      num: 3
+      term: 2
+      startDelay: 0.5
+      startPointIndex: 1
+      endPointIndex: 1
   - spawnDataList:
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
+    - prefab: {fileID: 47178282886948583, guid: 5b29e779c570fd84cb252779e83bd215, type: 3}
+      num: 8
+      term: 1
+      startDelay: 1
       startPointIndex: 0
       endPointIndex: 0
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
-      startPointIndex: 0
-      endPointIndex: 0
-    - prefab: {fileID: 0}
-      num: 0
-      term: 0
-      startDelay: 0
-      startPointIndex: 0
+    - prefab: {fileID: 47178282886948583, guid: ce573e9f5c8fbad4581ce090145317d8, type: 3}
+      num: 6
+      term: 1.5
+      startDelay: 0.5
+      startPointIndex: 1
       endPointIndex: 0

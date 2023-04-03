@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
@@ -31,10 +32,10 @@ public class Pathfinder : MonoBehaviour
             => !(op1 == op2);
 
         public static Coord operator +(Coord op1, Coord op2)
-            => new Coord(op1.x + op2.x, op1.y + op1.y);
+            => new Coord(op1.x + op2.x, op1.y + op2.y);
 
         public static Coord operator -(Coord op1, Coord op2)
-            => new Coord(op1.x - op2.x, op1.y - op1.y);
+            => new Coord(op1.x - op2.x, op1.y - op2.y);
     }
 
     private enum MapNodeType
@@ -65,6 +66,7 @@ public class Pathfinder : MonoBehaviour
 
     private static List<Transform> _fixedPath;
     private static List<Transform> _dfsPath;
+    private static List<Transform> _bfsPath;
 
     public static void SetUp()
     {
@@ -100,6 +102,12 @@ public class Pathfinder : MonoBehaviour
                 }
                 break;
             case Option.BFS:
+                {
+                    if (TryGetBFSPath(start, end, out optimizedPath))
+                    {
+                        return true;
+                    }
+                }
                 break;
             case Option.DFS:
                 {
@@ -190,11 +198,14 @@ public class Pathfinder : MonoBehaviour
         while (stack.Count > 0)
         {
             Coord current = stack.Pop();
+            visited[current.y, current.x] = true;
 
+            Debug.Log($"DFS ... {current.x},{current.y}");
             // 도착 체크
             if (current == endCoord)
             {
-                path = BacktrackPath(startCoord, endCoord, pairs).GetEnumerator();
+                _dfsPath = BacktrackPath(startCoord, endCoord, pairs);
+                path = _dfsPath.GetEnumerator();
                 return true;
             }
             else
@@ -217,6 +228,57 @@ public class Pathfinder : MonoBehaviour
                         continue;
 
                     stack.Push(next);
+                    pairs.Add(new KeyValuePair<Coord, Coord>(current, next));
+                }
+            }
+        }
+
+        path = null;
+        return false;
+    }
+
+    private static bool TryGetBFSPath(Transform start, Transform end, out IEnumerator<Transform> path)
+    {
+        bool[,] visited = new bool[_map.GetLength(0), _map.GetLength(1)];
+        Queue<Coord> queue = new Queue<Coord>();
+        List<KeyValuePair<Coord, Coord>> pairs = new List<KeyValuePair<Coord, Coord>>();
+        Coord startCoord = GetCoord(start);
+        Coord endCoord = GetCoord(end);
+        queue.Enqueue(startCoord);
+
+        while (queue.Count > 0)
+        {
+            Coord current = queue.Dequeue();
+            visited[current.y, current.x] = true;
+
+            Debug.Log($"DFS ... {current.x},{current.y}");
+            // 도착 체크
+            if (current == endCoord)
+            {
+                _dfsPath = BacktrackPath(startCoord, endCoord, pairs);
+                path = _dfsPath.GetEnumerator();
+                return true;
+            }
+            else
+            {
+                for (int i = _searchPattern.GetLength(1) - 1; i >= 0; i--)
+                {
+                    Coord next = current + new Coord(_searchPattern[1, i], _searchPattern[0, i]);
+
+                    // 맵 범위 초과 체크
+                    if (next.x < 0 || next.x >= _map.GetLength(1) ||
+                        next.y < 0 || next.y >= _map.GetLength(0))
+                        continue;
+
+                    // 방문여부체크
+                    if (visited[next.y, next.x])
+                        continue;
+
+                    // 장애물 체크
+                    if (_map[next.y, next.x].type == MapNodeType.Obstacle)
+                        continue;
+
+                    queue.Enqueue(next);
                     pairs.Add(new KeyValuePair<Coord, Coord>(current, next));
                 }
             }
