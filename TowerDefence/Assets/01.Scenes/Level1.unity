@@ -13613,6 +13613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b59b92663064cd4491084c085bf1a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skipButtonPrefab: {fileID: 6613772737461799729, guid: 8efa75431e0b28342a52719222fa7b46, type: 3}
 --- !u!4 &668720798
 Transform:
   m_ObjectHideFlags: 0

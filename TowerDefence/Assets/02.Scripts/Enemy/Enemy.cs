@@ -34,16 +34,16 @@ public class Enemy : MonoBehaviour
         }
     }
     private float _hp;
-    private event Action<float> onHpChanged;
-    private event Action onHpMin;
-    private event Action onHpMax;
+    public event Action<float> onHpChanged;
+    public event Action onHpMin;
+    public event Action onHpMax;
 
     public float speed;
     public float speedOrigin;
 
     [SerializeField] private IEnumerator<Transform> _path;
     [SerializeField] private Transform _targetPathPoint;
-    private float _posTolerance = 0.03f;
+    private float _posTolerance = 0.1f;
 
     private Rigidbody _rb;
     private Pathfinder _pathfinder;
