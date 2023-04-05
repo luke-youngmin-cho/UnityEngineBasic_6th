@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour
     public event Action<float> onHpChanged;
     public event Action onHpMin;
     public event Action onHpMax;
+    public int moneyValue;
 
     public float speed;
     public float speedOrigin;
@@ -61,6 +62,11 @@ public class Enemy : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _pathfinder = GetComponent<Pathfinder>();
+        onHpMin += () => Player.instance.money += moneyValue;
+    }
+
+    private void OnEnable()
+    {
         hp = hpMax;
         speed = speedOrigin;
     }
@@ -89,9 +95,8 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                // todo ->
-                // 플레이어체력깎기
-                // 자기자신 파괴하기
+                Player.instance.life--;
+                ObjectPool.instance.Return(gameObject);
             }
         }
     }

@@ -34,6 +34,22 @@ public class GameManager : MonoBehaviour
         state = GameState.LoadLevelData;
     }
 
+    public void FailLevel()
+    {
+        if (state != GameState.WaitUntilLevelFinished)
+            return;
+
+        state = GameState.FailLevel;
+    }
+
+    public void SuccessLevel()
+    {
+        if (state != GameState.WaitUntilLevelFinished)
+            return;
+
+        state = GameState.SuccessLevel;
+    }
+
     private void Awake()
     {
         if (instance != null)
@@ -76,8 +92,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.InitLevel:
                 {
-                    Pathfinder.SetUp();
-                    state = GameState.WaitUntilLevelFinished;
+                    if (Player.instance != null)
+                    {
+                        Pathfinder.SetUp();
+                        state = GameState.WaitUntilLevelFinished;
+                    }
                 }
                 break;
             case GameState.WaitUntilLevelFinished:

@@ -6,5 +6,7 @@ using UnityEngine;
 public class LevelData : ScriptableObject
 {
     public int level;
+    public int life;
+    public int money;
     public List<StageData> stageDataList;
 }
