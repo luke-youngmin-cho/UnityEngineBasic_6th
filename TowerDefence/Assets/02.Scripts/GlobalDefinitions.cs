@@ -2,5 +2,6 @@ public enum TowerType
 {
     MachineGun,
     RocketLauncher,
-    LaserBeamer
+    LaserBeamer,
+    DamageAmplifier
 }

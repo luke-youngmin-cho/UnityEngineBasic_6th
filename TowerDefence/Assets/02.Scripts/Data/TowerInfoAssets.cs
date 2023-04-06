@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerInfoAssets : MonoBehaviour
@@ -20,5 +21,10 @@ public class TowerInfoAssets : MonoBehaviour
     {
         info = _towerInfoList.Find(x => x.type == type && x.upgradeLevel == upgradeLevel);
         return info;
+    }
+
+    public IEnumerable<TowerInfo> GetTowerInfos(Predicate<TowerInfo> match)
+    {
+        return _towerInfoList.FindAll(match);
     }
 }
