@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8285026712029147058}
   - component: {fileID: 825883398833771981}
+  - component: {fileID: -7364262141563371193}
   m_Layer: 0
   m_Name: DamageAmplifier1
   m_TagString: Untagged
@@ -130,3 +131,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 3
   upgradeLevel: 1
+--- !u!65 &-7364262141563371193
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8285026712029147059}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
