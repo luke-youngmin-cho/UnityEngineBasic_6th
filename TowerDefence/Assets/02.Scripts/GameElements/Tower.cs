@@ -5,8 +5,8 @@ public abstract class Tower : MonoBehaviour
     public Node node;
     public TowerType type;
     public int upgradeLevel;
-    protected LayerMask targetMask;
-    protected float detectRange;
+    [SerializeField] protected LayerMask targetMask;
+    [SerializeField] protected float detectRange;
 
     protected virtual Collider[] DetectTargets()
     {
@@ -16,5 +16,11 @@ public abstract class Tower : MonoBehaviour
     private void OnMouseUpAsButton()
     {
         TowerUI.instance.Show(this);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectRange);
     }
 }

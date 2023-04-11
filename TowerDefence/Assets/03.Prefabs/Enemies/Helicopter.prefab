@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7181533387214710664}
   - component: {fileID: 8255086413307238837}
   - component: {fileID: 3579902341800384898}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Helicopter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpMax: 80
+  moneyValue: 0
   speed: 0
   speedOrigin: 5
   _targetPathPoint: {fileID: 0}

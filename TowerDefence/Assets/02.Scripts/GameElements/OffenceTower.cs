@@ -3,7 +3,6 @@
 public abstract class OffenceTower : Tower
 {
     [SerializeField] protected Transform rotatePoint;
-    [SerializeField] protected float damage;
     protected Collider target;
     protected virtual void FixedUpdate()
     {
@@ -22,9 +21,4 @@ public abstract class OffenceTower : Tower
 
     protected abstract void Attack();
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, detectRange);
-    }
 }

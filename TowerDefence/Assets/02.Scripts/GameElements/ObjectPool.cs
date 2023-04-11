@@ -81,4 +81,15 @@ public class ObjectPool : MonoBehaviour
             go.transform.SetParent(transform);
         }
     }
+
+    public void Return(GameObject go, float delay)
+    {
+        StartCoroutine(E_Return(go, delay));
+    }
+
+    private IEnumerator E_Return(GameObject go, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Return(go);
+    }
 }
