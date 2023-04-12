@@ -85,8 +85,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   detectRange: 2.5
+  airAttackEnabled: 1
   rotatePoint: {fileID: 8285026712821253089}
-  damage: 5
   firePoints:
   - {fileID: 5571809817665993666}
   projectilePrefab: {fileID: 6542843471790903598, guid: b7b112171b6e990438cd8edba0855ba3, type: 3}

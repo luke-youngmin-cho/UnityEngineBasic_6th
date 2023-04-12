@@ -10,6 +10,6 @@ public class MachineGunBullet : Projectile
     protected override void OnTargetTriggered(Collider target)
     {
         base.OnTargetTriggered(target);
-        target.GetComponent<Enemy>().hp -= damage;
+        target.GetComponent<IDamageable>().Damage(owner, damage);
     }
 }

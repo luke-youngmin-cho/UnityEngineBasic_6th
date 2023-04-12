@@ -2,6 +2,7 @@
 
 public class Projectile : MonoBehaviour
 {
+    public GameObject owner;
     protected bool isGuided; // 유도기능
     protected float speed;
     protected float damage;
@@ -10,13 +11,15 @@ public class Projectile : MonoBehaviour
     protected Transform target;
     [SerializeField] protected ParticleSystem explosionEffect;
 
-    public void SetUp(bool isGuided, float speed, float damage, LayerMask targetMask, Transform target)
+    public void SetUp(GameObject owner, bool isGuided, float speed, float damage, LayerMask targetMask, Transform target)
     {
+        this.owner = owner;
         this.isGuided = isGuided;
         this.speed = speed;
         this.damage = damage;
         this.targetMask = targetMask;
         this.target = target;
+        transform.LookAt(target);
 
         ObjectPool.instance.Register(new ObjectPool.Element(explosionEffect.name, explosionEffect.gameObject, 1));
     }

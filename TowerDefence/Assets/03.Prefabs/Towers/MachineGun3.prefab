@@ -333,6 +333,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   detectRange: 3
+  airAttackEnabled: 1
   rotatePoint: {fileID: 5673969272432280188}
   firePoints:
   - {fileID: 6691269075729833531}

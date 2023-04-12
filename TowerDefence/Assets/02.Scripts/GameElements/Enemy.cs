@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Pathfinder))]
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour , IDamageable
 {
     public float hpMin => 0;
     public float hpMax => _hpMax;
@@ -49,6 +49,8 @@ public class Enemy : MonoBehaviour
     private Rigidbody _rb;
     private Pathfinder _pathfinder;
     [SerializeField] private Pathfinder.Option _pathfindOption;
+    public BuffManager<Enemy> buffManager { get; private set; }
+
     public void SetPath(Transform start, Transform end)
     {
         if (_pathfinder.TryGetOptimizedPath(start, end, out _path, _pathfindOption))
@@ -63,6 +65,7 @@ public class Enemy : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _pathfinder = GetComponent<Pathfinder>();
         onHpMin += () => Player.instance.money += moneyValue;
+        buffManager = new BuffManager<Enemy>(this);
     }
 
     private void OnEnable()
@@ -99,5 +102,10 @@ public class Enemy : MonoBehaviour
                 ObjectPool.instance.Return(gameObject);
             }
         }
+    }
+
+    public void Damage(GameObject subject, float value)
+    {
+        hp -= value;
     }
 }

@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public abstract class OffenceTower : Tower
 {
+    [SerializeField] protected bool airAttackEnabled;
     [SerializeField] protected Transform rotatePoint;
     protected Collider target;
     protected virtual void FixedUpdate()
@@ -16,6 +19,20 @@ public abstract class OffenceTower : Tower
         else
         {
             target = null;
+        }
+    }
+
+    protected override Collider[] DetectTargets()
+    {
+        if (airAttackEnabled)
+        {
+            return Physics.OverlapSphere(transform.position, detectRange, targetMask);
+        }
+        else
+        {
+            return Physics.OverlapSphere(transform.position, detectRange, targetMask)
+                   .Where(x => x.transform.position.y < transform.position.y)
+                   .ToArray();
         }
     }
 

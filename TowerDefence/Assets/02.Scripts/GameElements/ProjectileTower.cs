@@ -44,7 +44,7 @@ public abstract class ProjectileTower : OffenceTower
         for (int i = 0; i < firePoints.Length; i++)
         {
             tmp = ObjectPool.instance.Take(projectilePrefab.name);
-            tmp.GetComponent<Projectile>().SetUp(_isGuided, _speed, _damage, targetMask, target.transform);
+            tmp.GetComponent<Projectile>().SetUp(gameObject, _isGuided, _speed, _damage, targetMask, target.transform);
             tmp.transform.position = firePoints[i].transform.position;
         }
     }

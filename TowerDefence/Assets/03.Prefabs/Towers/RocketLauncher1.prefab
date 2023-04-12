@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5713758176777532568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 403275402459543773}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &403275402459543773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5713758176777532568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.001, y: 0.292, z: 0.025}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5365502729824904882}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8285026712029147059
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,11 +75,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 8285026712029147059}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3a8fd195772ba41959ed399357b6ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 90ee480ed63d47f4782ace98e6389449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  node: {fileID: 0}
   type: 1
   upgradeLevel: 1
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 32768
+  detectRange: 3
+  rotatePoint: {fileID: 5365502729824904882}
+  firePoints:
+  - {fileID: 403275402459543773}
+  projectilePrefab: {fileID: 5492348699242192190, guid: 9d9363f58ea41f447a525a95b85c26d8, type: 3}
+  reloadTime: 1
+  _isGuided: 0
+  _speed: 5
+  _damage: 30
 --- !u!65 &-3078043394293380722
 BoxCollider:
   m_ObjectHideFlags: 0
