@@ -50,6 +50,7 @@ public class Enemy : MonoBehaviour , IDamageable
     private Pathfinder _pathfinder;
     [SerializeField] private Pathfinder.Option _pathfindOption;
     public BuffManager<Enemy> buffManager { get; private set; }
+    private EnemyUI _enemyUI;
 
     public void SetPath(Transform start, Transform end)
     {
@@ -66,12 +67,19 @@ public class Enemy : MonoBehaviour , IDamageable
         _pathfinder = GetComponent<Pathfinder>();
         onHpMin += () => Player.instance.money += moneyValue;
         buffManager = new BuffManager<Enemy>(this);
+        _enemyUI = EnemyUI.Create(this);
     }
 
     private void OnEnable()
     {
         hp = hpMax;
         speed = speedOrigin;
+        _enemyUI.Show();
+    }
+
+    private void OnDisable()
+    {
+        _enemyUI.Hide();
     }
 
     private void FixedUpdate()
