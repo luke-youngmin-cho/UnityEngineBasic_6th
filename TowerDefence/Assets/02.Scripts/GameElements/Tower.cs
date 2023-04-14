@@ -2,7 +2,7 @@
 
 public abstract class Tower : MonoBehaviour
 {
-    public Node node;
+    public Node node { get; set; }
     public TowerType type;
     public int upgradeLevel;
     [SerializeField] protected LayerMask targetMask;

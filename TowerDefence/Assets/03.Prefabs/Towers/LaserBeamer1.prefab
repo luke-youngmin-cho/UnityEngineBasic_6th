@@ -5057,6 +5057,7 @@ MonoBehaviour:
   _beam: {fileID: 4061661431814506503}
   _sparkEffect: {fileID: 6903554361103944413}
   _firePoint: {fileID: 1876112118821851809}
+  _damage: 2
   _damageChargeTime: 0.5
   _damageGain: 1.5
   _damagePeriod: 0.1

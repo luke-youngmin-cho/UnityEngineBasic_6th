@@ -10,7 +10,6 @@ public abstract class ProjectileTower : OffenceTower
     [Header("Projectile")]
     [SerializeField] private bool _isGuided;
     [SerializeField] private float _speed;
-    [SerializeField] private float _damage;
 
     private void Start()
     {
@@ -44,7 +43,7 @@ public abstract class ProjectileTower : OffenceTower
         for (int i = 0; i < firePoints.Length; i++)
         {
             tmp = ObjectPool.instance.Take(projectilePrefab.name);
-            tmp.GetComponent<Projectile>().SetUp(gameObject, _isGuided, _speed, _damage, targetMask, target.transform);
+            tmp.GetComponent<Projectile>().SetUp(gameObject, _isGuided, _speed, damageModified, targetMask, target.transform);
             tmp.transform.position = firePoints[i].transform.position;
         }
     }

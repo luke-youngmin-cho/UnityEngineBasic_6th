@@ -2,11 +2,22 @@
 using System.Linq;
 using UnityEngine;
 
-public abstract class OffenceTower : Tower
+public abstract class OffenceTower : Tower, IAttackable
 {
+    public float damage
+    {
+        get => damageOrigin;
+        private set => damageOrigin = value;
+    }
+
+    public float damageModified { get; set; }
+    [SerializeField] protected float damageOrigin;
     [SerializeField] protected bool airAttackEnabled;
     [SerializeField] protected Transform rotatePoint;
     protected Collider target;
+
+    
+
     protected virtual void FixedUpdate()
     {
         Collider[] targets = DetectTargets();
@@ -38,4 +49,8 @@ public abstract class OffenceTower : Tower
 
     protected abstract void Attack();
 
+    float IAttackable.Attack()
+    {
+        throw new System.NotImplementedException();
+    }
 }

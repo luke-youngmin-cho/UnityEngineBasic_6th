@@ -130,9 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpMax: 100
-  moneyValue: 0
-  speed: 0
-  speedOrigin: 3
+  moneyValue: 20
+  _speed: 5
   _targetPathPoint: {fileID: 0}
   _pathfindOption: 1
 --- !u!114 &3579902341800384898

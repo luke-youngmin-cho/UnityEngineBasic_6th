@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Pathfinder))]
-public class Enemy : MonoBehaviour , IDamageable
+public class Enemy : MonoBehaviour , IDamageable, ISpeed
 {
     public float hpMin => 0;
     public float hpMax => _hpMax;
@@ -38,9 +38,13 @@ public class Enemy : MonoBehaviour , IDamageable
     public event Action onHpMin;
     public event Action onHpMax;
     public int moneyValue;
-
-    public float speed;
-    public float speedOrigin;
+    public float speed
+    {
+        get => _speed;
+        set => _speed = value;
+    }
+    [SerializeField] private float _speed;
+    public float speedModified { get; set; }
 
     [SerializeField] private IEnumerator<Transform> _path;
     [SerializeField] private Transform _targetPathPoint;
@@ -50,6 +54,9 @@ public class Enemy : MonoBehaviour , IDamageable
     private Pathfinder _pathfinder;
     [SerializeField] private Pathfinder.Option _pathfindOption;
     public BuffManager<Enemy> buffManager { get; private set; }
+
+    
+
     private EnemyUI _enemyUI;
 
     public void SetPath(Transform start, Transform end)
@@ -68,12 +75,12 @@ public class Enemy : MonoBehaviour , IDamageable
         onHpMin += () => Player.instance.money += moneyValue;
         buffManager = new BuffManager<Enemy>(this);
         _enemyUI = EnemyUI.Create(this);
+        speedModified = speed;
     }
 
     private void OnEnable()
     {
         hp = hpMax;
-        speed = speedOrigin;
         _enemyUI.Show();
     }
 
@@ -95,7 +102,7 @@ public class Enemy : MonoBehaviour , IDamageable
         Vector3 dir = (targetPos - _rb.position).normalized;
 
         _rb.rotation = Quaternion.LookRotation(dir);
-        _rb.MovePosition(_rb.position + dir * speed * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + dir * speedModified * Time.fixedDeltaTime);
 
         // 타겟포인트도착했는지
         if (Vector3.Distance(_rb.position, targetPos) < _posTolerance)

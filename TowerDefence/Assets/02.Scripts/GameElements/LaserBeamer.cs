@@ -16,19 +16,31 @@ public class LaserBeamer : OffenceTower
         }
         set
         {
+            if (_damageStep == value ||
+                value > DAMAGE_STEP_MAXIMUM)
+                return;
 
             _damageStep = value;
             _beam.startWidth = 0.03f * (1.0f + value * 0.3f);
             _beam.endWidth = 0.03f * (1.0f + value * 0.3f);
             _sparkEffect.transform.localScale = Vector3.one * (1.0f + value * 0.3f);
+
+            if (value > 0)
+            {
+                _targetEnemy.buffManager.DeactiveBuff(_buffSlowingDown);
+                _buffSlowingDown.gain = _slowGain * (1.0f + value);
+                _targetEnemy.buffManager.ActiveBuff(_buffSlowingDown);
+            }
         }
     }
     private int _damageStep;
+    private const int DAMAGE_STEP_MAXIMUM = 2;
     [SerializeField] private float _damageChargeTime = 0.5f;
     [SerializeField] private float _damageGain = 1.5f;
     [SerializeField] private float _damagePeriod = 0.1f;
     [SerializeField] private float _slowGain = 1.2f;
     private float _damageChargeTimeMark;
+    private float _damagePeriodTimeMark;
     public Enemy targetEnemy
     {
         get
@@ -37,22 +49,38 @@ public class LaserBeamer : OffenceTower
         }
         set
         {
+            if (_targetEnemy == value)
+                return;
+
             if (value == null)
             {
                 damageStep = -1;
                 _beam.enabled = false;
                 _sparkEffect.Stop();
+                _targetEnemy.buffManager.DeactiveBuff(_buffSlowingDown);
             }
             else
             {
                 damageStep = 0;
                 _beam.enabled = true;
                 _sparkEffect.Play();
+
+                if (_targetEnemy != null)
+                    _targetEnemy.buffManager.DeactiveBuff(_buffSlowingDown);
+
+                _buffSlowingDown.gain = _slowGain * (1.0f + damageStep);
+                value.buffManager.ActiveBuff(_buffSlowingDown);
             }
             _targetEnemy = value;
         }
     }
     private Enemy _targetEnemy;
+    private BuffSlowingDown<Enemy> _buffSlowingDown;
+
+    private void Awake()
+    {
+        _buffSlowingDown = new BuffSlowingDown<Enemy>(_slowGain);
+    }
 
     private void Update()
     {
@@ -75,6 +103,7 @@ public class LaserBeamer : OffenceTower
         else
         {
             target = null;
+            targetEnemy = null;
         }
     }
 
@@ -94,6 +123,18 @@ public class LaserBeamer : OffenceTower
         {
             _sparkEffect.transform.position = hit.point;
             _sparkEffect.transform.LookAt(_firePoint);
+        }
+
+        if (Time.time - _damageChargeTimeMark > _damageChargeTime)
+        {
+            damageStep++;
+            _damageChargeTimeMark = Time.time;
+        }
+
+        if (Time.time - _damagePeriodTimeMark > _damagePeriod)
+        {
+            _targetEnemy.Damage(gameObject, damageModified * (1.0f + _damageStep * _damageGain));
+            _damagePeriodTimeMark = Time.time;
         }
     }
 }
