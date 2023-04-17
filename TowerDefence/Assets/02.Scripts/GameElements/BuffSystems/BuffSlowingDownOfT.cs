@@ -1,5 +1,7 @@
-﻿public class BuffSlowingDown<T> : IBuff<T>
-    where T : ISpeed
+﻿using UnityEngine;
+
+public class BuffSlowingDown<T> : IBuff<T>
+    where T : MonoBehaviour, ISpeed
 {
     public float gain
     {

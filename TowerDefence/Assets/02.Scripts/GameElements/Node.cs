@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,25 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     public bool isTowerExist => towerBuilt;
-    public Tower towerBuilt;
+    public Tower towerBuilt
+    {
+        get
+        {
+            return _towerBuilt;
+        }
+        set
+        {
+            if (_towerBuilt == value)
+                return;
+
+            _towerBuilt = value;
+
+            if (value != null)
+                onTowerBuilt?.Invoke(value);
+        }
+    }
+    private Tower _towerBuilt;
+    public event Action<Tower> onTowerBuilt;
     private Renderer _renderer;
     private Material _origin;
     [SerializeField] private Material _buildAvailable;

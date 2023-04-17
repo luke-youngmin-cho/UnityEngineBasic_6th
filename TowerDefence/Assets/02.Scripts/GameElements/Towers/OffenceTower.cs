@@ -15,8 +15,18 @@ public abstract class OffenceTower : Tower, IAttackable
     [SerializeField] protected bool airAttackEnabled;
     [SerializeField] protected Transform rotatePoint;
     protected Collider target;
+    public BuffManager<OffenceTower> buffManager { get; private set; }
 
-    
+    protected virtual void Awake()
+    {
+        buffManager = new BuffManager<OffenceTower>(this);
+        damageModified = damageOrigin;
+    }
+
+    private void OnDisable()
+    {
+        buffManager.DeactiveAllBuffs();
+    }
 
     protected virtual void FixedUpdate()
     {

@@ -5045,19 +5045,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965c9b72d8662c2418e4a1c210075c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  node: {fileID: 0}
   type: 2
   upgradeLevel: 1
   targetMask:
     serializedVersion: 2
     m_Bits: 32768
   detectRange: 3
+  damageOrigin: 1
   airAttackEnabled: 1
   rotatePoint: {fileID: 5464612244064239005}
   _beam: {fileID: 4061661431814506503}
   _sparkEffect: {fileID: 6903554361103944413}
   _firePoint: {fileID: 1876112118821851809}
-  _damage: 2
   _damageChargeTime: 0.5
   _damageGain: 1.5
   _damagePeriod: 0.1

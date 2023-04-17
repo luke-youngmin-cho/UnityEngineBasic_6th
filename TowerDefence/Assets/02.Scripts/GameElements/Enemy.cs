@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour , IDamageable, ISpeed
     public event Action<float> onHpChanged;
     public event Action onHpMin;
     public event Action onHpMax;
+    public event Action onReachedToEnd;
     public int moneyValue;
     public float speed
     {
@@ -115,6 +116,7 @@ public class Enemy : MonoBehaviour , IDamageable, ISpeed
             {
                 Player.instance.life--;
                 ObjectPool.instance.Return(gameObject);
+                onReachedToEnd?.Invoke();
             }
         }
     }

@@ -9,6 +9,24 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 _offset = Vector3.up * 0.25f;
     private SkipButton[] _skipButtons;
     [SerializeField] private SkipButton _skipButtonPrefab;
+    public int remains
+    {
+        get
+        {
+            return _remains;
+        }
+        set
+        {
+            _remains = value;
+
+            if (_stage >= _levelData.stageDataList.Count &&
+                value <= 0)
+            {
+                GameManager.instance.SuccessLevel();
+            }
+        }
+    }
+    private int _remains;
 
     public void SpawnNext()
     {
@@ -86,13 +104,23 @@ public class EnemySpawner : MonoBehaviour
                             //                .GetComponent<Enemy>();
 
                             Enemy enemy = ObjectPool.instance.Take(stageData.spawnDataList[i].prefab.name).GetComponent<Enemy>();
-                            enemy.onHpMin += () => ObjectPool.instance.Return(enemy.gameObject);
+                            enemy.onHpMin += () =>
+                            {
+                                ObjectPool.instance.Return(enemy.gameObject);
+                                remains--;
+                            };
+                            enemy.onReachedToEnd += () =>
+                            {
+                                remains--;
+                            };
+
                             enemy.transform.position = PathInformation.instance.startPoints[stageData.spawnDataList[i].startPointIndex].position +
                                                       stageData.spawnDataList[i].prefab.transform.position +
                                                       _offset;
                             enemy.SetPath(PathInformation.instance.startPoints[stageData.spawnDataList[i].startPointIndex],
                                           PathInformation.instance.endPoints[stageData.spawnDataList[i].endPointIndex]);
                             counters[i]++;
+                            remains++;
                             termTimeMarks[i] = Time.time;
                         }
                     }

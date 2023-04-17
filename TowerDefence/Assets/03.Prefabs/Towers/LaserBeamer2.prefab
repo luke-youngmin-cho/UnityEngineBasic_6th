@@ -4907,12 +4907,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   detectRange: 3
+  damageOrigin: 2
   airAttackEnabled: 1
   rotatePoint: {fileID: 6520665077588767823}
   _beam: {fileID: 1726158742740415985}
   _sparkEffect: {fileID: 2036247021839414010}
   _firePoint: {fileID: 8751329780894561094}
-  _damage: 3
   _damageChargeTime: 0.5
   _damageGain: 1.5
   _damagePeriod: 0.1

@@ -17,4 +17,4 @@ MonoBehaviour:
   buildPrice: 600
   sellPrice: 650
   icon: {fileID: 21300000, guid: adfb6b7a7287a3644a9fbd5482f69e56, type: 3}
-  prefab: {fileID: 825883398833771981, guid: 1c197d404405d2046b3ac15a959cd30f, type: 3}
+  prefab: {fileID: 8517732296387240842, guid: 1c197d404405d2046b3ac15a959cd30f, type: 3}

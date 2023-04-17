@@ -171,13 +171,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ee480ed63d47f4782ace98e6389449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  node: {fileID: 0}
   type: 1
   upgradeLevel: 3
   targetMask:
     serializedVersion: 2
     m_Bits: 32768
   detectRange: 4
+  damageOrigin: 9
+  airAttackEnabled: 0
   rotatePoint: {fileID: 3424732742627264199}
   firePoints:
   - {fileID: 3779404334013923942}
@@ -188,7 +189,6 @@ MonoBehaviour:
   reloadTime: 1
   _isGuided: 0
   _speed: 5
-  _damage: 30
 --- !u!65 &-5217565263488472507
 BoxCollider:
   m_ObjectHideFlags: 0

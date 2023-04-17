@@ -77,8 +77,9 @@ public class LaserBeamer : OffenceTower
     private Enemy _targetEnemy;
     private BuffSlowingDown<Enemy> _buffSlowingDown;
 
-    private void Awake()
+    override protected void Awake()
     {
+        base.Awake();
         _buffSlowingDown = new BuffSlowingDown<Enemy>(_slowGain);
     }
 

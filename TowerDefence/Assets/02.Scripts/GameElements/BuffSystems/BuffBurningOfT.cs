@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class BuffBurning<T> : IBuff<T>
-    where T : IDamageable
+    where T : MonoBehaviour, IDamageable
 {
     private float _damage;
     private float _period;

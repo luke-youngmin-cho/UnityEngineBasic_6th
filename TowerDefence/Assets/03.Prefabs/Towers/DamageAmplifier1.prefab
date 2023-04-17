@@ -126,11 +126,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8285026712029147059}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3a8fd195772ba41959ed399357b6ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 19d2bff47ef01c04092e4b076914d8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
   upgradeLevel: 1
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  detectRange: 2.5
+  amplifyRate: 1.5
 --- !u!65 &-7364262141563371193
 BoxCollider:
   m_ObjectHideFlags: 0
