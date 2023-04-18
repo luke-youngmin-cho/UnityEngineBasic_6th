@@ -34,6 +34,14 @@ public class GameManager : MonoBehaviour
         state = GameState.LoadLevelData;
     }
 
+    public void RestartGame()
+    {
+        if (state <= GameState.WaitUntilLevelFinished)
+            return;
+
+        state = GameState.StartLevel;
+    }
+
     public void FailLevel()
     {
         if (state != GameState.WaitUntilLevelFinished)
@@ -102,10 +110,17 @@ public class GameManager : MonoBehaviour
             case GameState.WaitUntilLevelFinished:
                 break;
             case GameState.SuccessLevel:
+                {
+                    Instantiate(Resources.Load<SuccessUI>("SuccessUI"));
+                    state = GameState.WaitForUser;
+                }
                 break;
             case GameState.FailLevel:
                 break;
             case GameState.WaitForUser:
+                {
+                    // nothing to do...
+                }
                 break;
             default:
                 break;
