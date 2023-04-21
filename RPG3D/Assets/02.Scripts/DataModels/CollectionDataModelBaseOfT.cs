@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using RPG.Collections;
 
-namespace RPG.Collections
+namespace RPG.DataModels
 {
-    public class ObservableCollection<T> : Collection<T>, INotifyCollectionChanged<T>
+    public abstract class CollectionDataModelBase<T> : Collection<T>, INotifyCollectionChanged<T>
     {
         public event Action<T> itemAdded;
         public event Action<T> itemRemoved;
@@ -37,23 +39,44 @@ namespace RPG.Collections
         protected override void InsertItem(int index, T item)
         {
             base.InsertItem(index, item);
-            itemAdded?.Invoke(item);
-            collectionChanged?.Invoke();
+            if (Save())
+            {
+                itemAdded?.Invoke(item);
+                collectionChanged?.Invoke();
+            }
+            else
+            {
+                throw new Exception($"[CollectionDataModelBase<{typeof(T)}>] : Failed to save data.");
+            }
         }
 
         protected override void RemoveItem(int index)
         {
             T expected = Items[index];
             base.RemoveItem(index);
-            itemRemoved?.Invoke(expected);
-            collectionChanged?.Invoke();
+            if (Save())
+            {
+                itemRemoved?.Invoke(expected);
+                collectionChanged?.Invoke();
+            }
+            else
+            {
+                throw new Exception($"[CollectionDataModelBase<{typeof(T)}>] : Failed to save data.");
+            }
         }
 
         protected override void SetItem(int index, T item)
         {
             base.SetItem(index, item);
-            itemChanged?.Invoke(item);
-            collectionChanged?.Invoke();
+            if (Save())
+            {
+                itemChanged?.Invoke(item);
+                collectionChanged?.Invoke();
+            }
+            else
+            {
+                throw new Exception($"[CollectionDataModelBase<{typeof(T)}>] : Failed to save data.");
+            }
         }
 
         protected override void ClearItems()
@@ -81,5 +104,7 @@ namespace RPG.Collections
         {
             collectionChanged?.Invoke();
         }
+        public abstract bool Save();
+        public abstract bool Load();
     }
 }

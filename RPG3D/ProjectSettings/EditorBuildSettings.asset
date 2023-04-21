@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/01.Scenes/SampleScene.unity
+    path: Assets/01.Scenes/Login.unity
+    guid: 607519eac8280ee4c94f4d166d10b544
+  - enabled: 1
+    path: Assets/01.Scenes/SampleField1.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}

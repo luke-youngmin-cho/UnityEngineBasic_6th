@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
 namespace RPG.UI
@@ -17,7 +14,6 @@ namespace RPG.UI
                 if (_manager == null)
                 {
                     _manager = UIManager.instance;
-                    _manager.Register(this);
                 }
                 return _manager;
             }
@@ -62,9 +58,22 @@ namespace RPG.UI
             onHide?.Invoke();
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
+            manager.Register(this);
             _canvas = GetComponent<Canvas>();
+            StartCoroutine(E_Init());
+        }
+
+        private IEnumerator E_Init()
+        {
+            yield return new WaitUntil(() => RPG.GameSystems.SceneInitializer.IsInitialized);
+            Init();
+        }
+
+        protected virtual void Init()
+        {
+
         }
 
         private void OnDestroy()

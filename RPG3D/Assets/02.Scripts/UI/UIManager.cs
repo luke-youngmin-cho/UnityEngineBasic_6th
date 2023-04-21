@@ -12,6 +12,18 @@ namespace RPG.UI
         public List<IUI> uis = new List<IUI>();
         public LinkedList<IUI> uisShown = new LinkedList<IUI>();
 
+        public T Get<T>()
+        {
+            try
+            {
+                return (T)uis.Find(ui => ui is T);
+            }
+            catch
+            {
+                throw new Exception($"[UIManager] : {typeof(T)} has not registered");
+            }
+        }
+
         public void Register(IUI ui)
         {
             uis.Add(ui);
@@ -40,7 +52,6 @@ namespace RPG.UI
             uisShown.AddLast(ui);
             ui.sortingOrder = uisShown.Count;
         }
-
 
         public void Pop(IUI ui)
         {
