@@ -7,6 +7,7 @@ namespace RPG.DataModels
     public struct ItemPair
     {
         public static ItemPair empty = new ItemPair(-1, 0);
+        public static ItemPair error = new ItemPair(0, 0);
         public int id;
         public int num;
 
