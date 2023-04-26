@@ -4,9 +4,10 @@ namespace RPG.Collections
 {
     public interface INotifyCollectionChanged<T>
     {
-        event Action<T> itemAdded;
-        event Action<T> itemRemoved;
-        event Action<T> itemChanged;
+        // <index of item, item>
+        event Action<int, T> itemAdded;
+        event Action<int, T> itemRemoved;
+        event Action<int, T> itemChanged;
         event Action collectionChanged;
     }
 }

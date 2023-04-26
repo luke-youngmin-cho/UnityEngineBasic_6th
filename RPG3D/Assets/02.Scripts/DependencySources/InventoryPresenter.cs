@@ -2,7 +2,7 @@
 using RPG.DataModels;
 using RPG.Datum;
 using System.Collections.Generic;
-using System.Windows.Input;
+using System;
 
 namespace RPG.DependencySources
 {
@@ -10,15 +10,20 @@ namespace RPG.DependencySources
     {
         public InventorySource inventorySource;
         public AddCommand addCommand;
+        public RemoveCommand removeCommand;
         private InventoryDataModel _inventoryDataModel;
+
         public InventoryPresenter()
         {
             _inventoryDataModel = DataModelManager.instance.Get<InventoryDataModel>();
             inventorySource = new InventorySource(_inventoryDataModel);
+
+            _inventoryDataModel.itemChanged += (slotIndex, itemPair) => inventorySource.Set(slotIndex, itemPair);
+
             addCommand = new AddCommand(this);
+            removeCommand = new RemoveCommand(this);
         }
 
-        #region Inventory Source
         public class InventorySource : ObservableCollection<ItemPair>
         {
             public InventorySource(IEnumerable<ItemPair> copy)
@@ -29,7 +34,6 @@ namespace RPG.DependencySources
                 }
             }
         }
-        #endregion
 
         public class AddCommand
         {
@@ -123,6 +127,8 @@ namespace RPG.DependencySources
                 bool result = false;
                 remains = item.num;
                 ItemPair current;
+                Action tmpHandler = null;
+
                 for (int i = 0; i < _presenter.inventorySource.Count; i++)
                 {
                     current = _presenter.inventorySource[i];
@@ -131,20 +137,30 @@ namespace RPG.DependencySources
                     {
                         result = true;
                         int expected = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
+                        int tmpIdx = i;
+                        ItemPair tmpPair;
                         if (expected > 0)
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(current.id, ItemInfoAssets.instance[item.id].numMax));
+                            tmpPair = new ItemPair(current.id, ItemInfoAssets.instance[item.id].numMax);
+                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, tmpPair);
                             remains = expected;
                             i++;
                         }
                         else
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(current.id, current.num + remains));
+                            tmpPair = new ItemPair(current.id, current.num + remains);
+                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, tmpPair);
                             remains = 0;
-                            return result;
+                            result = true;
+                            break;
                         }
                     }
                 }
+
+                if (result)
+                    tmpHandler?.Invoke();
+
+
                 return result;
             }
         }
@@ -159,26 +175,73 @@ namespace RPG.DependencySources
 
             public bool CanExecute(ItemPair item)
             {
-                return _presenter
-                        .inventorySource
-                        .Find(x => x.id == item.id && x.num >= item.num)
-                        .id > 0;
+                int sum = 0;
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
+                {
+                    if (_presenter.inventorySource[i].id == item.id)
+                    {
+                        sum += _presenter.inventorySource[i].num;
+                        if (sum >= item.num)
+                            return true;
+                    }
+                }
+
+                return false;
             }
 
             public void Execute(ItemPair item)
             {
-                _presenter._inventoryDataModel.Remove(item);
+                int remains = item.num;
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
+                {
+                    if (_presenter.inventorySource[i].id == item.id)
+                    {
+                        int expected = remains - _presenter.inventorySource[i].num;
+                        if (expected > 0)
+                        {
+                            _presenter.inventorySource.Set(i, ItemPair.empty);
+                            remains = expected;
+                        }
+                        else
+                        {
+                            _presenter.inventorySource.Set(i, new ItemPair(item.id, -expected));
+                            remains = 0; 
+                        }                        
+                    }
+                }
             }
 
             public bool TryExecute(ItemPair item)
             {
-                if (CanExecute(item))
+                bool result = false;
+                int remains = item.num;
+                Action tmpHandler = null;
+
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
                 {
-                    Execute(item);
-                    return true;
+                    if (_presenter.inventorySource[i].id == item.id)
+                    {
+                        int expected = remains - _presenter.inventorySource[i].num;
+                        int tmpIdx = i;
+                        if (expected > 0)
+                        {
+                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, ItemPair.empty);
+                            remains = expected;
+                        }
+                        else
+                        {
+                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, new ItemPair(item.id, -expected));
+                            remains = 0;
+                            result = true;
+                            break;
+                        }
+                    }
                 }
 
-                return false;
+                if (result)
+                    tmpHandler?.Invoke();
+
+                return result;
             }
         }
     }

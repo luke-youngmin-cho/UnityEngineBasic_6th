@@ -7,9 +7,9 @@ namespace RPG.DataModels
 {
     public abstract class CollectionDataModelBase<T> : Collection<T>, INotifyCollectionChanged<T>
     {
-        public event Action<T> itemAdded;
-        public event Action<T> itemRemoved;
-        public event Action<T> itemChanged;
+        public event Action<int, T> itemAdded;
+        public event Action<int, T> itemRemoved;
+        public event Action<int, T> itemChanged;
         public event Action collectionChanged;
 
         public T Find(Predicate<T> match)
@@ -41,7 +41,7 @@ namespace RPG.DataModels
             base.InsertItem(index, item);
             if (Save())
             {
-                itemAdded?.Invoke(item);
+                itemAdded?.Invoke(index, item);
                 collectionChanged?.Invoke();
             }
             else
@@ -56,7 +56,7 @@ namespace RPG.DataModels
             base.RemoveItem(index);
             if (Save())
             {
-                itemRemoved?.Invoke(expected);
+                itemRemoved?.Invoke(index, expected);
                 collectionChanged?.Invoke();
             }
             else
@@ -70,7 +70,7 @@ namespace RPG.DataModels
             base.SetItem(index, item);
             if (Save())
             {
-                itemChanged?.Invoke(item);
+                itemChanged?.Invoke(index, item);
                 collectionChanged?.Invoke();
             }
             else
@@ -85,19 +85,19 @@ namespace RPG.DataModels
             collectionChanged?.Invoke();
         }
 
-        protected virtual void OnItemAdded(T item)
+        protected virtual void OnItemAdded(int index, T item)
         {
-            itemAdded?.Invoke(item);
+            itemAdded?.Invoke(index, item);
         }
 
-        protected virtual void OnItemChanged(T item)
+        protected virtual void OnItemChanged(int index, T item)
         {
-            itemChanged?.Invoke(item);
+            itemChanged?.Invoke(index,item);
         }
 
-        protected virtual void OnItemRemoved(T item)
+        protected virtual void OnItemRemoved(int index, T item)
         {
-            itemRemoved?.Invoke(item);
+            itemRemoved?.Invoke(index, item);
         }
 
         protected virtual void OnCollectionChanged()

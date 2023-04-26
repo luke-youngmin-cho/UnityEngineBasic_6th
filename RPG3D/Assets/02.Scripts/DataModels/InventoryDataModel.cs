@@ -31,6 +31,7 @@ namespace RPG.DataModels
         public InventoryDataModel()
         {
             _path = Application.persistentDataPath + "InventoryData.json";
+            Load();
         }
 
         new public void Add(ItemPair item)
