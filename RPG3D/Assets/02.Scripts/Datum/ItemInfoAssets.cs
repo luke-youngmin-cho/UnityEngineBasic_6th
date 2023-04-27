@@ -16,7 +16,7 @@ namespace RPG.Datum
         protected override void Init()
         {
             base.Init();
-
+            _itemsDictionary = new Dictionary<int, ItemInfo>();
             for (int i = 0; i < _items.Length; i++)
             {
                 _itemsDictionary.Add(_items[i].id.value, _items[i]);

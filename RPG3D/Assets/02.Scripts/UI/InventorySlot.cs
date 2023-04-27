@@ -24,7 +24,14 @@ namespace RPG.UI
                 if (value.id > 0 && value.num > 0)
                 {
                     _icon.sprite = ItemInfoAssets.instance[value.id].icon;
+                    _icon.color = Color.white;
                     _num.text = value.num.ToString();
+                }
+                else
+                {
+                    _icon.sprite = null;
+                    _icon.color = Color.clear;
+                    _num.text = string.Empty;
                 }
             }
         }

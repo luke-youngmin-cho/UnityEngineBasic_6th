@@ -5,6 +5,7 @@ using RPG.Collections;
 
 namespace RPG.DataModels
 {
+    [Serializable]
     public abstract class CollectionDataModelBase<T> : Collection<T>, INotifyCollectionChanged<T>
     {
         public event Action<int, T> itemAdded;

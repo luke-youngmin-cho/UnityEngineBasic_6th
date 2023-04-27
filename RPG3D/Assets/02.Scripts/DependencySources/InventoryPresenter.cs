@@ -108,13 +108,13 @@ namespace RPG.DependencySources
                         int expected = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
                         if (expected > 0)
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(current.id, ItemInfoAssets.instance[item.id].numMax));
+                            _presenter.inventorySource.Set(i, new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax));
                             remains = expected;
                             i++;
                         }
                         else
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(current.id, current.num + remains));
+                            _presenter.inventorySource.Set(i, new ItemPair(item.id, current.num + remains));
                             remains = 0;
                             return;
                         }
@@ -141,17 +141,16 @@ namespace RPG.DependencySources
                         ItemPair tmpPair;
                         if (expected > 0)
                         {
-                            tmpPair = new ItemPair(current.id, ItemInfoAssets.instance[item.id].numMax);
+                            tmpPair = new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax);
                             tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, tmpPair);
                             remains = expected;
                             i++;
                         }
                         else
                         {
-                            tmpPair = new ItemPair(current.id, current.num + remains);
+                            tmpPair = new ItemPair(item.id, current.num + remains);
                             tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, tmpPair);
                             remains = 0;
-                            result = true;
                             break;
                         }
                     }

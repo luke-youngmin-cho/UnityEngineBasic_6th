@@ -9,7 +9,7 @@ namespace RPG.UI
     {
         [SerializeField] private InventorySlot _slotPrefab;
         [SerializeField] private Transform _content;
-        private InventoryPresenter _presenter;
+        public InventoryPresenter _presenter;
         private List<InventorySlot> _slots;
         protected override void Init()
         {
