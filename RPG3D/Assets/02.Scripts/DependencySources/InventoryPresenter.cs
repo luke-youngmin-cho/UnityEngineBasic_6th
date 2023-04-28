@@ -54,12 +54,8 @@ namespace RPG.DependencySources
                         current == ItemPair.empty)
                     {
                         remains = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
-                        if (remains > 0)
-                        {
-                            i++;
-                        }
-                        else
-                        {
+                        if (remains <= 0)
+                        { 
                             return true;
                         }
                     }
@@ -81,13 +77,8 @@ namespace RPG.DependencySources
                     {
                         result = true;
                         remains = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
-                        if (remains > 0)
+                        if (remains <= 0)
                         {
-                            i++;
-                        }
-                        else
-                        {
-                            remains = 0;
                             return result;
                         }
                     }
@@ -108,13 +99,12 @@ namespace RPG.DependencySources
                         int expected = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
                         if (expected > 0)
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax));
+                            _presenter._inventoryDataModel.Set(i, new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax));
                             remains = expected;
-                            i++;
                         }
                         else
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(item.id, current.num + remains));
+                            _presenter._inventoryDataModel.Set(i, new ItemPair(item.id, current.num + remains));
                             remains = 0;
                             return;
                         }
@@ -142,14 +132,13 @@ namespace RPG.DependencySources
                         if (expected > 0)
                         {
                             tmpPair = new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax);
-                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, tmpPair);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, tmpPair);
                             remains = expected;
-                            i++;
                         }
                         else
                         {
                             tmpPair = new ItemPair(item.id, current.num + remains);
-                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, tmpPair);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, tmpPair);
                             remains = 0;
                             break;
                         }
@@ -198,12 +187,12 @@ namespace RPG.DependencySources
                         int expected = remains - _presenter.inventorySource[i].num;
                         if (expected > 0)
                         {
-                            _presenter.inventorySource.Set(i, ItemPair.empty);
+                            _presenter._inventoryDataModel.Set(i, ItemPair.empty);
                             remains = expected;
                         }
                         else
                         {
-                            _presenter.inventorySource.Set(i, new ItemPair(item.id, -expected));
+                            _presenter._inventoryDataModel.Set(i, new ItemPair(item.id, -expected));
                             remains = 0; 
                         }                        
                     }
@@ -224,12 +213,12 @@ namespace RPG.DependencySources
                         int tmpIdx = i;
                         if (expected > 0)
                         {
-                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, ItemPair.empty);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, ItemPair.empty);
                             remains = expected;
                         }
                         else
                         {
-                            tmpHandler += () => _presenter.inventorySource.Set(tmpIdx, new ItemPair(item.id, -expected));
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, new ItemPair(item.id, -expected));
                             remains = 0;
                             result = true;
                             break;
