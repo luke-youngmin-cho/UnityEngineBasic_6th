@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using RPG.Controllers;
 
 namespace RPG.UI
 {
-    public class InventorySlot : MonoBehaviour
+    public class InventorySlot : MonoBehaviour, IPointerClickHandler
     {
+        public int index;
         public ItemPair itemPair
         {
             get
@@ -33,10 +36,24 @@ namespace RPG.UI
                     _icon.color = Color.clear;
                     _num.text = string.Empty;
                 }
+                _itemPair = value;
             }
         }
         private ItemPair _itemPair;
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _num;
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (_itemPair == ItemPair.empty)
+                return;
+
+            if (ControllerManager.instance.IsAuthorized<InventorySlotController>())
+                return;
+
+            // 왼쪽 클릭시
+            if (eventData.button == 0)
+                ControllerManager.instance.Get<InventorySlotController>().Select(this);
+        }
     }
 }

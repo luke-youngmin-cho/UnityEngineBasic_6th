@@ -37,6 +37,24 @@ namespace RPG.DataModels
             SetItem(index, item);
         }
 
+        public void Swap(int index1, int index2)
+        {
+            T tmp1 = Items[index1];
+            T tmp2 = Items[index2];
+            base.SetItem(index1, tmp2);
+            base.SetItem(index2, tmp1);
+            if (Save())
+            {
+                itemChanged?.Invoke(index1, tmp2);
+                itemChanged?.Invoke(index2, tmp1);
+                collectionChanged?.Invoke();
+            }
+            else
+            {
+                throw new Exception($"[CollectionDataModelBase] : Failed To Swap index {index1} & index {index2}");
+            }
+        }
+
         protected override void InsertItem(int index, T item)
         {
             base.InsertItem(index, item);
@@ -65,6 +83,7 @@ namespace RPG.DataModels
                 throw new Exception($"[CollectionDataModelBase<{typeof(T)}>] : Failed to save data.");
             }
         }
+
 
         protected override void SetItem(int index, T item)
         {

@@ -11,11 +11,17 @@ namespace RPG.Controllers
         public void Register(IController controller)
         {
             _controllers.Add(controller);
+            controller.controllable = false;
         }
 
         public T Get<T>() where T : IController
         {
             return (T)_controllers.Find(controller => controller is T);
+        }
+
+        public bool IsAuthorized<T>() where T : IController
+        {
+            return _authorized is T;
         }
 
         public void Authorize<T>() where T : IController

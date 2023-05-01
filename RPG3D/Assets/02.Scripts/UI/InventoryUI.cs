@@ -20,6 +20,7 @@ namespace RPG.UI
             {
                 InventorySlot slot = Instantiate(_slotPrefab, _content);
                 _slots.Add(slot);
+                slot.index = i;
                 slot.itemPair = _presenter.inventorySource[i];
             }
             _presenter.inventorySource.itemChanged += (slotIndex, itemPair) => _slots[slotIndex].itemPair = itemPair;
