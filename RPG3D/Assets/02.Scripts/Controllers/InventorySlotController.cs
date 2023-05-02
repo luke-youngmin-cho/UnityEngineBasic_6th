@@ -72,7 +72,9 @@ namespace RPG.Controllers
                 // World 위를 누를시
                 else
                 {
-                    // todo -> 아이템 버리기
+                    ItemPair tmp = _selected.itemPair;
+                    _inventoryDataModel.Set(_selected.index, ItemPair.empty);
+                    ItemController.Create(tmp, Vector3.zero);
                 }
 
                 Deselect(0.1f);

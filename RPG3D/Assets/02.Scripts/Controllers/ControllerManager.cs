@@ -24,6 +24,15 @@ namespace RPG.Controllers
             return _authorized is T;
         }
 
+        public void Authorize(IController controller)
+        {
+            foreach (IController sub in _controllers)
+            {
+                sub.controllable = sub == controller;
+            }
+            _authorized = controller;
+        }
+
         public void Authorize<T>() where T : IController
         {
             foreach (IController controller in _controllers)
@@ -37,6 +46,19 @@ namespace RPG.Controllers
                 {
                     controller.controllable = false;
                 }
+            }
+        }
+
+        public void Dismiss(IController controller)
+        {
+            if (_authorized == controller)
+            {
+                controller.controllable = false;
+                _authorized = null;
+            }
+            else
+            {
+                throw new System.Exception($"[ControllerManager] : Tried to dismiss wrong controller. {controller} wasn't authorized");
             }
         }
 

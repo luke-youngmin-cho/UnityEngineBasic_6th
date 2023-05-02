@@ -10,5 +10,7 @@ namespace RPG.Datum
         public ItemID id;
         public int numMax; // 한 슬롯 최대 소지가능갯수
         public Sprite icon;
+        public Mesh mesh;
+        public Material material;
     }
 }
