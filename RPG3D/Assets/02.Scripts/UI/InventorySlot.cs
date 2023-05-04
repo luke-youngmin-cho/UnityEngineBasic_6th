@@ -1,15 +1,10 @@
-﻿using RPG.DataModels;
-using RPG.Datum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RPG.Datum;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using RPG.Controllers;
+using RPG.DataStructures;
 
 namespace RPG.UI
 {

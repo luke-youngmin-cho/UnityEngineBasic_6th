@@ -1,19 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using RPG.DataStructures;
+using System.IO;
 using UnityEngine;
 
 namespace RPG.DataModels
 {
-    public class GoldDataModel : DataModelBase<uint>
+    public class GoldDataModel : DataModelBase<Gold>
     {
-        public override bool Load()
+        public GoldDataModel()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool Save()
-        {
-            throw new System.NotImplementedException();
-        }
+            path = Application.persistentDataPath + "/Gold.json";
+            Load();
+        }        
     }
 }

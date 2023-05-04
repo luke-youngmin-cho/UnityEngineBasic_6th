@@ -3,6 +3,7 @@ using RPG.DataModels;
 using RPG.Datum;
 using System.Collections.Generic;
 using System;
+using RPG.DataStructures;
 
 namespace RPG.DependencySources
 {

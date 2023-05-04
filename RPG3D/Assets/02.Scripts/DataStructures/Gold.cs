@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 namespace RPG.DataStructures
 {
+    [Serializable]
     public struct Gold
     {
         public static Gold max => new Gold
@@ -31,30 +32,45 @@ namespace RPG.DataStructures
         public int tsp1; // g(10^9) ~ p(10^15)
         public int tsp2; // e(10^18) ~ y(10^24)
         public int tsp3; // r(10^27) ~ ak(10^33)
-        private static StringBuilder _stringBuilder { get; set; }
+        public static StringBuilder stringBuilder
+        {
+            get
+            {
+                if (_stringBuilder == null)
+                    _stringBuilder = new StringBuilder();
+                return _stringBuilder;
+            }
+        }
+        private static StringBuilder _stringBuilder;
+
+        public Gold(int tsp3, int tsp2, int tsp1, int tsp0)
+        {
+            this.tsp3 = tsp3;
+            this.tsp2 = tsp2;
+            this.tsp1 = tsp1;
+            this.tsp0 = tsp0;
+        }
 
         public override string ToString()
         {
-            if (_stringBuilder == null)
-                _stringBuilder = new StringBuilder();
-
-            _stringBuilder.Clear();
+            stringBuilder.Clear();
 
             if (tsp3 >= 1_000_000) _stringBuilder.Append(tsp3 / 1_000_000).Append(".").Append(tsp3 % 1_000_000 / 100_000).Append("ak");
             else if (tsp3 >= 1_000) _stringBuilder.Append(tsp3 / 1_000).Append(".").Append(tsp3 % 1_000 / 100).Append("q");
             else if (tsp3 >= 1) _stringBuilder.Append(tsp3 / 1).Append(".").Append(tsp2 / 100_000_000).Append("r");
 
-            if (tsp2 >= 1_000_000) _stringBuilder.Append(tsp2 / 1_000_000).Append(".").Append(tsp2 % 1_000_000 / 100_000).Append("y");
+            else if (tsp2 >= 1_000_000) _stringBuilder.Append(tsp2 / 1_000_000).Append(".").Append(tsp2 % 1_000_000 / 100_000).Append("y");
             else if (tsp2 >= 1_000) _stringBuilder.Append(tsp2 / 1_000).Append(".").Append(tsp2 % 1_000 / 100).Append("z");
             else if (tsp2 >= 1) _stringBuilder.Append(tsp2 / 1).Append(".").Append(tsp1 / 100_000_000).Append("e");
 
-            if (tsp1 >= 1_000_000) _stringBuilder.Append(tsp1 / 1_000_000).Append(".").Append(tsp1 % 1_000_000 / 100_000).Append("p");
+            else if (tsp1 >= 1_000_000) _stringBuilder.Append(tsp1 / 1_000_000).Append(".").Append(tsp1 % 1_000_000 / 100_000).Append("p");
             else if (tsp1 >= 1_000) _stringBuilder.Append(tsp1 / 1_000).Append(".").Append(tsp1 % 1_000 / 100).Append("t");
             else if (tsp1 >= 1) _stringBuilder.Append(tsp1 / 1).Append(".").Append(tsp0 / 100_000_000).Append("g");
 
-            if (tsp0 >= 1_000_000) _stringBuilder.Append(tsp0 / 1_000_000).Append(".").Append(tsp0 % 1_000_000 / 100_000).Append("m");
+            else if (tsp0 >= 1_000_000) _stringBuilder.Append(tsp0 / 1_000_000).Append(".").Append(tsp0 % 1_000_000 / 100_000).Append("m");
             else if (tsp0 >= 1_000) _stringBuilder.Append(tsp0 / 1_000).Append(".").Append(tsp0 % 1_000 / 100).Append("k");
             else if (tsp0 >= 1) _stringBuilder.Append(tsp0 / 1);
+            else _stringBuilder.Append(0);
 
             return _stringBuilder.ToString();
         }
@@ -151,9 +167,9 @@ namespace RPG.DataStructures
             tmp3 += tmp2 / 1_000_000_000.0;
 
             if (tmp1 > 1_000_000_000.0)
-                tmp2 += 1;
+                tmp2 += tmp1 / 1_000_000_000.0;
             if (tmp2 > 1_000_000_000.0)
-                tmp3 += 1;
+                tmp3 += tmp2 / 1_000_000_000.0;
 
             return new Gold
             {

@@ -5,6 +5,7 @@ using RPG.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using RPG.DataStructures;
 
 namespace RPG.Controllers
 {

@@ -1,16 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RPG.DataStructures;
+using System;
+using System.IO;
+using UnityEngine;
 
 namespace RPG.DataModels
 {
     public abstract class DataModelBase<T>
     {
-        public T data;
+        public T data { get; protected set; }
         public event Action<T> dataChanged;
-        public abstract bool Save();
-        public abstract bool Load();
+        protected string path;
+
+        public virtual void SetData(T value)
+        {
+            data = value;
+            if (Save())
+                dataChanged?.Invoke(value);
+        }
+
+        public virtual bool Load()
+        {
+            if (File.Exists(path) == false)
+            {
+                CreateDefaultData();
+            }
+
+            data = JsonUtility.FromJson<T>(File.ReadAllText(path));
+
+            return true;
+        }
+
+        public virtual bool Save()
+        {
+            File.WriteAllText(path, JsonUtility.ToJson(data));
+            return true;
+        }
+
+        protected virtual void CreateDefaultData()
+        {
+            data = default(T);
+            File.WriteAllText(path, JsonUtility.ToJson(data)); // <- 추가해주삼
+        }
     }
 }

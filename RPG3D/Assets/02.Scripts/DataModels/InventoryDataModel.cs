@@ -3,31 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using RPG.DataStructures;
 
 namespace RPG.DataModels
 {
-    [Serializable]
-    public struct ItemPair
-    {
-        public static ItemPair empty = new ItemPair(-1, 0);
-        public static ItemPair error = new ItemPair(0, 0);
-        public int id;
-        public int num;
-
-        public ItemPair(int id, int num)
-        {
-            this.id = id;
-            this.num = num;
-        }
-
-        public static bool operator ==(ItemPair op1, ItemPair op2)
-            => (op1.id == op2.id) && (op1.num == op2.num);
-
-        public static bool operator !=(ItemPair op1, ItemPair op2)
-            => !(op1 == op2);
-    }
-
-    
     public class InventoryDataModel : CollectionDataModelBase<ItemPair>
     {
         private string _path;
@@ -43,16 +22,11 @@ namespace RPG.DataModels
             }
         }
 
-        private InventoryDataModel() 
-        {
-            _path = Application.persistentDataPath + "/InventoryData.json";
-        }
 
-        public InventoryDataModel(bool doLoad)
+        public InventoryDataModel()
         {
             _path = Application.persistentDataPath + "/InventoryData.json";
-            if (doLoad)
-                Load();
+            Load();
         }
 
         new public void Add(ItemPair item)

@@ -22,7 +22,8 @@ namespace RPG.DataModels
 
             models = new List<object>()
             {
-                new InventoryDataModel(true),
+                new InventoryDataModel(),
+                new GoldDataModel()
             };
         }
     }
