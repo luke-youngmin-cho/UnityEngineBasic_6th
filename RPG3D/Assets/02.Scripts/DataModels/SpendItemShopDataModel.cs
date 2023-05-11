@@ -7,18 +7,18 @@ using UnityEngine;
 
 namespace RPG.DataModels
 {
-    public class SpendItemShopDataModel : CollectionDataModelBase<ItemPricePair>
+    public class SpendItemShopDataModel : CollectionDataModelBase<int>
     {
         private string _path;
 
         [Serializable]
         public class Data
         {
-            public List<ItemPricePair> items;
+            public List<int> items;
 
-            public Data(IEnumerable<ItemPricePair> copy)
+            public Data(IEnumerable<int> copy)
             {
-                items = new List<ItemPricePair>(copy);
+                items = new List<int>(copy);
             }
         }
 
@@ -51,9 +51,9 @@ namespace RPG.DataModels
 
         private void CreateDefaultData()
         {
-            Data data = new Data(new List<ItemPricePair>()
+            Data data = new Data(new List<int>()
             {
-                new ItemPricePair(122, new Gold(0,0,0,1200)),
+                122,
             });
             File.WriteAllText(_path, JsonUtility.ToJson(data));
         }

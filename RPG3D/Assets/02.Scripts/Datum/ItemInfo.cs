@@ -1,3 +1,4 @@
+using RPG.DataStructures;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace RPG.Datum
     {
         public ItemID id;
         public int numMax; // 한 슬롯 최대 소지가능갯수
+        public Gold purchasePrice;
+        public Gold sellPrice;
         public Sprite icon;
         public Mesh mesh;
         public Material material;

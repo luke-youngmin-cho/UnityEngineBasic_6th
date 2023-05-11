@@ -1,8 +1,10 @@
 ﻿using RPG.Collections;
 using RPG.DataModels;
 using RPG.DataStructures;
+using RPG.Datum;
 using System;
 using System.Collections.Generic;
+using static UnityEditor.Progress;
 
 namespace RPG.DependencySources
 {
@@ -12,24 +14,28 @@ namespace RPG.DependencySources
         public InventorySource inventorySource;
         public GoldSource goldSource;
 
+        private SpendItemShopDataModel _spendItemShopDataModel;
+        private InventoryDataModel _inventoryDataModel;
+        private GoldDataModel _goldDataModel;
+
         public SpendItemShopPresenter()
         {
-            SpendItemShopDataModel spendItemShopDataModel = DataModelManager.instance.Get<SpendItemShopDataModel>();
-            spendItemShopSource = new SpendItemShopSource(spendItemShopDataModel);
-            spendItemShopDataModel.itemChanged += (slotID, itemPricePair) => spendItemShopSource.Set(slotID, itemPricePair);
+            _spendItemShopDataModel = DataModelManager.instance.Get<SpendItemShopDataModel>();
+            spendItemShopSource = new SpendItemShopSource(_spendItemShopDataModel);
+            _spendItemShopDataModel.itemChanged += (slotID, itemPricePair) => spendItemShopSource.Set(slotID, itemPricePair);
 
-            InventoryDataModel inventoryDataModel = DataModelManager.instance.Get<InventoryDataModel>();
-            inventorySource = new InventorySource(inventoryDataModel);
-            inventoryDataModel.itemChanged += (slotID, itemPair) => inventorySource.Set(slotID, itemPair);
+            _inventoryDataModel = DataModelManager.instance.Get<InventoryDataModel>();
+            inventorySource = new InventorySource(_inventoryDataModel);
+            _inventoryDataModel.itemChanged += (slotID, itemPair) => inventorySource.Set(slotID, itemPair);
 
-            GoldDataModel goldDataModel = DataModelManager.instance.Get<GoldDataModel>();
-            goldSource = new GoldSource(goldDataModel.data);
-            goldDataModel.dataChanged += (value) => goldSource.SetData(value);
+            _goldDataModel = DataModelManager.instance.Get<GoldDataModel>();
+            goldSource = new GoldSource(_goldDataModel.data);
+            _goldDataModel.dataChanged += (value) => goldSource.SetData(value);
         }
 
-        public class SpendItemShopSource : ObservableCollection<ItemPricePair>
+        public class SpendItemShopSource : ObservableCollection<int>
         {
-            public SpendItemShopSource(IEnumerable<ItemPricePair> copy)
+            public SpendItemShopSource(IEnumerable<int> copy)
             {
                 foreach (var item in copy)
                 {
@@ -73,20 +79,161 @@ namespace RPG.DependencySources
 
             public PurchaseCommand(SpendItemShopPresenter presenter) => _presenter = presenter;
 
-            public bool CanExecute(ItemPricePair pricePair, int num)
+            public bool CanExecute(ItemPair item)
             {
-                Gold expected = pricePair.price * num;
-                return _presenter.goldSource.data >= expected;
+                // 돈 충분한지 
+                Gold expected = ItemInfoAssets.instance[item.id].purchasePrice * item.num;
+                if (_presenter.goldSource.data < expected)
+                    return false;
+
+                // 인벤토리 여유 있는지
+                int remains = item.num;
+                ItemPair current;
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
+                {
+                    current = _presenter.inventorySource[i];
+                    if ((current.id == item.id && current.num < ItemInfoAssets.instance[item.id].numMax) ||
+                        current == ItemPair.empty)
+                    {
+                        remains = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
+                        if (remains <= 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
             }
 
-            public void Execute(ItemPricePair pricePair, int num)
+            public void Execute(ItemPair item)
             {
+                bool result = false;
+                int remains = item.num;
+                ItemPair current;
+                Action tmpHandler = null;
 
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
+                {
+                    current = _presenter.inventorySource[i];
+                    if ((current.id == item.id && current.num < ItemInfoAssets.instance[item.id].numMax) ||
+                        current == ItemPair.empty)
+                    {
+                        result = true;
+                        int expected = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
+                        int tmpIdx = i;
+                        ItemPair tmpPair;
+                        if (expected > 0)
+                        {
+                            tmpPair = new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, tmpPair);
+                            remains = expected;
+                        }
+                        else
+                        {
+                            tmpPair = new ItemPair(item.id, current.num + remains);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, tmpPair);
+                            remains = 0;
+                            break;
+                        }
+                    }
+                }
+
+                if (result && remains == 0)
+                {
+                    tmpHandler?.Invoke();
+                    _presenter._goldDataModel.SetData(_presenter.goldSource.data - ItemInfoAssets.instance[item.id].purchasePrice * item.num);
+                }
+                else
+                {
+                    throw new Exception($"[SpendItemShopPresenter] : Impossible to purchase item. not enough inventory.");
+                }
             }
 
-            public void TryExecute(ItemPricePair pricePair, int num)
+            public bool TryExecute(ItemPair item)
             {
+                bool result = false;
+                int remains = item.num;
+                ItemPair current;
+                Action tmpHandler = null;
 
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
+                {
+                    current = _presenter.inventorySource[i];
+                    if ((current.id == item.id && current.num < ItemInfoAssets.instance[item.id].numMax) ||
+                        current == ItemPair.empty)
+                    {
+                        result = true;
+                        int expected = remains - (ItemInfoAssets.instance[item.id].numMax - current.num);
+                        int tmpIdx = i;
+                        ItemPair tmpPair;
+                        if (expected > 0)
+                        {
+                            tmpPair = new ItemPair(item.id, ItemInfoAssets.instance[item.id].numMax);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, tmpPair);
+                            remains = expected;
+                        }
+                        else
+                        {
+                            tmpPair = new ItemPair(item.id, current.num + remains);
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, tmpPair);
+                            remains = 0;
+                            break;
+                        }
+                    }
+                }
+
+                if (result && remains == 0)
+                {
+                    tmpHandler?.Invoke();
+                    _presenter._goldDataModel.SetData(_presenter.goldSource.data - ItemInfoAssets.instance[item.id].purchasePrice * item.num);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public class SellCommand
+        {
+            private SpendItemShopPresenter _presenter;
+            public SellCommand(SpendItemShopPresenter presenter) => _presenter = presenter;
+
+            public bool TryExecute(ItemPair item)
+            {
+                bool result = false;
+                int remains = item.num;
+                Action tmpHandler = null;
+
+                for (int i = 0; i < _presenter.inventorySource.Count; i++)
+                {
+                    if (_presenter.inventorySource[i].id == item.id)
+                    {
+                        int expected = remains - _presenter.inventorySource[i].num;
+                        int tmpIdx = i;
+                        if (expected > 0)
+                        {
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, ItemPair.empty);
+                            remains = expected;
+                        }
+                        else
+                        {
+                            tmpHandler += () => _presenter._inventoryDataModel.Set(tmpIdx, new ItemPair(item.id, -expected));
+                            remains = 0;
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (result)
+                {
+                    tmpHandler?.Invoke();
+                    _presenter._goldDataModel.SetData(_presenter._goldDataModel.data + ItemInfoAssets.instance[item.id].sellPrice * item.num);
+                    return true;
+                }
+
+                return false;
             }
         }
     }

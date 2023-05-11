@@ -166,11 +166,6 @@ namespace RPG.DataStructures
             tmp2 += tmp1 / 1_000_000_000.0;
             tmp3 += tmp2 / 1_000_000_000.0;
 
-            if (tmp1 > 1_000_000_000.0)
-                tmp2 += tmp1 / 1_000_000_000.0;
-            if (tmp2 > 1_000_000_000.0)
-                tmp3 += tmp2 / 1_000_000_000.0;
-
             return new Gold
             {
                 tsp0 = (int)(tmp0 % 1_000_000_000),

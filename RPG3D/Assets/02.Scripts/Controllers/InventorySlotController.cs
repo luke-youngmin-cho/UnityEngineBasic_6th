@@ -74,8 +74,23 @@ namespace RPG.Controllers
                 else
                 {
                     ItemPair tmp = _selected.itemPair;
-                    _inventoryDataModel.Set(_selected.index, ItemPair.empty);
-                    ItemController.Create(tmp, Vector3.zero);
+                    ConfirmWindowWithInputFieldUI confirmWindow = UIManager.instance.Get<ConfirmWindowWithInputFieldUI>();
+                    confirmWindow.Show(onConfirm: () =>
+                                                  {
+                                                      if (tmp.num < confirmWindow.GetInput())
+                                                      {
+                                                          UIManager.instance.Get<WarningWindowUI>().Show(string.Empty, "Input exceeds remains", 1.0f);
+                                                          return;
+                                                      }
+
+                                                      int removeNum = confirmWindow.GetInput();
+                                                      _inventoryDataModel.Set(_selected.index, new ItemPair(tmp.id, tmp.num - removeNum));
+                                                      ItemController.Create(new ItemPair(tmp.id, removeNum), Vector3.zero);
+                                                      confirmWindow.Hide();
+                                                  },
+                                        onCancel: null,
+                                        content: "Enter number to drop");
+                    
                 }
 
                 Deselect(0.1f);
