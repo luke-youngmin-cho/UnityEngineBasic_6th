@@ -25,6 +25,7 @@ namespace RPG.DataModels
         public SpendItemShopDataModel()
         {
             _path = Application.persistentDataPath + "/SpendItemShopData.json";
+            Load();
         }
 
         public override bool Load()

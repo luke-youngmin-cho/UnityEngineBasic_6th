@@ -73,19 +73,20 @@ namespace RPG.Controllers
                 // World 위를 누를시
                 else
                 {
-                    ItemPair tmp = _selected.itemPair;
+                    ItemPair tmpItemPair = _selected.itemPair;
+                    int tmpSlotIndex = _selected.index;
                     ConfirmWindowWithInputFieldUI confirmWindow = UIManager.instance.Get<ConfirmWindowWithInputFieldUI>();
                     confirmWindow.Show(onConfirm: () =>
                                                   {
-                                                      if (tmp.num < confirmWindow.GetInput())
+                                                      if (tmpItemPair.num < confirmWindow.GetInput())
                                                       {
                                                           UIManager.instance.Get<WarningWindowUI>().Show(string.Empty, "Input exceeds remains", 1.0f);
                                                           return;
                                                       }
 
                                                       int removeNum = confirmWindow.GetInput();
-                                                      _inventoryDataModel.Set(_selected.index, new ItemPair(tmp.id, tmp.num - removeNum));
-                                                      ItemController.Create(new ItemPair(tmp.id, removeNum), Vector3.zero);
+                                                      _inventoryDataModel.Set(tmpSlotIndex, new ItemPair(tmpItemPair.id, tmpItemPair.num - removeNum));
+                                                      ItemController.Create(new ItemPair(tmpItemPair.id, removeNum), Vector3.zero);
                                                       confirmWindow.Hide();
                                                   },
                                         onCancel: null,

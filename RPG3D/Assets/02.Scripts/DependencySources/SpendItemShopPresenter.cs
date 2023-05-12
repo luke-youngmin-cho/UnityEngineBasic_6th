@@ -10,6 +10,9 @@ namespace RPG.DependencySources
 {
     public class SpendItemShopPresenter
     {
+        public PurchaseCommand purchaseCommand;
+        public SellCommand sellCommand;
+
         public SpendItemShopSource spendItemShopSource;
         public InventorySource inventorySource;
         public GoldSource goldSource;
@@ -31,6 +34,9 @@ namespace RPG.DependencySources
             _goldDataModel = DataModelManager.instance.Get<GoldDataModel>();
             goldSource = new GoldSource(_goldDataModel.data);
             _goldDataModel.dataChanged += (value) => goldSource.SetData(value);
+
+            purchaseCommand = new PurchaseCommand(this);
+            sellCommand = new SellCommand(this);
         }
 
         public class SpendItemShopSource : ObservableCollection<int>
