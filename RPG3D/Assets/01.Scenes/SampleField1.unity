@@ -16090,7 +16090,7 @@ Animator:
   m_GameObject: {fileID: 3711860155509397259}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c4154c0eb934e754fbbdbc45ebd51b26, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c7ba8baf1c80ba64aa661714f9f2b73e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -16543,7 +16543,7 @@ GameObject:
   - component: {fileID: 3662101449633904003}
   - component: {fileID: 3609085169073397979}
   m_Layer: 0
-  m_Name: 05_akaza
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

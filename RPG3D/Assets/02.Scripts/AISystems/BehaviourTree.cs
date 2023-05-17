@@ -20,15 +20,21 @@ namespace RPG.AISystems
             //((Selector)_behaviourTree.root.child).children.Add(new RandomSelector());
             //((Condition)((Selector)_behaviourTree.root.child).children[0]).child = new Sequence();
 
-            //_behaviourTree.StartBuild()
-            //    .Selector()
-            //        .Sequence()
-            //            .Execution()
-            //            .Execution()
-            //            .Condition()
-            //                .Execution()
-            //        .ExitComposite()
-            //        .Execution()
+            _behaviourTree.StartBuild()
+                .Selector()
+                    .Condition(() => true)
+                        .Sequence()
+                            .Execution(() => Result.Success)
+                            .Execution(() => Result.Success)
+                            .Condition(() => false)
+                                .Execution(() => Result.Failure)
+                        .ExitCurrentComposite()
+                    .Execution(() => Result.Success)
+                    .RandomSelector()
+                        .Execution(() => Result.Failure)
+                        .Execution(() => Result.Success)
+                    .ExitCurrentComposite()
+                .ExitCurrentComposite();
         }
 
         private void Update()
@@ -59,6 +65,7 @@ namespace RPG.AISystems
 
         public BehaviourTree StartBuild()
         {
+            _root = new Root();
             _current = _root;
             _compositeStack = new Stack<Composite>();
             return this;
@@ -80,14 +87,90 @@ namespace RPG.AISystems
             }
         }
 
+        public BehaviourTree ExitCurrentComposite()
+        {
+            if (_compositeStack.Count > 1)
+            {
+                _compositeStack.Pop();
+                _current = _compositeStack.Peek();
+            }
+            else if (_compositeStack.Count == 1)
+            {
+                _compositeStack.Pop();
+                _current = null;
+            }
+            else
+            {
+                throw new Exception($"[BehaviourTree] : Cannot exit composite. Composite stack is empty.");
+            }
+            return this;
+        }
+
         public BehaviourTree Selector()
         {
-            Selector selector = new Selector();
+            Composite selector = new Selector();
             AttachAsChild(_current, selector);
             _current = selector;
             _compositeStack.Push(selector);
             return this;
         }
+
+        public BehaviourTree RandomSelector()
+        {
+            Composite selector = new RandomSelector();
+            AttachAsChild(_current, selector);
+            _current = selector;
+            _compositeStack.Push(selector);
+            return this;
+        }
+
+        public BehaviourTree Sequence()
+        {
+            Composite sequence = new Sequence();
+            AttachAsChild(_current, sequence);
+            _current = sequence;
+            _compositeStack.Push(sequence);
+            return this;
+        }
+
+        public BehaviourTree RandomSequence()
+        {
+            Composite sequence = new RandomSequence();
+            AttachAsChild(_current, sequence);
+            _current = sequence;
+            _compositeStack.Push(sequence);
+            return this;
+        }
+
+        public BehaviourTree Condition(Func<bool> func)
+        {
+            Behaviour condition = new Condition(func);
+            AttachAsChild(_current, condition);
+            _current = condition;
+            return this;
+        }
+
+        public BehaviourTree Repeat(int times)
+        {
+            Behaviour repeat = new Repeat(times);
+            AttachAsChild(_current, repeat);
+            _current = repeat;
+            return this;
+        }
+
+        public BehaviourTree Execution(Func<Result> execute)
+        { 
+            Behaviour execution = new Execution(execute);
+            AttachAsChild(_current, execution);
+
+            if (_compositeStack.Count > 0)
+                _current = _compositeStack.Peek();
+            else
+                _current = null;
+
+            return this;
+        }
+
 
         #endregion
     }
