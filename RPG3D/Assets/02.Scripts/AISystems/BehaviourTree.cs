@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,12 +51,11 @@ namespace RPG.AISystems
     {
         public Root root => _root;
         private Root _root;
-
         
 
-        public void Run()
+        public virtual Result Run()
         {
-            _root.Invoke();
+            return _root.Invoke();
         }
 
         #region Builder
