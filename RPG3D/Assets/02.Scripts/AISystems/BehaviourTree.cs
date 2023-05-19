@@ -49,29 +49,28 @@ namespace RPG.AISystems
 
     public class BehaviourTree
     {
-        public Root root => _root;
-        private Root _root;
+        protected Root root;
         
 
         public virtual Result Run()
         {
-            return _root.Invoke();
+            return root.Invoke();
         }
 
         #region Builder
 
-        private Behaviour _current;
-        private Stack<Composite> _compositeStack;
+        protected Behaviour current;
+        protected Stack<Composite> compositeStack;
 
         public BehaviourTree StartBuild()
         {
-            _root = new Root();
-            _current = _root;
-            _compositeStack = new Stack<Composite>();
+            root = new Root();
+            current = root;
+            compositeStack = new Stack<Composite>();
             return this;
         }
 
-        private void AttachAsChild(Behaviour parent, Behaviour child)
+        protected void AttachAsChild(Behaviour parent, Behaviour child)
         {
             if (parent is IChild)
             {
@@ -89,15 +88,15 @@ namespace RPG.AISystems
 
         public BehaviourTree ExitCurrentComposite()
         {
-            if (_compositeStack.Count > 1)
+            if (compositeStack.Count > 1)
             {
-                _compositeStack.Pop();
-                _current = _compositeStack.Peek();
+                compositeStack.Pop();
+                current = compositeStack.Peek();
             }
-            else if (_compositeStack.Count == 1)
+            else if (compositeStack.Count == 1)
             {
-                _compositeStack.Pop();
-                _current = null;
+                compositeStack.Pop();
+                current = null;
             }
             else
             {
@@ -109,64 +108,64 @@ namespace RPG.AISystems
         public BehaviourTree Selector()
         {
             Composite selector = new Selector();
-            AttachAsChild(_current, selector);
-            _current = selector;
-            _compositeStack.Push(selector);
+            AttachAsChild(current, selector);
+            current = selector;
+            compositeStack.Push(selector);
             return this;
         }
 
         public BehaviourTree RandomSelector()
         {
             Composite selector = new RandomSelector();
-            AttachAsChild(_current, selector);
-            _current = selector;
-            _compositeStack.Push(selector);
+            AttachAsChild(current, selector);
+            current = selector;
+            compositeStack.Push(selector);
             return this;
         }
 
         public BehaviourTree Sequence()
         {
             Composite sequence = new Sequence();
-            AttachAsChild(_current, sequence);
-            _current = sequence;
-            _compositeStack.Push(sequence);
+            AttachAsChild(current, sequence);
+            current = sequence;
+            compositeStack.Push(sequence);
             return this;
         }
 
         public BehaviourTree RandomSequence()
         {
             Composite sequence = new RandomSequence();
-            AttachAsChild(_current, sequence);
-            _current = sequence;
-            _compositeStack.Push(sequence);
+            AttachAsChild(current, sequence);
+            current = sequence;
+            compositeStack.Push(sequence);
             return this;
         }
 
         public BehaviourTree Condition(Func<bool> func)
         {
             Behaviour condition = new Condition(func);
-            AttachAsChild(_current, condition);
-            _current = condition;
+            AttachAsChild(current, condition);
+            current = condition;
             return this;
         }
 
         public BehaviourTree Repeat(int times)
         {
             Behaviour repeat = new Repeat(times);
-            AttachAsChild(_current, repeat);
-            _current = repeat;
+            AttachAsChild(current, repeat);
+            current = repeat;
             return this;
         }
 
         public BehaviourTree Execution(Func<Result> execute)
         { 
             Behaviour execution = new Execution(execute);
-            AttachAsChild(_current, execution);
+            AttachAsChild(current, execution);
 
-            if (_compositeStack.Count > 0)
-                _current = _compositeStack.Peek();
+            if (compositeStack.Count > 0)
+                current = compositeStack.Peek();
             else
-                _current = null;
+                current = null;
 
             return this;
         }
