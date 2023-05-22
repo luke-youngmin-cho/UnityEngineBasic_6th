@@ -1,5 +1,6 @@
 using RPG.AISystems;
 using RPG.GameElements.Casters;
+using RPG.InputSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Player : Character
 
     private void Start()
     {
+        AnimatorWrapper animator = GetComponent<AnimatorWrapper>();
         GroundDetector groundDetector = GetComponent<GroundDetector>();
         _behavourTree = new BehaviourTreeForCharacter(gameObject);
         _behavourTree.StartBuild()
@@ -20,7 +22,13 @@ public class Player : Character
                     .Condition(() => groundDetector.isDetected == true)
                         .Move();
 
-        GetComponent<Animator>().SetBool("doMove", true);
+        new Move(_behavourTree, animator, "doMove").Invoke();
+        _behavourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
+
+        int horizontalParameterID = Animator.StringToHash("h");
+        int verticalParameterID = Animator.StringToHash("v");
+        InputManager.instance.RegisterAxisAction("Horizontal", (value) => animator.SetFloat(horizontalParameterID, value));
+        InputManager.instance.RegisterAxisAction("Vertical", (value) => animator.SetFloat(verticalParameterID, value));
     }
 
     private void Update()

@@ -1,4 +1,5 @@
 using RPG.DependencySources;
+using RPG.InputSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,15 @@ namespace RPG.UI
                 slot.itemPair = _presenter.inventorySource[i];
             }
             _presenter.inventorySource.itemChanged += (slotIndex, itemPair) => _slots[slotIndex].itemPair = itemPair;
+
+            InputManager.instance.RegisterDownAction(KeyCode.I,
+                                                     () =>
+                                                     {
+                                                         if (gameObject.activeSelf)
+                                                             Hide();
+                                                         else
+                                                             Show();
+                                                     });
         }
     }
 }

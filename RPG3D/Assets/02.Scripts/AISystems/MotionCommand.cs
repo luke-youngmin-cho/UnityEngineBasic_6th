@@ -40,6 +40,7 @@ namespace RPG.AISystems
         {
             animator.SetBool(behaviourTree.currentAnimatorParameterID, false);
             behaviourTree.currentAnimatorParameterID = animatorParameterID;
+            Debug.Log($"[{this.GetType()}] : Start running...");
             yield return Result.Running;
         }
     }

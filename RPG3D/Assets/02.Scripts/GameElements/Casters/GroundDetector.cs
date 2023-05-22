@@ -14,7 +14,7 @@ namespace RPG.GameElements.Casters
 
         public bool TryCastGround(out RaycastHit hit)
         {
-            return Physics.SphereCast(transform.position,
+            return Physics.SphereCast(transform.position + Vector3.up,
                                       _range,
                                       Vector3.down,
                                       out hit,

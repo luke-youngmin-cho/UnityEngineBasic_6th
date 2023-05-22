@@ -191,7 +191,7 @@ namespace RPG.AISystems
 
         public BehaviourTreeForCharacter Fall()
         {
-            Behaviour fall = new Move(this, animator, "doFall");
+            Behaviour fall = new Fall(this, animator, "doFall");
             AttachAsChild(current, fall);
 
             if (compositeStack.Count > 0)
@@ -204,7 +204,7 @@ namespace RPG.AISystems
 
         public BehaviourTreeForCharacter Land()
         {
-            Behaviour land = new Move(this, animator, "doLand");
+            Behaviour land = new Land(this, animator, "doLand");
             AttachAsChild(current, land);
 
             if (compositeStack.Count > 0)

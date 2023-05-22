@@ -20,11 +20,6 @@ namespace RPG.AISystems
             {
                 yield return baseEnumerator.Current;
             }
-
-            while (true)
-            {
-                yield return Result.Running;
-            }
         }
     }
 }

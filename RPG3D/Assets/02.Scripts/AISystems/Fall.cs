@@ -37,7 +37,6 @@ namespace RPG.AISystems
                 {
                     if (Mathf.Abs(_transform.position.y - _startPos.y) < _landingDistance)
                     {
-                        animator.SetBool(animatorParameterID, false);
                         yield return Result.Success;
                     }
                     else

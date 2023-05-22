@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG.GameSystems;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -62,7 +63,7 @@ namespace RPG.UI
         {
             manager.Register(this);
             _canvas = GetComponent<Canvas>();
-            StartCoroutine(E_Init());
+            MainSystem.instance.StartCoroutine(E_Init());
         }
 
         private IEnumerator E_Init()
