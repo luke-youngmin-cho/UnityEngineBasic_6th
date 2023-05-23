@@ -22,13 +22,21 @@ public class Player : Character
                     .Condition(() => groundDetector.isDetected == true)
                         .Move();
 
-        new Move(_behavourTree, animator, "doMove").Invoke();
-        _behavourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
+        Move move = new Move(_behavourTree, animator, "doMove");
+        Jump jump = new Jump(_behavourTree, animator, "doJump");
+        int jumpParameterID = Animator.StringToHash("doJump");
 
-        int horizontalParameterID = Animator.StringToHash("h");
-        int verticalParameterID = Animator.StringToHash("v");
-        InputManager.instance.RegisterAxisAction("Horizontal", (value) => animator.SetFloat(horizontalParameterID, value));
-        InputManager.instance.RegisterAxisAction("Vertical", (value) => animator.SetFloat(verticalParameterID, value));
+        InputManager.instance.RegisterPressAction(KeyCode.Space, () =>
+        {
+            if (_behavourTree.currentAnimatorParameterID != jumpParameterID &&
+                groundDetector.TryCastGround(out RaycastHit hit, 1.0f))
+            {
+                _behavourTree.Interrupt(jump);
+            }
+        });
+
+        move.Invoke();
+        _behavourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
     }
 
     private void Update()

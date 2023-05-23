@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RPG.GameElements;
 
 namespace RPG.AISystems
 {
@@ -16,6 +17,9 @@ namespace RPG.AISystems
         public override IEnumerator<Result> Running()
         {
             IEnumerator<Result> baseEnumerator = base.Running();
+
+            movement.mode = MovementBase.Mode.RootMotion;
+
             while (baseEnumerator.MoveNext())
             {
                 yield return baseEnumerator.Current;

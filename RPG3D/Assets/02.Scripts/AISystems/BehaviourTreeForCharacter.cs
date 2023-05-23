@@ -40,13 +40,9 @@ namespace RPG.AISystems
             return tmp;
         }
 
-        public void Interrupt()
+        public void Interrupt(Behaviour behaviour)
         {
-            if (status == Result.Running)
-            {
-                status = Result.Failure;
-                runningFSM = null;
-            }
+            status = behaviour.Invoke();
         }
         #region Builder
 

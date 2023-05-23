@@ -2,6 +2,7 @@ using RPG.InputSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace RPG.Controllers
 {
@@ -27,6 +28,7 @@ namespace RPG.Controllers
         [SerializeField] private float _yMoveSpeed = 250.0f;
         [SerializeField] private float _yLimitMin = 5.0f;
         [SerializeField] private float _yLimitMax = 80.0f;
+        [SerializeField] private Vector3 _offset;
         private float _y, _x, _distance;
 
         protected override void Awake()
@@ -42,16 +44,18 @@ namespace RPG.Controllers
                                                          if (_controllable == false)
                                                              return;
 
-                                                         _x = value * _xMoveSpeed * Time.deltaTime;
+                                                         _x += value * _xMoveSpeed * Time.deltaTime;
+                                                         _x = ClampAngle(_x, -360.0f, 360.0f);
                                                      });
-
+            
             InputManager.instance.RegisterAxisAction("Mouse Y",
                                                      (value) =>
                                                      {
                                                          if (_controllable == false)
                                                              return;
 
-                                                         _y = ClampAngle(value * _yMoveSpeed * Time.deltaTime, _yLimitMin, _yLimitMax);
+                                                         _y += value * _yMoveSpeed * Time.deltaTime;
+                                                         _y = ClampAngle(_y, _yLimitMin, _yLimitMax);
                                                      });
 
             InputManager.instance.RegisterAxisAction("Mouse ScrollWheel",
@@ -63,6 +67,8 @@ namespace RPG.Controllers
                                                          _distance -= value * _wheelSpeed * Time.deltaTime;
                                                          _distance = Mathf.Clamp(_distance, _minDistance, _maxDistance);
                                                      });
+
+            ControllerManager.instance.Authorize(this);
         }
 
         private void FixedUpdate()
@@ -79,7 +85,7 @@ namespace RPG.Controllers
                 return;
 
             transform.rotation = Quaternion.Euler(_y, _x, 0.0f);
-            transform.position = _target.position - transform.rotation * Vector3.forward * _distance;
+            transform.position = _target.position - transform.rotation * Vector3.forward * _distance + _offset;
         }
 
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RPG.GameElements;
 
 namespace RPG.AISystems
 {
@@ -20,6 +18,8 @@ namespace RPG.AISystems
             {
                 yield return baseEnumerator.Current;
             }
+
+            movement.mode = MovementBase.Mode.RootMotion;
 
             while (animator.GetNormalizedTime() < 1.0f)
             {

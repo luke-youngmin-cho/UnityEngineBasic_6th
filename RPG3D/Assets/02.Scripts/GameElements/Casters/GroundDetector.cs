@@ -12,13 +12,13 @@ namespace RPG.GameElements.Casters
         [SerializeField] private Vector3 _offset;
         [SerializeField] private LayerMask _groundMask;
 
-        public bool TryCastGround(out RaycastHit hit)
+        public bool TryCastGround(out RaycastHit hit, float maxDistance)
         {
             return Physics.SphereCast(transform.position + Vector3.up,
                                       _range,
                                       Vector3.down,
                                       out hit,
-                                      float.PositiveInfinity,
+                                      1.0f + maxDistance,
                                       _groundMask);
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using RPG.GameElements;
 
 namespace RPG.AISystems
 {
@@ -26,6 +27,7 @@ namespace RPG.AISystems
                 yield return baseEnumerator.Current;
             }
 
+            movement.mode = MovementBase.Mode.Manual;
             _rb.velocity = new Vector3(_rb.velocity.x, 0.0f, _rb.velocity.y);
             _rb.AddForce(Vector3.up * _force, ForceMode.Impulse);
             while (true)

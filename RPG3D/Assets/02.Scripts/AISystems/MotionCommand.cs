@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RPG.GameElements;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.AISystems
@@ -9,13 +10,14 @@ namespace RPG.AISystems
         protected AnimatorWrapper animator;
         protected int animatorParameterID;
         protected BehaviourTreeForCharacter behaviourTree;
-
+        protected MovementBase movement;
 
         public MotionCommand(BehaviourTreeForCharacter behaviourTree, AnimatorWrapper animator, string parameterName)
         {
             this.behaviourTree = behaviourTree;
             this.animator = animator;
             animatorParameterID = Animator.StringToHash(parameterName);
+            movement = behaviourTree.owner.GetComponent<MovementBase>();
         }
 
 
