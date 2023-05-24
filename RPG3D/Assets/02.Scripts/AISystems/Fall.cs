@@ -11,7 +11,7 @@ namespace RPG.AISystems
         private Transform _transform;
         private GroundDetector _groundDetector;
         private Vector3 _startPos;
-        private float _landingDistance = 0.5f;
+        private float _landingDistance = 1.0f;
         private Land _land;
 
         public Fall(BehaviourTreeForCharacter behaviourTree, AnimatorWrapper animator, string parameterName) 
@@ -35,7 +35,7 @@ namespace RPG.AISystems
 
             while (true)
             {
-                if (_groundDetector.TryCastGround(out RaycastHit hit, 1.0f))
+                if (_groundDetector.TryCastGround(out RaycastHit hit, 0.1f))
                 {
                     if (Mathf.Abs(_transform.position.y - _startPos.y) < _landingDistance)
                     {
@@ -53,6 +53,7 @@ namespace RPG.AISystems
             }
 
             behaviourTree.Interrupt(_land);
+            yield return Result.Running;
         }
     }
 }

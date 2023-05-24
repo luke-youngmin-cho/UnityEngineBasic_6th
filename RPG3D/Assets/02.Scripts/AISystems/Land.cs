@@ -11,6 +11,11 @@ namespace RPG.AISystems
         {
         }
 
+        public override Result Invoke()
+        {
+            return base.Invoke();
+        }
+
         public override IEnumerator<Result> Running()
         {
             IEnumerator<Result> baseEnumerator = base.Running();

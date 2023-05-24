@@ -13,6 +13,7 @@ namespace RPG.AISystems
         public Result status;
         public int currentAnimatorParameterID;
         public Root root;
+        private bool _interrupted;
 
         public BehaviourTreeForCharacter(GameObject owner)
         {
@@ -22,18 +23,24 @@ namespace RPG.AISystems
 
         public Result Run()
         {
+            _interrupted = false;
             Result tmp = Result.Failure;
 
             if (status == Result.Running)
             {
                 if (runningFSM.MoveNext())
                 {
+                    if (_interrupted)
+                        return status;
+
                     tmp = runningFSM.Current;
                 }
             }
             else
             {
                 tmp = root.Invoke();
+                if (_interrupted)
+                    return status;
             }
 
             status = tmp;
@@ -43,6 +50,14 @@ namespace RPG.AISystems
         public void Interrupt(Behaviour behaviour)
         {
             status = behaviour.Invoke();
+
+            if (status == Result.Running && 
+                runningFSM.MoveNext())
+            {
+                status = runningFSM.Current;
+            }
+
+            _interrupted = true;
         }
         #region Builder
 

@@ -8,6 +8,27 @@ namespace RPG.InputSystems
 {
     public class InputManager : SingletonMonoBase<InputManager>
     {
+        public bool mouse0Trigger
+        {
+            get
+            {
+                if (_mouse0Trigger)
+                {
+                    _mouse0Trigger = false;
+                    return true;
+                }
+                return false;
+            }
+            set
+            {
+                _mouse0Trigger = value;
+                if (value)
+                    onMouse0Triggered?.Invoke();
+            }
+        }
+        private bool _mouse0Trigger;
+        public event Action onMouse0Triggered;
+
         private Dictionary<KeyCode, Action> _downActions = new Dictionary<KeyCode, Action>();
         private Dictionary<KeyCode, Action> _pressActions = new Dictionary<KeyCode, Action>();
         private Dictionary<KeyCode, Action> _upActions = new Dictionary<KeyCode, Action>();
@@ -70,6 +91,9 @@ namespace RPG.InputSystems
 
         private void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+                mouse0Trigger = true;
+
             foreach (var pair in _downActions)
             {
                 if (Input.GetKeyDown(pair.Key))

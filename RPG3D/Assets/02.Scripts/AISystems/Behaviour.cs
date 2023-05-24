@@ -6,9 +6,10 @@ namespace RPG.AISystems
 {
     public enum Result
     {
+        None,
+        Running,
         Success,
         Failure,
-        Running
     }
 
     public abstract class Behaviour

@@ -18,12 +18,12 @@ namespace RPG.AISystems
         {
             IEnumerator<Result> baseEnumerator = base.Running();
 
-            movement.mode = MovementBase.Mode.RootMotion;
-
             while (baseEnumerator.MoveNext())
             {
                 yield return baseEnumerator.Current;
             }
+
+            movement.mode = MovementBase.Mode.RootMotion;
         }
     }
 }
