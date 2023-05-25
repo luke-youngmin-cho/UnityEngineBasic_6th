@@ -14,6 +14,7 @@ namespace RPG.AISystems
         public int currentAnimatorParameterID;
         public Root root;
         private bool _interrupted;
+        public GameObject target;
 
         public BehaviourTreeForCharacter(GameObject owner)
         {
