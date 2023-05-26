@@ -7,6 +7,7 @@ namespace RPG.AISystems
 {
     public class BehaviourTreeForCharacter
     {
+        public bool enabled = true;
         public GameObject owner;
         public AnimatorWrapper animator;
         public IEnumerator<Result> runningFSM;
@@ -24,6 +25,9 @@ namespace RPG.AISystems
 
         public Result Run()
         {
+            if (enabled == false)
+                return Result.Failure;
+
             _interrupted = false;
             Result tmp = Result.Failure;
 
@@ -226,5 +230,60 @@ namespace RPG.AISystems
 
             return this;
         }
+
+        public BehaviourTreeForCharacter Attack()
+        {
+            Behaviour attack = new Attack(this, animator, "doAttack");
+            AttachAsChild(current, attack);
+
+            if (compositeStack.Count > 0)
+                current = compositeStack.Peek();
+            else
+                current = null;
+
+            return this;
+        }
+
+        public BehaviourTreeForCharacter Seek(float radius, float angle, float angleDelta, LayerMask targetMask, Vector3 offset)
+        {
+            Behaviour seek = new Seek(this, radius, angle, angleDelta, targetMask, offset);
+            AttachAsChild(current, seek);
+
+            if (compositeStack.Count > 0)
+                current = compositeStack.Peek();
+            else
+                current = null;
+
+            return this;
+        }
+
+        public BehaviourTreeForCharacter Follow(float endDistance)
+        {
+            Behaviour follow = new Follow(this, animator, "doMove", endDistance);
+            AttachAsChild(current, follow);
+
+            if (compositeStack.Count > 0)
+                current = compositeStack.Peek();
+            else
+                current = null;
+
+            return this;
+        }
+
+        public BehaviourTreeForCharacter Sleep(float sleepTime)
+        {
+            Behaviour sleep = new Sleep(this, sleepTime);
+            AttachAsChild(current, sleep);
+            current = sleep;
+            return this;
+        }
+        public BehaviourTreeForCharacter RandomSleep(float sleepTimeMin, float sleepTimeMax)
+        {
+            Behaviour sleep = new RandomSleep(this, sleepTimeMin, sleepTimeMax);
+            AttachAsChild(current, sleep);
+            current = sleep;
+            return this;
+        }
+
     }
 }

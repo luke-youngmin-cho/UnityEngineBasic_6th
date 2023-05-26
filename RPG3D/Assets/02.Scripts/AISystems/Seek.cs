@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RPG.AISystems
 {
-    public class Seek : Execution
+    public class Seek : Behaviour
     {
         protected BehaviourTreeForCharacter behaviourTree;
         protected Transform owner;
@@ -17,14 +17,12 @@ namespace RPG.AISystems
         private LayerMask _targetMask;
         private Vector3 _offset;
 
-        public Seek(Func<Result> execute,
-                    BehaviourTreeForCharacter behaviourTree,
+        public Seek(BehaviourTreeForCharacter behaviourTree,
                     float radius,
                     float angle,
                     float angleDelta,
                     LayerMask targetMask,
                     Vector3 offset) 
-            : base(execute)
         {
             this.behaviourTree = behaviourTree;
             this.owner = behaviourTree.owner.transform;
@@ -37,9 +35,10 @@ namespace RPG.AISystems
 
         public override Result Invoke()
         {
+            bool result = false;
             Ray ray;
             RaycastHit hit;
-
+            behaviourTree.target = null;
             for (float theta = 0; theta < _angle / 2.0f; theta += _angleDelta)
             {
                 ray = new Ray(owner.position + _offset,
@@ -51,6 +50,7 @@ namespace RPG.AISystems
                               Quaternion.Euler(Vector3.up * theta) * (owner.forward) * _radius,
                               Color.red);
                     behaviourTree.target = hit.transform.gameObject;
+                    result = true;
                 }
                 else
                 {
@@ -68,6 +68,7 @@ namespace RPG.AISystems
                               Quaternion.Euler(Vector3.up * -theta) * (owner.forward) * _radius,
                               Color.red);
                     behaviourTree.target = hit.transform.gameObject;
+                    result = true;
                 }
                 else
                 {
@@ -77,7 +78,7 @@ namespace RPG.AISystems
                 }
             }
 
-            return base.Invoke();
+            return result ? Result.Success : Result.Failure;
         }
     }
 }
