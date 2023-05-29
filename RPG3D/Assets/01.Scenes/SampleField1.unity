@@ -29717,17 +29717,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10284f4e81e239e4ea6f45938bd60f07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seekRadius: 10
-  seekAngle: 45
-  seekAngleDelta: 5
+  seekRadius: 20
+  seekAngle: 120
+  seekAngleDelta: 2
   seekTargetMask:
     serializedVersion: 2
     m_Bits: 2048
   seekOffset: {x: 0, y: 1, z: 0}
-  attackRange: 0
-  followLimit: 1
+  attackRange: 1.5
+  followLimit: 1.5
   thinkTimeMin: 1
-  thinkTimeMax: 5
+  thinkTimeMax: 2
 --- !u!114 &8303678657006525350
 MonoBehaviour:
   m_ObjectHideFlags: 0

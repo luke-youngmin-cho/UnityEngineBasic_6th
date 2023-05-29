@@ -11,7 +11,12 @@ namespace RPG.AISystems
         public GameObject owner;
         public AnimatorWrapper animator;
         public IEnumerator<Result> runningFSM;
-        public Result status;
+        public Result status
+        {
+            get => _status;
+            set => _status = value;
+        }
+        private Result _status;
         public int currentAnimatorParameterID;
         public Root root;
         private bool _interrupted;

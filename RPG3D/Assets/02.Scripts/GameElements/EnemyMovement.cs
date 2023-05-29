@@ -15,8 +15,9 @@ namespace RPG.GameElements
         public override float gain => _gain;
         private float _gain;
 
-        public void SetMove(float horizontal, float vertical, float gain)
+        public override void SetMove(float horizontal, float vertical, float gain)
         {
+            base.SetMove(horizontal, vertical, gain);
             _h = horizontal;
             _v = vertical;
             _gain = gain;

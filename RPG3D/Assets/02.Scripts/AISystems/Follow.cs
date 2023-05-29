@@ -29,13 +29,16 @@ namespace RPG.AISystems
             }
 
             movement.mode = MovementBase.Mode.RootMotion;
+            movement.SetMove(0.0f, 1.0f, 1.0f);
 
             while (behaviourTree.target != null &&
                    Vector3.Distance(_owner.position, behaviourTree.target.transform.position) > _endDistance)
             {
                 Vector3 forward = (behaviourTree.target.transform.position - _owner.position);
                 forward = new Vector3(forward.x, 0.0f, forward.y);
-                _owner.rotation = Quaternion.LookRotation(forward, Vector3.up);
+                //_owner.rotation = Quaternion.LookRotation(forward, Vector3.up);
+                _owner.transform.LookAt(behaviourTree.target.transform);
+                Debug.Log("Following...");
                 yield return Result.Running;
             }
 

@@ -37,6 +37,8 @@ namespace RPG.GameElements
         public abstract float h { get; }
         public abstract float gain { get; }
 
+        public virtual void SetMove(float horizontal, float vertical, float gain) { }
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();

@@ -1,7 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RPG.GameElements.StatSystems;
 
-public abstract class Character : MonoBehaviour
+namespace RPG.GameElements
 {
+    public abstract class Character : MonoBehaviour
+    {
+        public Stats stats;
+
+
+        private void FootR() { }
+        private void FootL() { }
+        private void Hit() { }
+
+    }
 }
