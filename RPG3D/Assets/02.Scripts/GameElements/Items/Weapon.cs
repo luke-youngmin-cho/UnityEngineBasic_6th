@@ -29,6 +29,7 @@ namespace RPG.GameElements.Items
                     targetsTriggered.Clear();
 
                 _castingTrigger.enabled = value;
+                _doCast = value;
             }
         }
         private bool _doCast;
@@ -53,6 +54,7 @@ namespace RPG.GameElements.Items
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     targetsTriggered.Add(other.gameObject.GetInstanceID(), damageable);
+                    Debug.Log($"{other.name} is casted");
                 }
             }
         }

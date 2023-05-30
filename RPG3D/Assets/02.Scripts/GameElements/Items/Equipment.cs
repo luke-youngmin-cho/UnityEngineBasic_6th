@@ -11,7 +11,8 @@ namespace RPG.GameElements.Items
         Bottom,
         Feet,
         RightHand,
-        LeftHand
+        LeftHand,
+        TwoHand
     }
 
     public class Equipment : Item
