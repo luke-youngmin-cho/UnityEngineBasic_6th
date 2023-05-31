@@ -20,7 +20,21 @@ namespace RPG.AISystems
         public int currentAnimatorParameterID;
         public Root root;
         private bool _interrupted;
-        public GameObject target;
+        public GameObject target
+        {
+            get => _target;
+            set
+            {
+                if (_target == value)
+                    return;
+
+                GameObject prev = _target;
+                _target = value;
+                onTargetChanged?.Invoke(prev, value);
+            }
+        }
+        private GameObject _target;
+        public event Action<GameObject, GameObject> onTargetChanged; // prev, next
 
         public BehaviourTreeForCharacter(GameObject owner)
         {

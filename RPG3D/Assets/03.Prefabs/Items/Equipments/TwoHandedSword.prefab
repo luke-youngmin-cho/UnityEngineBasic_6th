@@ -62,7 +62,18 @@ MonoBehaviour:
   id: 10
   description: Two Handed Sword
   bodyPartType: 7
+  statModList:
+  - key: {fileID: 11400000, guid: 4a400171325219d4ca8e39987359a84c, type: 2}
+    value: 15
+  - key: {fileID: 11400000, guid: cb3613dbb58fe964e87422997a80eb32, type: 2}
+    value: 3
+  - key: {fileID: 11400000, guid: 96718c00ff74a824fbeceba0a1e8a65c, type: 2}
+    value: 1
+  - key: {fileID: 11400000, guid: e95f9521781e8c94e99628d96588bdb6, type: 2}
+    value: 1
+  owner: {fileID: 0}
   weaponType: 2
+  damageStatID: {fileID: 11400000, guid: 4a400171325219d4ca8e39987359a84c, type: 2}
 --- !u!1 &8690155025833546037
 GameObject:
   m_ObjectHideFlags: 0

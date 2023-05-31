@@ -9,6 +9,10 @@ namespace RPG.GameElements
     public abstract class Character : MonoBehaviour, IDamageable
     {
         public Stats stats;
+        public StatID strStatID;
+        public StatID dexStatID;
+        public StatID intStatID;
+        public StatID lukStatID;
 
         public event Action<float> onHpChanged;
         public event Action<float> onHpDecreased;
@@ -46,9 +50,9 @@ namespace RPG.GameElements
         }
         protected float _hp;
         public float hpMax => _hpMax;
-        protected float _hpMax;
+        [SerializeField] protected float _hpMax;
         public float hpMin => _hpMin;
-        protected float _hpMin = 0.0f;
+        [SerializeField] protected float _hpMin = 0.0f;
 
         public void Damage(GameObject hitter, float amount)
         {
@@ -63,6 +67,13 @@ namespace RPG.GameElements
         protected virtual void Awake()
         {
             hp = hpMax;
+            stats = new Stats(new Dictionary<int, Stat>()
+            {
+                { strStatID.value, new Stat() },
+                { dexStatID.value, new Stat() },
+                { intStatID.value, new Stat() },
+                { lukStatID.value, new Stat() },
+            });
         }
 
         private void FootR() { }

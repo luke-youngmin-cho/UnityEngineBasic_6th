@@ -10,7 +10,7 @@ namespace RPG.GameElements
 {
     public class Player : Character
     {
-        private BehaviourTreeForCharacter _behaviourTree;
+        public BehaviourTreeForCharacter behaviourTree;
         [SerializeField] private Weapon _bareHandRight;
         [SerializeField] private Weapon _bareHandLeft;
         [SerializeField] private Transform _rightHand;
@@ -33,8 +33,38 @@ namespace RPG.GameElements
                 case BodyPartType.Feet:
                     break;
                 case BodyPartType.RightHand:
+                    {
+                        Transform child = null;
+                        if (_rightHand.childCount > 0)
+                        {
+                            child = _rightHand.GetChild(0);
+                            child.GetComponent<Equipment>().Unequip(this);
+                            Destroy(child.gameObject);
+                        }
+
+                        Instantiate(equipment, _rightHand).Equip(this);
+                        if (equipment is Weapon)
+                        {
+                            SetAnimatorWeaponParameter(((Weapon)equipment).weaponType);
+                        }
+                    }
                     break;
                 case BodyPartType.LeftHand:
+                    {
+                        Transform child = null;
+                        if (_leftHand.childCount > 0)
+                        {
+                            child = _leftHand.GetChild(0);
+                            child.GetComponent<Equipment>().Unequip(this);
+                            Destroy(child.gameObject);
+                        }
+
+                        Instantiate(equipment, _leftHand).Equip(this);
+                        if (equipment is Weapon)
+                        {
+                            SetAnimatorWeaponParameter(((Weapon)equipment).weaponType);
+                        }
+                    }
                     break;
                 case BodyPartType.TwoHand:
                     {
@@ -117,48 +147,53 @@ namespace RPG.GameElements
 
         private void Start()
         {
+            TryEquip(_bareHandRight);
+            TryEquip(_bareHandLeft);
+
             AnimatorWrapper animator = GetComponent<AnimatorWrapper>();
             GroundDetector groundDetector = GetComponent<GroundDetector>();
-            _behaviourTree = new BehaviourTreeForCharacter(gameObject);
-            _behaviourTree.StartBuild()
+            behaviourTree = new BehaviourTreeForCharacter(gameObject);
+            behaviourTree.StartBuild()
                 .Selector()
+                    .Condition(() => GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).loop == false ? 
+                                     animator.GetNormalizedTime(0) > 0.9f : true)
                     .Selector()
                         .Condition(() => groundDetector.isDetected == false)
                             .Fall()
                         .Condition(() => groundDetector.isDetected == true)
                             .Move();
 
-            Move move = new Move(_behaviourTree, animator, "doMove");
-            Jump jump = new Jump(_behaviourTree, animator, "doJump");
-            Attack attack = new Attack(_behaviourTree, animator, "doAttack");
+            Move move = new Move(behaviourTree, animator, "doMove");
+            Jump jump = new Jump(behaviourTree, animator, "doJump");
+            Attack attack = new Attack(behaviourTree, animator, "doAttack");
             int jumpParameterID = Animator.StringToHash("doJump");
             int attackParameterID = Animator.StringToHash("doAttack");
 
             InputManager.instance.RegisterPressAction(KeyCode.Space, () =>
             {
-                if (_behaviourTree.currentAnimatorParameterID != jumpParameterID &&
+                if (behaviourTree.currentAnimatorParameterID != jumpParameterID &&
                     groundDetector.TryCastGround(out RaycastHit hit, 0.1f))
                 {
-                    _behaviourTree.Interrupt(jump);
+                    behaviourTree.Interrupt(jump);
                 }
             });
 
             InputManager.instance.onMouse0Triggered += () =>
             {
-                if (_behaviourTree.currentAnimatorParameterID != attackParameterID)
+                if (behaviourTree.currentAnimatorParameterID != attackParameterID)
                 {
-                    _behaviourTree.Interrupt(attack);
+                    behaviourTree.Interrupt(attack);
                 }
             };
 
 
             move.Invoke();
-            _behaviourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
+            behaviourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
         }
 
         private void Update()
         {
-            _behaviourTree.Run();
+            behaviourTree.Run();
         }
 
         private void SetAnimatorWeaponParameter(WeaponType weaponType)

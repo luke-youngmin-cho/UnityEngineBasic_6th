@@ -27,6 +27,8 @@ namespace RPG.GameElements
 
             _behaviourTree = new BehaviourTreeForCharacter(gameObject);
             _behaviourTree.StartBuild()
+                .Condition(() => GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).loop == false ?
+                                 GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f : true)
                 .Selector()
                     .Condition(() => groundDetector.isDetected == false)
                         .Fall()

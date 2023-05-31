@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG.GameElements.StatSystems;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,8 @@ namespace RPG.GameElements.Items
         private BoxCollider _castingTrigger;
         private LayerMask _targetMask;
         public Dictionary<int, IDamageable> targetsTriggered = new Dictionary<int, IDamageable>();
+        
+        public StatID damageStatID;
 
         private void Awake()
         {
@@ -54,6 +57,11 @@ namespace RPG.GameElements.Items
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     targetsTriggered.Add(other.gameObject.GetInstanceID(), damageable);
+                    damageable.Damage(owner.gameObject, owner.stats[damageStatID.value].valueModified);
+                    if (owner.TryGetComponent(out Player player))
+                    {
+                        player.behaviourTree.target = other.gameObject;
+                    }
                     Debug.Log($"{other.name} is casted");
                 }
             }
