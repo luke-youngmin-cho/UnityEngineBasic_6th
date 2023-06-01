@@ -3,7 +3,8 @@ using RPG.Datum;
 using System;
 using UnityEngine;
 using RPG.DataStructures;
-
+using System.Collections;
+using RPG.GameSystems;
 
 namespace RPG.Controllers
 {
@@ -11,14 +12,16 @@ namespace RPG.Controllers
     public class ItemController : Controller
     {
         public ItemPair itemPair;
-
+        private bool _hasBeenPicked;
         public static ItemController Create(ItemPair itemPair, Vector3 position)
         {            
             ItemInfo itemInfo = ItemInfoAssets.instance[itemPair.id];
             GameObject go = new GameObject(itemInfo.name);
+            go.layer = LayerMask.NameToLayer("ItemController");
             ItemController controller = go.AddComponent<ItemController>();
             controller.itemPair = itemPair;
             go.GetComponent<BoxCollider>().size = Vector3.one * 2.0f;
+            go.GetComponent<BoxCollider>().isTrigger = true;
             go.GetComponent<MeshFilter>().mesh = itemInfo.mesh;
             go.GetComponent<MeshRenderer>().material = itemInfo.material;
             go.transform.localScale = Vector3.one * 0.5f;
@@ -27,8 +30,14 @@ namespace RPG.Controllers
         }
 
 
-        public void PickUp()
+        public void PickUp(Transform owner)
         {
+            if (_hasBeenPicked)
+                return;
+
+            GetComponent<BoxCollider>().enabled = false;
+            _hasBeenPicked = true;
+
             bool result = false;
             int remains = itemPair.num;
             ItemPair current;
@@ -69,8 +78,20 @@ namespace RPG.Controllers
             }
             else
             {
-                Destroy(gameObject);
+                StartCoroutine(Follow(owner));
             }
+        }
+
+        private IEnumerator Follow(Transform owner)
+        {
+            while (Vector3.Distance(transform.position, owner.position + Vector3.up) > 0.2f)
+            {
+                transform.position = Vector3.Lerp(transform.position, owner.position + Vector3.up, 0.05f);
+                yield return null;
+            }
+
+            StopAllCoroutines();
+            Destroy(gameObject);
         }
     }
 }

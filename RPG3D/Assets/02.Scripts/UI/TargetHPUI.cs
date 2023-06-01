@@ -22,7 +22,7 @@ namespace RPG.UI
         private IEnumerator E_Init()
         {
             yield return new WaitUntil(() => GameManager.instance.mine != null);
-            Player player = GameManager.instance.mine;
+            PlayerController player = GameManager.instance.mine;
 
             player.behaviourTree.onTargetChanged += ((prev, next) =>
             {

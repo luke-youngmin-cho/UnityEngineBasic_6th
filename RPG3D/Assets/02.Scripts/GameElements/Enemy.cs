@@ -1,4 +1,6 @@
 using RPG.AISystems;
+using RPG.Controllers;
+using RPG.Datum;
 using RPG.GameElements.Casters;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,9 +21,18 @@ namespace RPG.GameElements
         [SerializeField] protected float thinkTimeMin;
         [SerializeField] protected float thinkTimeMax;
 
+        public List<ItemID> _dropItems;
 
         private void Start()
         {
+            onHpMin += () =>
+            {
+                ItemController.Create(new DataStructures.ItemPair(_dropItems[Random.Range(0, _dropItems.Count)].value, 1),
+                                      transform.position + Vector3.up);
+                Destroy(gameObject);
+            };
+
+
             GroundDetector groundDetector = GetComponent<GroundDetector>();
             EnemyMovement movement = GetComponent<EnemyMovement>();
 

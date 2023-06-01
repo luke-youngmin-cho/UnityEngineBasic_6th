@@ -1,9 +1,12 @@
-﻿using RPG.Tools;
+﻿using RPG.Controllers;
+using RPG.GameElements;
+using RPG.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 namespace RPG.UI
 {
@@ -22,6 +25,19 @@ namespace RPG.UI
             {
                 throw new Exception($"[UIManager] : {typeof(T)} has not registered");
             }
+        }
+
+        public bool TryGet<T>(out T ui)
+        {
+            int index = uis.FindIndex(x => x is T);
+            if (index >= 0)
+            {
+                ui = (T)uis[index];
+                return true;
+            }
+
+            ui = default(T);
+            return false;
         }
 
         public void Register(IUI ui)
@@ -51,6 +67,8 @@ namespace RPG.UI
             uisShown.Remove(ui);
             uisShown.AddLast(ui);
             ui.sortingOrder = uisShown.Count;
+
+            ControllerManager.instance.Dismiss<PlayerController>();
         }
 
         public void Pop(IUI ui)
@@ -63,6 +81,11 @@ namespace RPG.UI
             {
                 throw new Exception($"[UIManager] : 이미 비활성화되어있는 {ui} 를 비활성화하려고 시도했습니다.");
             }
+
+            if (uisShown.Count == 0)
+            {
+                ControllerManager.instance.Authorize<PlayerController>();
+            }
         }
 
         public void HideLast()
@@ -72,5 +95,7 @@ namespace RPG.UI
 
             uisShown.Last.Value.Hide();
         }
+
+        
     }
 }

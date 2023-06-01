@@ -1,4 +1,5 @@
 using RPG.AISystems;
+using RPG.Controllers;
 using RPG.GameElements.Casters;
 using RPG.GameElements.Items;
 using RPG.InputSystems;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace RPG.GameElements
 {
-    public class Player : Character
+    public class PlayerController : Character, IController
     {
         public BehaviourTreeForCharacter behaviourTree;
         [SerializeField] private Weapon _bareHandRight;
@@ -18,6 +19,18 @@ namespace RPG.GameElements
         private AnimatorWrapper _animator;
         private int _equipedTwoHandAnimatorParameter;
 
+        public bool controllable
+        {
+            get => _controllable;
+            set
+            {
+                _controllable = value;
+                Cursor.visible = value == false;
+                Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.Confined;
+                ControllerManager.instance.Get<CameraController>().controllable = value;
+            }
+        }
+        private bool _controllable;
         public bool TryEquip(Equipment equipment)
         {
             switch (equipment.bodyPartType)
@@ -147,6 +160,8 @@ namespace RPG.GameElements
 
         private void Start()
         {
+            ControllerManager.instance.Register(this);
+            ControllerManager.instance.Authorize(this);
             TryEquip(_bareHandRight);
             TryEquip(_bareHandLeft);
 
@@ -171,6 +186,9 @@ namespace RPG.GameElements
 
             InputManager.instance.RegisterPressAction(KeyCode.Space, () =>
             {
+                if (controllable == false)
+                    return;
+
                 if (behaviourTree.currentAnimatorParameterID != jumpParameterID &&
                     groundDetector.TryCastGround(out RaycastHit hit, 0.1f))
                 {
@@ -180,15 +198,47 @@ namespace RPG.GameElements
 
             InputManager.instance.onMouse0Triggered += () =>
             {
+                if (controllable == false)
+                    return;
+
                 if (behaviourTree.currentAnimatorParameterID != attackParameterID)
                 {
                     behaviourTree.Interrupt(attack);
                 }
             };
 
-
             move.Invoke();
             behaviourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
+
+            LayerMask npcMask = 1 << LayerMask.NameToLayer("NPC");
+            LayerMask itemMask = 1 << LayerMask.NameToLayer("ItemController");
+            InputManager.instance.RegisterDownAction(KeyCode.F, () =>
+            {
+                if (controllable == false)
+                    return;
+
+                Collider[] cols;
+                cols = Physics.OverlapSphere(transform.position, 2.0f, npcMask);
+                if (cols.Length > 0)
+                {
+                    NPC npc;
+                    for (int i = 0; i < cols.Length; i++)
+                    {
+                        npc = cols[i].GetComponent<NPC>();
+                        if (npc.canInteract)
+                        {
+                            npc.StartInteraction(gameObject);
+                            return;
+                        }
+                    }
+                }
+
+                cols = Physics.OverlapSphere(transform.position, 2.0f, itemMask);
+                if (cols.Length > 0)
+                {
+                    cols[0].GetComponent<ItemController>().PickUp(transform);
+                }
+            });
         }
 
         private void Update()

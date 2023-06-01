@@ -14,8 +14,6 @@ namespace RPG.Controllers
             set
             {
                 _controllable = value;
-                Cursor.visible = value == false;
-                Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.Confined;
             }
         }
         private bool _controllable;
@@ -34,6 +32,7 @@ namespace RPG.Controllers
         protected override void Awake()
         {
             base.Awake();
+            ControllerManager.instance.Register(this);
             _distance = Vector3.Distance(transform.position, _target.position);
             _y = transform.eulerAngles.x;
             _x = transform.eulerAngles.y;
@@ -67,8 +66,6 @@ namespace RPG.Controllers
                                                          _distance -= value * _wheelSpeed * Time.deltaTime;
                                                          _distance = Mathf.Clamp(_distance, _minDistance, _maxDistance);
                                                      });
-
-            ControllerManager.instance.Authorize(this);
         }
 
         private void FixedUpdate()

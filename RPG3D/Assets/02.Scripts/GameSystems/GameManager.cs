@@ -6,16 +6,16 @@ namespace RPG.GameSystems
 {
     public class GameManager : SingletonMonoBase<GameManager>
     {
-        public Player mine
+        public PlayerController mine
         {
             get
             {
                 if (_mine == null)
-                    _mine = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                    _mine = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
                 return _mine;
             }
         }
-        private Player _mine;
+        private PlayerController _mine;
 
         protected override void Init()
         {

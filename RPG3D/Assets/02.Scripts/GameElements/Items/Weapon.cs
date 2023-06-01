@@ -58,7 +58,7 @@ namespace RPG.GameElements.Items
                 {
                     targetsTriggered.Add(other.gameObject.GetInstanceID(), damageable);
                     damageable.Damage(owner.gameObject, owner.stats[damageStatID.value].valueModified);
-                    if (owner.TryGetComponent(out Player player))
+                    if (owner.TryGetComponent(out PlayerController player))
                     {
                         player.behaviourTree.target = other.gameObject;
                     }

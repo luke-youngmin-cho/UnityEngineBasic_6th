@@ -2,6 +2,7 @@ using RPG.DependencySources;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RPG.UI
 {
@@ -11,6 +12,7 @@ namespace RPG.UI
         [SerializeField] private SpendItemShopSellSlot _sellSlotPrefab;
         [SerializeField] private Transform _purchaseContent;
         [SerializeField] private Transform _sellContent;
+        [SerializeField] private Button _close;
         private SpendItemShopPresenter _presenter;
         private List<SpendItemShopPurchaseSlot> _purchaseSlots;
         private List<SpendItemShopSellSlot> _sellSlots;
@@ -42,6 +44,8 @@ namespace RPG.UI
             {
                 _sellSlots[index].itemPair = itemPair;
             };
+
+            _close.onClick.AddListener(() => Hide());
         }
     }
 }
