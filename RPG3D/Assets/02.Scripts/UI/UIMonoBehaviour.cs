@@ -31,28 +31,28 @@ namespace RPG.UI
         public event Action onShow;
         public event Action onHide;
 
-        public void Show()
+        public virtual void Show()
         {
             gameObject.SetActive(true);
             _manager.Push(this);
             onShow?.Invoke();
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             gameObject.SetActive(false);
             _manager.Pop(this);
             onHide?.Invoke();
         }
 
-        public void ShowUnmanaged()
+        public virtual void ShowUnmanaged()
         {
             gameObject.SetActive(true);
             sortingOrder = _manager.uisShown.Count;
             onShow?.Invoke();
         }
 
-        public void HideUnmanaged()
+        public virtual void HideUnmanaged()
         {
             gameObject.SetActive(false);
             sortingOrder = 0;

@@ -31,6 +31,40 @@ namespace RPG.GameElements
             }
         }
         private bool _controllable;
+
+        public Equipment GetEquipment(BodyPartType bodyPartType)
+        {
+            switch (bodyPartType)
+            {
+                case BodyPartType.None:
+                    break;
+                case BodyPartType.Head:
+                    break;
+                case BodyPartType.Top:
+                    break;
+                case BodyPartType.Bottom:
+                    break;
+                case BodyPartType.Feet:
+                    break;
+                case BodyPartType.RightHand:
+                    {
+                        return _rightHand.GetChild(0).GetComponent<Equipment>();
+                    }
+                case BodyPartType.LeftHand:
+                    {
+                        return _leftHand.GetChild(0).GetComponent<Equipment>();
+                    }
+                case BodyPartType.TwoHand:
+                    {
+                        return _rightHand.GetChild(0).GetComponent<Equipment>();
+                    }
+                default:
+                    break;
+            }
+
+            return null;
+        }
+
         public bool TryEquip(Equipment equipment)
         {
             switch (equipment.bodyPartType)
@@ -132,6 +166,47 @@ namespace RPG.GameElements
                         Transform child = _rightHand.GetChild(0);
                         if (child.TryGetComponent(out Equipment equiped) && 
                             equiped == equipment)
+                        {
+                            Destroy(child.gameObject);
+                            Instantiate(_bareHandRight, _rightHand);
+                            Instantiate(_bareHandLeft, _leftHand);
+                            SetAnimatorWeaponParameter(_bareHandRight.weaponType);
+                        }
+                        else
+                        {
+                            throw new System.Exception($"[Player] : Tried to unequip wrong equipment");
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return true;
+        }
+
+        public bool TryUnequip(BodyPartType bodyPartType)
+        {
+            switch (bodyPartType)
+            {
+                case BodyPartType.None:
+                    break;
+                case BodyPartType.Head:
+                    break;
+                case BodyPartType.Top:
+                    break;
+                case BodyPartType.Bottom:
+                    break;
+                case BodyPartType.Feet:
+                    break;
+                case BodyPartType.RightHand:
+                    break;
+                case BodyPartType.LeftHand:
+                    break;
+                case BodyPartType.TwoHand:
+                    {
+                        Transform child = _rightHand.GetChild(0);
+                        if (child.TryGetComponent(out Equipment equiped))
                         {
                             Destroy(child.gameObject);
                             Instantiate(_bareHandRight, _rightHand);
