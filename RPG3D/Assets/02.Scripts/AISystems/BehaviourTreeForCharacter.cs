@@ -47,18 +47,19 @@ namespace RPG.AISystems
             if (enabled == false)
                 return Result.Failure;
 
+            if (animator.GetBool(Animator.StringToHash("hasNotInitialized")))
+                return Result.Failure;
+
             _interrupted = false;
             Result tmp = Result.Failure;
 
-            if (status == Result.Running)
+            if (runningFSM != null &&
+                runningFSM.MoveNext())
             {
-                if (runningFSM.MoveNext())
-                {
-                    if (_interrupted)
-                        return status;
+                if (_interrupted)
+                    return status;
 
-                    tmp = runningFSM.Current;
-                }
+                tmp = runningFSM.Current;
             }
             else
             {
@@ -66,6 +67,23 @@ namespace RPG.AISystems
                 if (_interrupted)
                     return status;
             }
+
+            //if (status == Result.Running)
+            //{
+            //    if (runningFSM.MoveNext())
+            //    {
+            //        if (_interrupted)
+            //            return status;
+            //
+            //        tmp = runningFSM.Current;
+            //    }
+            //}
+            //else
+            //{
+            //    tmp = root.Invoke();
+            //    if (_interrupted)
+            //        return status;
+            //}
 
             status = tmp;
             return tmp;

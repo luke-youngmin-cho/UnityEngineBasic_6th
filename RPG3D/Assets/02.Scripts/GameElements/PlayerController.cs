@@ -1,5 +1,7 @@
 using RPG.AISystems;
 using RPG.Controllers;
+using RPG.DataModels;
+using RPG.Datum;
 using RPG.GameElements.Casters;
 using RPG.GameElements.Items;
 using RPG.InputSystems;
@@ -240,6 +242,21 @@ namespace RPG.GameElements
             TryEquip(_bareHandRight);
             TryEquip(_bareHandLeft);
 
+            ItemsEquippedDataModel itemsEquippedDataModel = DataModelManager.instance.Get<ItemsEquippedDataModel>();
+            foreach (var itemID in itemsEquippedDataModel)
+            {
+                if (itemID > 0)
+                    TryEquip((Equipment)ItemInfoAssets.instance[itemID].prefab);
+            }
+            itemsEquippedDataModel.itemChanged += ((slotID, itemID) =>
+            {
+                if (itemID > 0)
+                    TryEquip((Equipment)ItemInfoAssets.instance[itemID].prefab);
+                else
+                    TryUnequip((BodyPartType)slotID);
+            });
+
+
             AnimatorWrapper animator = GetComponent<AnimatorWrapper>();
             GroundDetector groundDetector = GetComponent<GroundDetector>();
             behaviourTree = new BehaviourTreeForCharacter(gameObject);
@@ -256,6 +273,7 @@ namespace RPG.GameElements
             Move move = new Move(behaviourTree, animator, "doMove");
             Jump jump = new Jump(behaviourTree, animator, "doJump");
             Attack attack = new Attack(behaviourTree, animator, "doAttack");
+            int moveParameterID = Animator.StringToHash("doMove");
             int jumpParameterID = Animator.StringToHash("doJump");
             int attackParameterID = Animator.StringToHash("doAttack");
 
@@ -282,7 +300,7 @@ namespace RPG.GameElements
                 }
             };
 
-            move.Invoke();
+            behaviourTree.Interrupt(move);
             behaviourTree.currentAnimatorParameterID = Animator.StringToHash("doMove");
 
             LayerMask npcMask = 1 << LayerMask.NameToLayer("NPC");

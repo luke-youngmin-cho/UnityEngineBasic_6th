@@ -30,7 +30,8 @@ namespace RPG.InputSystems
                 if (m_PointerData.TryGetValue(mouseID, out PointerEventData pointerEventData))
                 {
                     hovered = pointerEventData.hovered;
-                    return pointerEventData.pointerCurrentRaycast.module.GetType() == typeof(T);
+                    if (pointerEventData.pointerCurrentRaycast.module != null)
+                        return pointerEventData.pointerCurrentRaycast.module.GetType() == typeof(T);
                 }
             }
             return false;

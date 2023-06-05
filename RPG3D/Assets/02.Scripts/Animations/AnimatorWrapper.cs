@@ -19,6 +19,8 @@ public class AnimatorWrapper : MonoBehaviour
     public int exitStateHash;
     private Animator _animator;
 
+    public bool isInTransition => _animator.IsInTransition(0);
+
     public float GetNormalizedTime(int layer = 0)
         => _animator.GetCurrentAnimatorStateInfo(layer).normalizedTime;
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using RPG.Controllers;
 using RPG.DataStructures;
+using UnityEngine.Rendering.UI;
 
 namespace RPG.UI
 {
@@ -47,8 +48,12 @@ namespace RPG.UI
                 return;
 
             // 왼쪽 클릭시
-            if (eventData.button == 0)
+            if (eventData.button == PointerEventData.InputButton.Left)
                 ControllerManager.instance.Get<InventorySlotController>().Select(this);
+            // 오른쪽 클릭시
+            else if (eventData.button == PointerEventData.InputButton.Right)
+                ItemInfoAssets.instance[_itemPair.id].Use();
+            
         }
     }
 }

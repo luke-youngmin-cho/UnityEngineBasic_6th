@@ -30,37 +30,40 @@ namespace RPG.Controllers
             if (_selected == null)
             {
                 // 슬롯에 왼쪽 마우스 눌렀을때 장착한 아이템 선택하기
-                List<GameObject> hovered;
-                if (_inputModule.TryGetHovered<GraphicRaycaster>(out hovered, StandaloneInputModule.kMouseLeftId))
+                if (Input.GetMouseButtonDown(0))
                 {
-                    foreach (var sub in hovered)
+                    List<GameObject> hovered;
+                    if (_inputModule.TryGetHovered<GraphicRaycaster>(out hovered, StandaloneInputModule.kMouseLeftId))
                     {
-                        if (sub.TryGetComponent(out ItemsEquippedSlot slot))
+                        foreach (var sub in hovered)
                         {
-                            if (slot.itemID > 0)
+                            if (sub.TryGetComponent(out ItemsEquippedSlot slot))
                             {
-                                _selected = slot;
-                                _imageFollowingCursor.gameObject.SetActive(true);
-                                _imageFollowingCursor.GetComponent<Image>().sprite = ItemInfoAssets.instance[slot.itemID].icon;
+                                if (slot.itemID > 0)
+                                {
+                                    _selected = slot;
+                                    _imageFollowingCursor.gameObject.SetActive(true);
+                                    _imageFollowingCursor.GetComponent<Image>().sprite = ItemInfoAssets.instance[slot.itemID].icon;
+                                }
                             }
                         }
                     }
-                }
-                else if (_inputModule.TryGetHovered<GraphicRaycaster>(out hovered, StandaloneInputModule.kMouseRightId))
-                {
-                    foreach (var sub in hovered)
+                    else if (_inputModule.TryGetHovered<GraphicRaycaster>(out hovered, StandaloneInputModule.kMouseRightId))
                     {
-                        if (sub.TryGetComponent(out ItemsEquippedSlot slot))
+                        foreach (var sub in hovered)
                         {
-                            if (slot.itemID > 0)
+                            if (sub.TryGetComponent(out ItemsEquippedSlot slot))
                             {
-                                if (TryUnequip(slot.bodyPartType))
+                                if (slot.itemID > 0)
                                 {
-                                    Cancel();
-                                }
-                                else
-                                {
-                                    throw new Exception($"[ItemsEquippedController] : Failed to unequip item {slot.itemID}");
+                                    if (TryUnequip(slot.bodyPartType))
+                                    {
+                                        Cancel();
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"[ItemsEquippedController] : Failed to unequip item {slot.itemID}");
+                                    }
                                 }
                             }
                         }

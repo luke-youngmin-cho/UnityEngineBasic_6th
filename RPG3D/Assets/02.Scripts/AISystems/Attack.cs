@@ -2,6 +2,7 @@ using RPG.InputSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace RPG.AISystems
 {
@@ -25,6 +26,7 @@ namespace RPG.AISystems
                 yield return baseEnumerator.Current;
             }
 
+            behaviourTree.owner.transform.LookAt(behaviourTree.target.transform);
             movement.mode = GameElements.MovementBase.Mode.RootMotion;
             InputManager.instance.mouse0Trigger = false;
             while (true)

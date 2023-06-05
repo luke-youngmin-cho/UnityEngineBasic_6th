@@ -19,24 +19,27 @@ namespace RPG.AISystems
             _endDistance = endDistance;
         }
 
-        public override IEnumerator<Result> Running()
+        public override Result Invoke()
         {
-            IEnumerator<Result> baseEnumerator = base.Running();
-
-            while (baseEnumerator.MoveNext())
+            if (animator.GetBool(animatorParameterID) &&
+                animator.isPreviousMachineFinished &&
+                animator.isPreviousStateFinished)
             {
-                yield return baseEnumerator.Current;
+                behaviourTree.runningFSM = Running();
+                return Result.Running;
             }
 
+            return Result.Failure;
+        }
+
+        public override IEnumerator<Result> Running()
+        {
             movement.mode = MovementBase.Mode.RootMotion;
             movement.SetMove(0.0f, 1.0f, 1.0f);
 
             while (behaviourTree.target != null &&
                    Vector3.Distance(_owner.position, behaviourTree.target.transform.position) > _endDistance)
             {
-                Vector3 forward = (behaviourTree.target.transform.position - _owner.position);
-                forward = new Vector3(forward.x, 0.0f, forward.y);
-                //_owner.rotation = Quaternion.LookRotation(forward, Vector3.up);
                 _owner.transform.LookAt(behaviourTree.target.transform);
                 Debug.Log("Following...");
                 yield return Result.Running;

@@ -2,11 +2,12 @@ using RPG.DataStructures;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RPG.GameElements.Items;
+using RPG.GameElements;
 
 namespace RPG.Datum
 {
-    [CreateAssetMenu(fileName = "new ItemInfo", menuName = "RPG/Create a new ItemInfo")]
-    public class ItemInfo : ScriptableObject
+    public abstract class ItemInfo : ScriptableObject
     {
         public ItemID id;
         public int numMax; // 한 슬롯 최대 소지가능갯수
@@ -15,5 +16,8 @@ namespace RPG.Datum
         public Sprite icon;
         public Mesh mesh;
         public Material material;
+        public Item prefab;
+
+        public abstract void Use();
     }
 }
